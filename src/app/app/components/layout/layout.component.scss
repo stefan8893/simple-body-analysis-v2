@@ -1,0 +1,53 @@
+@import '../../../../styles/layout-variables';
+
+.layout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "header header"
+    "nav content";
+
+  min-height: 100vh;
+}
+
+.header {
+  grid-area: header;
+}
+
+.side-nav {
+  grid-area: nav;
+}
+
+.side-nav-browser {
+  display: inherit;
+}
+
+.side-nav-mobile {
+  display: none;
+}
+
+.content {
+  grid-area: content;
+}
+
+@media (max-width: calc(#{$mobile-breakpoint})) {
+  .layout {
+    grid-template-columns: auto;
+    grid-template-areas:
+      "header"
+      "content";
+
+      .side-nav {
+        display: none;
+      }
+
+      .side-nav-browser {
+        display: none;
+      }
+
+      .side-nav-mobile {
+        display: inherit;
+      }
+  }
+}

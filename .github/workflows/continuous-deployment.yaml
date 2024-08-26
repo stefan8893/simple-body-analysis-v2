@@ -1,0 +1,97 @@
+﻿name: Continuous Deployment
+
+on:
+  workflow_run:
+    workflows: ["Continuous Integration"]
+    branches: ["main"]
+    types: ["completed"]
+
+jobs:
+  has_next_version:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      HasNextVersion: ${{ steps.get_next_version.outputs.hasNextVersion }}
+      Version: ${{ steps.get_next_version.outputs.version }}
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get next version
+        id: get_next_version
+        uses: thenativeweb/get-next-version@2.6.2
+
+      - name: Tag new version
+        if: ${{ steps.get_next_version.outputs.hasNextVersion == 'true' }}
+        shell: pwsh
+        run: |
+          $nextVersion = '${{ steps.get_next_version.outputs.version }}'
+          git tag $nextVersion
+          git push origin $nextVersion
+
+  package:
+    runs-on: ubuntu-latest
+    needs: has_next_version
+    if: ${{ needs.has_next_version.outputs.HasNextVersion == 'true' }}
+
+    env:
+      Version: ${{ needs.has_next_version.outputs.Version }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup node 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+
+      - name: Build for production
+        run: |
+          npm install
+          npm version ${{ env.Version }} --allow-same-version --no-git-tag-version
+          npm run build
+
+      - name: Zip artifact
+        run: zip -r artifact.zip ./dist/simple-body-analysis/browser/*
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: simple-body-analysis
+          path: ./artifact.zip
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: package
+    environment:
+      name: Production
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: simple-body-analysis
+
+      - name: Unzip artifact
+        run: unzip artifact.zip
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: "Deploy client app"
+        uses: azure/CLI@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az storage blob upload-batch --account-name "$CLIENT_APP_STORAGE_ACCOUNT" --destination '$web' --source ./dist/simple-body-analysis/browser --overwrite
+        env:
+          CLIENT_APP_STORAGE_ACCOUNT: ${{ vars.CLIENT_APP_STORAGE_ACCOUNT }}

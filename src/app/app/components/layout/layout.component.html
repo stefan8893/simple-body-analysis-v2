@@ -1,0 +1,20 @@
+<p-toast position="bottom-center"></p-toast>
+
+<div class="layout">
+  <app-header (triggerMenu)="triggerMenu()" class="header surface-800"></app-header>
+
+  @if (showBrowserMenu) {
+  <nav class="side-nav surface-card">
+    <app-side-nav class="side-nav-browser"></app-side-nav>
+  </nav>
+  }
+
+  <p-sidebar [(visible)]="showMobileMenu" position="left" class="side-nav-mobile">
+    <app-side-nav></app-side-nav>
+  </p-sidebar>
+
+  <section class="content surface-ground">
+    <router-outlet></router-outlet>
+  </section>
+
+</div>
