@@ -5,3 +5,12 @@
 .side-nav-menu.p-menu >  ul > li > div > a {
   padding-left: 18px;
 }
+
+.side-nav-app-version {
+  color: var(--primary-color-text);
+  background-color: var(--gray-500);
+}
+
+.p-inputswitch.p-focus .p-inputswitch-slider {
+  box-shadow: none;
+}

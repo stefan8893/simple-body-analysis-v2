@@ -1,14 +1,15 @@
 @import '../../../../styles/layout-variables';
 
 .layout {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: auto 1fr;
   grid-template-areas:
     "header header"
     "nav content";
-
-  min-height: 100vh;
 }
 
 .header {
@@ -17,37 +18,44 @@
 
 .side-nav {
   grid-area: nav;
+  z-index: 2;
+  overflow-y: auto;
+  transition: 0.3s cubic-bezier(.36,-0.01,0,.77);
 }
 
-.side-nav-browser {
-  display: inherit;
+.side-nav-closed{
+  margin-left: -200px;
 }
 
-.side-nav-mobile {
-  display: none;
+.side-nav-closed-instantly{
+  margin-left: -200px;
+  transition: 0ms;
 }
 
 .content {
   grid-area: content;
+  position: relative;
+  overflow-y: auto;
+}
+
+.mobile-menu-overlay {
+  position: absolute;
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 1;
+  cursor: pointer;
+  transition: 0.3s ease-in;
 }
 
 @media (max-width: calc(#{$mobile-breakpoint})) {
-  .layout {
-    grid-template-columns: auto;
-    grid-template-areas:
-      "header"
-      "content";
-
-      .side-nav {
-        display: none;
-      }
-
-      .side-nav-browser {
-        display: none;
-      }
-
-      .side-nav-mobile {
-        display: inherit;
-      }
+  .side-nav{
+    position: absolute;
   }
 }

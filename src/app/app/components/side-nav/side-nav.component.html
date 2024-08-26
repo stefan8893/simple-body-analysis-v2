@@ -1,12 +1,18 @@
-<div class="flex flex-column align-items-stretch justify-content-start">
+<div class="flex flex-column align-items-stretch justify-content-start h-full">
 
 
   <div class="mt-2">
     <p-menu [model]="items" styleClass="side-nav-menu" />
   </div>
 
-  <div class="flex flex-row justify-content-center mt-2">
-    <p>Version {{version}}</p>
+  <div class="flex flex-row align-items-center justify-content-center mt-auto mb-4">
+    <p-chip [label]="version" styleClass="side-nav-app-version"></p-chip>
+    <a href="https://github.com/stefan8893/simple-body-analysis-v2" target="_blank" rel="noopener" title="Github Repo"
+      class="disable-link-styling">
+      <span class="side-nav-git-link ml-2">
+        <i class="pi pi-github" style="font-size: 1.6rem;"></i>
+      </span>
+    </a>
   </div>
 
 

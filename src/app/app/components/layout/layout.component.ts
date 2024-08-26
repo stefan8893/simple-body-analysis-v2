@@ -1,12 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { HeaderComponent } from '../header/header.component';
 import { MessageService } from 'primeng/api';
 import { SideNavComponent } from '../side-nav/side-nav.component';
-import { SidebarModule } from 'primeng/sidebar';
 import { ButtonModule } from 'primeng/button';
 import { layouVariables } from '../../../../styles/layout-variables';
+import {
+  calculateSideNavState,
+  initialSideNavState,
+  SideNavState,
+  StateChangeTrigger,
+} from './side-nav.state';
 
 @Component({
   selector: 'app-layout',
@@ -15,7 +20,6 @@ import { layouVariables } from '../../../../styles/layout-variables';
     RouterOutlet,
     HeaderComponent,
     SideNavComponent,
-    SidebarModule,
     ToastModule,
     ButtonModule,
   ],
@@ -23,17 +27,43 @@ import { layouVariables } from '../../../../styles/layout-variables';
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss',
 })
-export class LayoutComponent {
-  showMobileMenu = false;
-  showBrowserMenu = true;
+export class LayoutComponent implements OnInit {
+  private get isMobileView(): boolean {
+    return window.innerWidth < layouVariables.mobileBreakpoint.value;
+  }
+  sideNavState: SideNavState = initialSideNavState(false);
 
-  triggerMenu() {
-    const isMobile = window.innerWidth < layouVariables.mobileBreakpoint.value;
+  sideNavCssClassByState = new Map<string, string>([
+    ['show', ''],
+    ['hideAnimated', 'side-nav-closed'],
+    ['hideInstantly', 'side-nav-closed-instantly'],
+  ]);
 
-    if (isMobile) {
-      this.showMobileMenu = true;
-    } else {
-      this.showBrowserMenu = !this.showBrowserMenu;
-    }
+  ngOnInit(): void {
+    this.sideNavState = initialSideNavState(this.isMobileView);
+  }
+
+  updateSideNavState(trigger: StateChangeTrigger) {
+    this.sideNavState = calculateSideNavState(
+      this.sideNavState,
+      trigger,
+      this.isMobileView
+    );
+  }
+
+  onMenuTogglerClicked() {
+    this.updateSideNavState('MenuTogglerClicked');
+  }
+
+  menuItemSelected() {
+    this.updateSideNavState('MenuItemSelected');
+  }
+
+  onOverlayClicked() {
+    this.updateSideNavState('OverlayClicked');
+  }
+
+  onResize() {
+    this.updateSideNavState('WindowResized');
   }
 }

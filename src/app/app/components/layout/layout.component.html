@@ -1,20 +1,23 @@
 <p-toast position="bottom-center"></p-toast>
 
-<div class="layout">
-  <app-header (triggerMenu)="triggerMenu()" class="header surface-800"></app-header>
+<div class="layout h-screen" (window:resize)="onResize()">
+  <app-header (triggerMenu)="onMenuTogglerClicked()" class="header surface-800"></app-header>
 
-  @if (showBrowserMenu) {
-  <nav class="side-nav surface-card">
-    <app-side-nav class="side-nav-browser"></app-side-nav>
+  <nav class="side-nav surface-card h-full" [class]="sideNavCssClassByState.get(sideNavState.state)">
+    <app-side-nav class="surface-card h-full" (menuItemSelected)="menuItemSelected()"></app-side-nav>
   </nav>
-  }
-
-  <p-sidebar [(visible)]="showMobileMenu" position="left" class="side-nav-mobile">
-    <app-side-nav></app-side-nav>
-  </p-sidebar>
 
   <section class="content surface-ground">
-    <router-outlet></router-outlet>
+    <div [class.mobile-menu-overlay]="sideNavState.showOverlay" (click)="onOverlayClicked()">
+
+      <span>start Lorem Ipsum Lorem IpsumLorem IpsumLorem IpsumLorem Ipsum</span>
+      <span>Lorem Ipsum Lorem IpsumLorem IpsumLorem IpsumLorem Ipsum</span>
+      <span>Lorem Ipsum Lorem IpsumLorem IpsumLorem IpsumLorem Ipsum</span>
+      <span>Lorem Ipsum Lorem IpsumLorem IpsumLorem IpsumLorem Ipsum</span>
+      <span>Lorem Ipsum Lorem IpsumLorem IpsumLorem IpsumLorem Ipsum</span>
+      <router-outlet></router-outlet>
+
+    </div>
   </section>
 
 </div>
