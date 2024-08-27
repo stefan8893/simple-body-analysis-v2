@@ -20,6 +20,7 @@ export class SideNavComponent implements OnInit {
       {
         label: 'Home',
         icon: 'pi pi-home',
+        routerLink: '/app/home',
         command: () => {
           this.notifyParent();
         },
@@ -27,6 +28,7 @@ export class SideNavComponent implements OnInit {
       {
         label: 'Täglich',
         icon: 'pi pi-calendar',
+        routerLink: '/app/daily',
         command: () => {
           this.notifyParent();
         },
@@ -34,6 +36,7 @@ export class SideNavComponent implements OnInit {
       {
         label: 'Wöchentlich',
         icon: 'pi pi-calendar-minus',
+        routerLink: '/app/weekly',
         command: () => {
           this.notifyParent();
         },
@@ -41,6 +44,7 @@ export class SideNavComponent implements OnInit {
       {
         label: 'Tabellarisch',
         icon: 'pi pi-table',
+        routerLink: '/app/table',
         command: () => {
           this.notifyParent();
         },

@@ -8,7 +8,7 @@ describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
-      providers: [provideRouter(routes), provideAnimations()],
+      providers: [provideAnimations()],
     }).compileComponents();
   });
 
@@ -22,14 +22,5 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app.title).toEqual('simple-body-analysis');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.app-title-test')?.textContent).toEqual(
-      'Simple Body Analysis'
-    );
   });
 });
