@@ -1,0 +1,10 @@
+<div class="m-8">
+  @if (isLoggedIn) {
+  <p>You're are currently logged in.</p>
+  <p-button label="Logout" rounded size="small" (click)="logout()" />
+  }
+  @else {
+  <p>You're not logged in.</p>
+  <p-button label="Login" rounded size="small" (click)="login()" />
+  }
+</div>
