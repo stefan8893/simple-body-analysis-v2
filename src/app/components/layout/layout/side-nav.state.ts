@@ -1,6 +1,6 @@
 export type SideNavState = {
   showOverlay: boolean;
-  state: 'show' | 'hideAnimated' | 'hideInstantly';
+  state: 'show' | 'hideAnimatedAndSlowly' | 'hideAnimated' | 'hideInstantly';
 };
 
 export type StateChangeTrigger =
@@ -40,7 +40,7 @@ function calculateSideNavStateOnMobileView(
     case 'AppTitleClicked':
       return { showOverlay: false, state: 'hideAnimated' };
     case 'WindowResized':
-      return { showOverlay: false, state: 'hideInstantly' };
+      return { showOverlay: false, state: 'hideAnimatedAndSlowly' };
     case 'MenuTogglerClicked':
       const isCurrentlyShown = currentState.state === 'show';
       return {

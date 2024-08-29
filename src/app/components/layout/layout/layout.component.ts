@@ -33,6 +33,7 @@ export class LayoutComponent {
     ['show', ''],
     ['hideAnimated', 'side-nav-closed'],
     ['hideInstantly', 'side-nav-closed-instantly'],
+    ['hideAnimatedAndSlowly', 'side-nav-closed-slowly'],
   ]);
 
   constructor() {

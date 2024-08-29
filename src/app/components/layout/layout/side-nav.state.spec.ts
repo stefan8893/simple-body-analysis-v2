@@ -123,7 +123,7 @@ describe('LayoutComponent SideNav', () => {
     expect(result.state).toBe('show');
   });
 
-  it('should be hidden instantly if view switches from browser to mobile view', () => {
+  it('should be hidden slowly if view switches from browser to mobile view', () => {
     const isMobile = true;
     const currentState: SideNavState = {
       showOverlay: false,
@@ -137,24 +137,7 @@ describe('LayoutComponent SideNav', () => {
     );
 
     expect(result.showOverlay).toBeFalse();
-    expect(result.state).toBe('hideInstantly');
-  });
-
-  it('should be hidden instantly if view switches from browser to mobile view even current state of show is false', () => {
-    const isMobile = true;
-    const currentState: SideNavState = {
-      showOverlay: false,
-      state: 'hideAnimated',
-    };
-
-    const result = calculateSideNavState(
-      currentState,
-      'WindowResized',
-      isMobile
-    );
-
-    expect(result.showOverlay).toBeFalse();
-    expect(result.state).toBe('hideInstantly');
+    expect(result.state).toBe('hideAnimatedAndSlowly');
   });
 
   it('should show up if menu toggler gets triggered on mobile view', () => {

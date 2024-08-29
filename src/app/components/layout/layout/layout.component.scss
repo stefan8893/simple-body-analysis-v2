@@ -32,6 +32,11 @@
   transition: 0ms;
 }
 
+.side-nav-closed-slowly {
+  margin-left: -200px;
+  transition: 1s;
+}
+
 .content {
   grid-area: content;
   position: relative;
