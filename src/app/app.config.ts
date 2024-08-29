@@ -1,10 +1,5 @@
-import {
-  APP_INITIALIZER,
-  ApplicationConfig,
-  ApplicationRef,
-  Injector,
-} from '@angular/core';
-import { provideRouter, Router } from '@angular/router';
+import { APP_INITIALIZER, ApplicationConfig, isDevMode } from '@angular/core';
+import { provideRouter } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
 import {
@@ -14,10 +9,9 @@ import {
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import {
-  MSALGuardConfigFactory,
-  //MSALGuardConfigFactory,
-  MSALInstanceFactory,
-  MSALInterceptorConfigFactory,
+  msalGuardConfigFactory,
+  msalInstanceFactory,
+  msalInterceptorConfigFactory,
 } from './auth/auth-config';
 import {
   MsalInterceptor,
@@ -28,16 +22,39 @@ import {
   MsalGuard,
   MsalBroadcastService,
 } from '@azure/msal-angular';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { provideStore, Store } from '@ngrx/store';
 import {
-  AuthenticationResult,
-  EventMessage,
-  EventType,
-} from '@azure/msal-browser';
+  appUserReducer,
+  AppUserState,
+} from './stores/app-user/app-user.reducer';
+import { UserProfileService } from './auth/user-profile.service';
+import { provideEffects } from '@ngrx/effects';
+import { userPictureReducer } from './stores/user-picture/user-picture.reducer';
+import * as appUserEffects from './stores/app-user/app-user.effects';
+import * as userPictureEffects from './stores/user-picture/user-picture.effects';
+import {
+  USER_PICTURE_STORAGE,
+  useUserPictureStorage,
+} from './auth/user-picture-storage.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideAnimations(),
+    provideStore({
+      appUser: appUserReducer,
+      userPicture: userPictureReducer,
+    }),
+    provideEffects(appUserEffects, userPictureEffects),
+    provideStoreDevtools({
+      maxAge: 25,
+      logOnly: !isDevMode(),
+      autoPause: true,
+      trace: false,
+      traceLimit: 75,
+      connectInZone: true,
+    }),
     provideHttpClient(),
     provideHttpClient(withInterceptorsFromDi(), withFetch()),
     {
@@ -47,49 +64,40 @@ export const appConfig: ApplicationConfig = {
     },
     {
       provide: MSAL_INSTANCE,
-      useFactory: MSALInstanceFactory,
+      useFactory: msalInstanceFactory,
     },
     {
       provide: MSAL_GUARD_CONFIG,
-      useFactory: MSALGuardConfigFactory,
+      useFactory: msalGuardConfigFactory,
     },
     {
       provide: MSAL_INTERCEPTOR_CONFIG,
-      useFactory: MSALInterceptorConfigFactory,
+      useFactory: msalInterceptorConfigFactory,
     },
     MsalService,
     MsalGuard,
     MsalBroadcastService,
+    UserProfileService,
     {
       provide: APP_INITIALIZER,
       useFactory: initializeApp,
-      deps: [ApplicationRef, MsalService],
+      deps: [MsalService],
       multi: true,
+    },
+    {
+      provide: USER_PICTURE_STORAGE,
+      useFactory: useUserPictureStorage,
     },
   ],
 };
 
-function initializeApp(appRef: ApplicationRef, authService: MsalService) {
+function initializeApp(authService: MsalService) {
   return async () => {
-    authService.instance.addEventCallback((event: EventMessage) => {
-      if (event.eventType === EventType.LOGIN_SUCCESS && event.payload) {
-        const payload = event.payload as AuthenticationResult;
-        const account = payload.account;
-
-        console.debug('Login was successful. Account:', account);
-      }
-
-      if (event.eventType === EventType.LOGOUT_SUCCESS) {
-        console.debug('Logout was successfuly');
-      }
-    });
-
-    await authService.instance.initialize();
-    await authService.instance
-      .handleRedirectPromise()
-      .then((authResult) =>
-        console.debug('Authentication handled. Result:', authResult)
-      )
-      .catch(console.error);
+    await initializeAuthentication(authService);
   };
+}
+
+async function initializeAuthentication(authService: MsalService) {
+  await authService.instance.initialize();
+  await authService.instance.handleRedirectPromise().catch(console.error);
 }

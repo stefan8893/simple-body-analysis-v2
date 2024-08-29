@@ -1,18 +1,14 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LayoutComponent } from './components/layout/layout/layout.component';
 import { RouterOutlet } from '@angular/router';
 import { PrimeNGConfig } from 'primeng/api';
-import {
-  MSAL_GUARD_CONFIG,
-  MsalBroadcastService,
-  MsalGuardConfiguration,
-  MsalService,
-} from '@azure/msal-angular';
-import {
-  AuthenticationResult,
-  EventMessage,
-  EventType,
-} from '@azure/msal-browser';
+import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
+import { Store } from '@ngrx/store';
+import { AppUserState } from './stores/app-user/app-user.reducer';
+import { getIdToken, IdToken, isAuthenticated } from './auth/auth.functions';
+import { removeUser, setUser } from './stores/app-user/app-user.actions';
+import { filter, Subject, takeUntil } from 'rxjs';
+import { EventType } from '@azure/msal-browser';
 
 @Component({
   selector: 'app-root',
@@ -21,8 +17,56 @@ import {
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
-  constructor(private primengConfig: PrimeNGConfig) {
+export class AppComponent implements OnInit, OnDestroy {
+  private poisonPill$ = new Subject<void>();
+
+  constructor(
+    private primengConfig: PrimeNGConfig,
+    private authService: MsalService,
+    private authBroadcastService: MsalBroadcastService,
+    private appUserStore: Store<{ appUser: AppUserState }>
+  ) {
     this.primengConfig.ripple = true;
+  }
+
+  async ngOnInit(): Promise<void> {
+    this.authBroadcastService.msalSubject$
+      .pipe(
+        filter((x) => x.eventType === EventType.LOGOUT_SUCCESS),
+        takeUntil(this.poisonPill$)
+      )
+      .subscribe((x) => {
+        // clear caches synchronously
+      });
+
+    if (isAuthenticated(this.authService)) {
+      console.log('User is authenticated.');
+
+      const idToken = getIdToken(this.authService);
+      if (!idToken)
+        throw 'User is authenticated, but has no Id. This should really not gonna happen.';
+
+      await this.onAuthenticated(idToken);
+    } else {
+      console.log('User is not authenticated.');
+      this.onAuthenticationChallenge(this.appUserStore);
+    }
+  }
+
+  async onAuthenticated(idToken: IdToken): Promise<void> {
+    console.log('User is authenticated.');
+
+    this.appUserStore.dispatch(setUser(idToken));
+  }
+
+  onAuthenticationChallenge(appUserStore: Store<{ appUser: AppUserState }>) {
+    console.log('User is not authenticated.');
+    console.debug('Remove possible existing user from store.');
+    appUserStore.dispatch(removeUser());
+  }
+
+  ngOnDestroy(): void {
+    this.poisonPill$.next();
+    this.poisonPill$.complete();
   }
 }

@@ -11,13 +11,38 @@
   </div>
 
   <div class="flex flex-row align-items-center ml-auto pr-2">
-    <p-avatar icon="pi pi-user" shape="circle" size="normal" [style]="{'width': '2.35rem', 'height': '2.35rem'}"
-      (click)="menu.toggle($event)" />
+    <p-avatar icon="pi pi-user" shape="circle" size="normal" class="header-avatar" (click)="menu.toggle($event)" />
   </div>
 
 
   <div class="card flex justify-content-center">
     <p-menu #menu [model]="items" styleClass="w-full md:w-15rem" [popup]="true">
+      <ng-template pTemplate="start">
+        <button pRipple
+          class="relative overflow-hidden w-full p-link flex align-items-center p-2 pl-3 text-color hover:surface-200 border-noround">
+          <p-avatar [image]="userPictureObjectUrl" [icon]="!userPictureObjectUrl ? 'pi pi-user' : ''" class="mr-2"
+            shape="circle" />
+          <span class="inline-flex flex-column">
+            <span class="font-bold">{{ (appUser$ | async)?.firstName }} {{ (appUser$ | async)?.lastName }}</span>
+            <span class="text-sm">{{ (appUser$ | async)?.email }}</span>
+          </span>
+        </button>
+      </ng-template>
+
+
+      <ng-template pTemplate="submenuheader" let-item>
+        <span class="text-primary font-bold">{{ item.label }}</span>
+      </ng-template>
+      <ng-template pTemplate="item" let-item>
+        <a pRipple class="flex align-items-center p-menuitem-link">
+          <span [class]="item.icon"></span>
+          <span class="ml-2">{{ item.label }}</span>
+          <p-badge *ngIf="item.badge" class="ml-auto" [value]="item.badge" />
+          <span *ngIf="item.shortcut" class="ml-auto border-1 surface-border border-round surface-100 text-xs p-1">{{
+            item.shortcut }}</span>
+        </a>
+      </ng-template>
+
       <ng-template pTemplate="end">
         <span class="inline-flex align-items-center gap-1 px-2 py-2">
           <svg width="33" height="35" viewBox="0 0 33 35" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -64,29 +89,7 @@
           <span class="font-medium text-xl font-semibold">Prime<span class="text-primary">APP</span></span>
         </span>
       </ng-template>
-      <ng-template pTemplate="submenuheader" let-item>
-        <span class="text-primary font-bold">{{ item.label }}</span>
-      </ng-template>
-      <ng-template pTemplate="item" let-item>
-        <a pRipple class="flex align-items-center p-menuitem-link">
-          <span [class]="item.icon"></span>
-          <span class="ml-2">{{ item.label }}</span>
-          <p-badge *ngIf="item.badge" class="ml-auto" [value]="item.badge" />
-          <span *ngIf="item.shortcut" class="ml-auto border-1 surface-border border-round surface-100 text-xs p-1">{{
-            item.shortcut }}</span>
-        </a>
-      </ng-template>
-      <ng-template pTemplate="start">
-        <button pRipple
-          class="relative overflow-hidden w-full p-link flex align-items-center p-2 pl-3 text-color hover:surface-200 border-noround">
-          <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" class="mr-2"
-            shape="circle" />
-          <span class="inline-flex flex-column">
-            <span class="font-bold">Stefan Jeitler</span>
-            <span class="text-sm">Admin</span>
-          </span>
-        </button>
-      </ng-template>
+
     </p-menu>
   </div>
 </div>

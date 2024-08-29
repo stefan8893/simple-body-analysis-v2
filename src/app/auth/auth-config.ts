@@ -9,8 +9,9 @@ import {
   BrowserCacheLocation,
   LogLevel,
 } from '@azure/msal-browser';
+import { UserProfileService } from './user-profile.service';
 
-export function MSALInstanceFactory(): IPublicClientApplication {
+export function msalInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication({
     auth: {
       clientId: '2564e5b2-e1a5-4dbf-963e-37e123b024e8',
@@ -50,20 +51,18 @@ export function MSALInstanceFactory(): IPublicClientApplication {
         },
         piiLoggingEnabled: false,
       },
-      windowHashTimeout: 60000,
-      iframeHashTimeout: 6000,
-      loadFrameTimeout: 0,
     },
   });
 }
 
-export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
+export function msalInterceptorConfigFactory(): MsalInterceptorConfiguration {
   const protectedResourceMap = new Map<string, Array<string>>();
-  protectedResourceMap.set('https://graph.microsoft.com/oidc/userinfo', [
+  protectedResourceMap.set(UserProfileService.userInfoEndpoint.href, [
     'profile',
     'email',
   ]);
-  protectedResourceMap.set('https://graph.microsoft.com/v1.0/me/photo/$value', [
+
+  protectedResourceMap.set('https://graph.microsoft.com/v1.0/me/photo/*', [
     'profile',
   ]);
 
@@ -73,7 +72,7 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
   };
 }
 
-export function MSALGuardConfigFactory(): MsalGuardConfiguration {
+export function msalGuardConfigFactory(): MsalGuardConfiguration {
   return {
     interactionType: InteractionType.Redirect,
     authRequest: {

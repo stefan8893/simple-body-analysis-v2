@@ -1,1 +1,23 @@
-<p>profile works!</p>
+<div class="m-6">
+  @if((appUser$ | async) !== null){
+  <div class="flex flex-column gap-2">
+    <label for="firstName">Vorname</label>
+    <input pInputText id="firstName" aria-describedby="username-help" [ngModel]="(appUser$ | async)?.firstName"
+      readonly />
+  </div>
+  <div class="flex flex-column gap-2 mt-2">
+    <label for="lastName">Nachname</label>
+    <input pInputText id="lastName" aria-describedby="username-help" [ngModel]="(appUser$ | async)?.lastName"
+      readonly />
+  </div>
+  <div class="flex flex-column gap-2 mt-2">
+    <label for="email">Email</label>
+    <input pInputText id="email" aria-describedby="username-help" [ngModel]="(appUser$ | async)?.email" readonly />
+  </div>
+  }
+  @else {
+  <div>
+    <p>No user data available</p>
+  </div>
+  }
+</div>
