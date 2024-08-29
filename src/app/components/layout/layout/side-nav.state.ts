@@ -10,8 +10,10 @@ export type StateChangeTrigger =
   | 'WindowResized'
   | 'OverlayClicked';
 
-export function initialSideNavState(isMobileView: boolean): SideNavState {
-  return isMobileView
+export type ViewType = 'Mobile' | 'Browser';
+
+export function initialSideNavState(viewType: ViewType): SideNavState {
+  return viewType === 'Mobile'
     ? {
         showOverlay: false,
         state: 'hideInstantly',
@@ -22,9 +24,9 @@ export function initialSideNavState(isMobileView: boolean): SideNavState {
 export function calculateSideNavState(
   currentState: SideNavState,
   trigger: StateChangeTrigger,
-  isMobileView: boolean
+  viewType: ViewType
 ): SideNavState {
-  if (isMobileView) {
+  if (viewType === 'Mobile') {
     return calculateSideNavStateOnMobileView(currentState, trigger);
   } else {
     return calculateSideNavStateOnBrowserView(currentState, trigger);

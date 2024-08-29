@@ -10,9 +10,10 @@ import {
   initialSideNavState,
   SideNavState,
   StateChangeTrigger,
+  ViewType,
 } from './side-nav.state';
-import { fromEvent, Observable, Subject } from 'rxjs';
-import { map, filter, debounceTime, tap, switchAll } from 'rxjs/operators';
+import { fromEvent, Observable } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-layout',
@@ -24,10 +25,12 @@ import { map, filter, debounceTime, tap, switchAll } from 'rxjs/operators';
 })
 export class LayoutComponent {
   windowResize$: Observable<Event>;
-  private get isMobileView(): boolean {
-    return window.innerWidth < layouVariables.mobileBreakpoint.value;
+  private get viewType(): ViewType {
+    return window.innerWidth < layouVariables.mobileBreakpoint.value
+      ? 'Mobile'
+      : 'Browser';
   }
-  sideNavState: SideNavState = initialSideNavState(false);
+  sideNavState: SideNavState = initialSideNavState('Browser');
 
   sideNavCssClassByState = new Map<string, string>([
     ['show', ''],
@@ -37,7 +40,7 @@ export class LayoutComponent {
   ]);
 
   constructor() {
-    this.sideNavState = initialSideNavState(this.isMobileView);
+    this.sideNavState = initialSideNavState(this.viewType);
 
     this.windowResize$ = fromEvent(window, 'resize').pipe(debounceTime(50));
     this.windowResize$.subscribe(() =>
@@ -49,7 +52,7 @@ export class LayoutComponent {
     this.sideNavState = calculateSideNavState(
       this.sideNavState,
       trigger,
-      this.isMobileView
+      this.viewType
     );
   }
 
