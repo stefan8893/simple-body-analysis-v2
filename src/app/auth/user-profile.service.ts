@@ -51,8 +51,6 @@ export class UserProfileService {
   ) {}
 
   loadUserProfile() {
-    console.debug('UserProfile gets loaded.');
-
     return this.httpClient
       .get<UserInfoDto>(UserProfileService.userInfoEndpoint.href)
       .pipe(

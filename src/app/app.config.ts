@@ -31,7 +31,6 @@ import {
 import { UserProfileService } from './auth/user-profile.service';
 import { provideEffects } from '@ngrx/effects';
 import { userPictureReducer } from './stores/user-picture/user-picture.reducer';
-import * as appUserEffects from './stores/app-user/app-user.effects';
 import * as userPictureEffects from './stores/user-picture/user-picture.effects';
 import {
   USER_PICTURE_STORAGE,
@@ -46,7 +45,7 @@ export const appConfig: ApplicationConfig = {
       appUser: appUserReducer,
       userPicture: userPictureReducer,
     }),
-    provideEffects(appUserEffects, userPictureEffects),
+    provideEffects(userPictureEffects),
     provideStoreDevtools({
       maxAge: 25,
       logOnly: !isDevMode(),
