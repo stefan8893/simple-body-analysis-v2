@@ -23,7 +23,7 @@ function extractUser(idToken: IdToken): AppUser {
   const userId = idToken['sub'] as string;
   const firstName = (idToken['name'] as string).split(' ')[0] ?? '';
   const lastName = (idToken['name'] as string).split(' ')[1] ?? '';
-  const email = (idToken['email'] ?? '') as string;
+  const email = (idToken['preferred_username'] ?? '') as string;
 
   return {
     id: userId,

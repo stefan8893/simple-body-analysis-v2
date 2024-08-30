@@ -15,6 +15,7 @@ export const USER_PICTURE_STORAGE = new InjectionToken<UserPictureStorage>(
 export type UserPictureStorage = {
   get: (userId: string) => Promise<UserPicture | null>;
   set: (userId: string, pictureObjectUrl: string) => Promise<void>;
+  clear: () => void;
 };
 
 export function useUserPictureStorage(): UserPictureStorage {
@@ -67,6 +68,10 @@ export function useUserPictureStorage(): UserPictureStorage {
     localStorage.setItem(storageKey, JSON.stringify(pictureEntry));
   };
 
+  const clear = () => {
+    localStorage.removeItem(storageKey);
+  };
+
   const dataUrlToBlob = async (dataUrl: string) => {
     const response = await fetch(dataUrl);
     return await response.blob();
@@ -86,5 +91,6 @@ export function useUserPictureStorage(): UserPictureStorage {
   return {
     get,
     set,
+    clear,
   };
 }

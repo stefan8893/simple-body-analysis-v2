@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { LayoutComponent } from './components/layout/layout/layout.component';
 import { RouterOutlet } from '@angular/router';
 import { PrimeNGConfig } from 'primeng/api';
@@ -9,6 +9,10 @@ import { getIdToken, IdToken, isAuthenticated } from './auth/auth.functions';
 import { removeUser, setUser } from './stores/app-user/app-user.actions';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { EventType } from '@azure/msal-browser';
+import {
+  USER_PICTURE_STORAGE,
+  UserPictureStorage,
+} from './auth/user-picture-storage.service';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +28,9 @@ export class AppComponent implements OnInit, OnDestroy {
     private primengConfig: PrimeNGConfig,
     private authService: MsalService,
     private authBroadcastService: MsalBroadcastService,
-    private appUserStore: Store<{ appUser: AppUserState }>
+    private appUserStore: Store<{ appUser: AppUserState }>,
+    @Inject(USER_PICTURE_STORAGE)
+    private userPictureStorage: UserPictureStorage
   ) {
     this.primengConfig.ripple = true;
   }
@@ -35,8 +41,9 @@ export class AppComponent implements OnInit, OnDestroy {
         filter((x) => x.eventType === EventType.LOGOUT_SUCCESS),
         takeUntil(this.poisonPill$)
       )
-      .subscribe((x) => {
-        // clear caches synchronously
+      .subscribe(() => {
+        this.userPictureStorage.clear();
+        console.debug('User Picture Storage cleared.');
       });
 
     if (isAuthenticated(this.authService)) {
