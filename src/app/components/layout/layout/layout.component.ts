@@ -12,8 +12,8 @@ import {
   StateChangeTrigger,
   ViewType,
 } from './side-nav.state';
-import { fromEvent, Observable } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { fromEvent, Observable, Subject } from 'rxjs';
+import { debounceTime, take, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-layout',
@@ -23,29 +23,32 @@ import { debounceTime } from 'rxjs/operators';
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss',
 })
-export class LayoutComponent {
+export class LayoutComponent implements OnInit, OnDestroy {
   windowResize$: Observable<Event>;
   private get viewType(): ViewType {
     return window.innerWidth < layouVariables.mobileBreakpoint.value
       ? 'Mobile'
       : 'Browser';
   }
+  private poisonPill$ = new Subject<void>();
   sideNavState: SideNavState = initialSideNavState('Browser');
 
   sideNavCssClassByState = new Map<string, string>([
     ['show', ''],
-    ['hideAnimated', 'side-nav-closed'],
     ['hideInstantly', 'side-nav-closed-instantly'],
-    ['hideAnimatedAndSlowly', 'side-nav-closed-slowly'],
+    ['hideAnimated', 'side-nav-closed-animated'],
+    ['hideAnimatedAndSlowly', 'side-nav-closed-slowly-animated'],
   ]);
 
   constructor() {
+    this.windowResize$ = fromEvent(window, 'resize');
+  }
+  ngOnInit(): void {
     this.sideNavState = initialSideNavState(this.viewType);
 
-    this.windowResize$ = fromEvent(window, 'resize').pipe(debounceTime(50));
-    this.windowResize$.subscribe(() =>
-      this.updateSideNavState('WindowResized')
-    );
+    this.windowResize$
+      .pipe(debounceTime(50), takeUntil(this.poisonPill$))
+      .subscribe(() => this.updateSideNavState('WindowResized'));
   }
 
   updateSideNavState(trigger: StateChangeTrigger) {
@@ -60,7 +63,7 @@ export class LayoutComponent {
     this.updateSideNavState('MenuTogglerClicked');
   }
 
-  menuItemSelected() {
+  onMenuItemSelected() {
     this.updateSideNavState('MenuItemSelected');
   }
 
@@ -70,5 +73,10 @@ export class LayoutComponent {
 
   onAppTitleClicked() {
     this.updateSideNavState('AppTitleClicked');
+  }
+
+  ngOnDestroy(): void {
+    this.poisonPill$.next();
+    this.poisonPill$.complete();
   }
 }

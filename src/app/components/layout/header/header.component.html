@@ -20,8 +20,8 @@
       <ng-template pTemplate="start">
         <button pRipple
           class="relative overflow-hidden w-full p-link flex align-items-center p-2 pl-3 text-color hover:surface-200 border-noround">
-          <p-avatar [image]="userPictureObjectUrl" [icon]="!userPictureObjectUrl ? 'pi pi-user' : ''" class="mr-2"
-            shape="circle" />
+          <p-avatar [image]="userPictureObjectUrl" [icon]="!userPictureObjectUrl ? 'pi pi-user' : ''"
+            class="mr-2 header-menu-avatar" shape="circle" />
           <span class="inline-flex flex-column">
             <span class="font-bold">{{ (appUser$ | async)?.firstName }} {{ (appUser$ | async)?.lastName }}</span>
             <span class="text-sm">{{ (appUser$ | async)?.email }}</span>

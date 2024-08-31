@@ -23,18 +23,18 @@
   transition: 0.3s cubic-bezier(.36,-0.01,0,.77);
 }
 
-.side-nav-closed{
+.side-nav-closed-animated{
   margin-left: -200px;
+}
+
+.side-nav-closed-slowly-animated {
+  margin-left: -200px;
+  transition: 1s;
 }
 
 .side-nav-closed-instantly{
   margin-left: -200px;
   transition: 0ms;
-}
-
-.side-nav-closed-slowly {
-  margin-left: -200px;
-  transition: 1s;
 }
 
 .content {

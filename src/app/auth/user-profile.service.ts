@@ -1,16 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { select } from '@ngrx/store';
-import {
-  catchError,
-  concatMap,
-  defaultIfEmpty,
-  EMPTY,
-  filter,
-  from,
-  of,
-  tap,
-} from 'rxjs';
+import { catchError, concatMap, EMPTY, from, map, of, tap } from 'rxjs';
 import { PictureSource } from '../stores/user-picture/user-picture.reducer';
 import {
   USER_PICTURE_STORAGE,
@@ -77,7 +68,9 @@ export class UserProfileService {
       tap((x) => this.userPictureStorage.set(userId, x.objectUrl))
     );
 
-    return cachedPicture.pipe(concatMap((x) => (!!x ? of(x) : grahPicture)));
+    return cachedPicture.pipe(
+      concatMap((cached) => (!!cached ? of(cached) : grahPicture))
+    );
   }
 
   private loadPictureFromGraphApi(pictureUrl: string) {
@@ -87,7 +80,7 @@ export class UserProfileService {
         responseType: 'blob' as 'json',
       })
       .pipe(
-        select(
+        map(
           (picture): UserPicture => ({
             objectUrl: URL.createObjectURL(picture),
             source: 'GraphApi',
