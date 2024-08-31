@@ -93,6 +93,7 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
+            az storage blob delete-batch --account-name "$CLIENT_APP_STORAGE_ACCOUNT" --source '$web' --pattern '*'
             az storage blob upload-batch --account-name "$CLIENT_APP_STORAGE_ACCOUNT" --destination '$web' --source ./dist/simple-body-analysis/browser --overwrite
         env:
           CLIENT_APP_STORAGE_ACCOUNT: ${{ vars.CLIENT_APP_STORAGE_ACCOUNT }}
