@@ -1,4 +1,17 @@
 .profile-user-picture {
-  width: 60px;
-  height: 60px;
+  overflow: hidden;
+  object-fit: cover;
+  width: 110px;
+  height: 110px;
+}
+
+
+.profile-user-avatar > .p-avatar{
+
+  width: 100px;
+  height: 100px;
+
+  .pi-user.p-avatar-icon{
+    transform: scale(2);
+  }
 }

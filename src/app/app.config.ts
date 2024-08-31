@@ -24,10 +24,7 @@ import {
 } from '@azure/msal-angular';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideStore, Store } from '@ngrx/store';
-import {
-  appUserReducer,
-  AppUserState,
-} from './stores/app-user/app-user.reducer';
+import { appUserReducer } from './stores/app-user/app-user.reducer';
 import { UserProfileService } from './auth/user-profile.service';
 import { provideEffects } from '@ngrx/effects';
 import { userPictureReducer } from './stores/user-picture/user-picture.reducer';

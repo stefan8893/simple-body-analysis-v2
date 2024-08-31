@@ -6,11 +6,11 @@
     <app-side-nav class="surface-card h-full" (menuItemSelected)="onMenuItemSelected()"></app-side-nav>
   </nav>
 
-  <section class="content surface-ground">
-    <div [class.mobile-menu-overlay]="sideNavState.showOverlay"
+  <section class="content surface-ground pl-3 sm:pl-4 pr-3 sm:pr-4">
+    <router-outlet></router-outlet>
+    <!-- <div [class.mobile-menu-overlay]="sideNavState.showOverlay"
       (click)="sideNavState.showOverlay && onOverlayClicked()">
-      <router-outlet></router-outlet>
-    </div>
+    </div> -->
   </section>
 
 </div>

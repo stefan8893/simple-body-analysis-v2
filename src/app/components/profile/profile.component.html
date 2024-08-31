@@ -1,11 +1,15 @@
 <app-content-header title="Profil"></app-content-header>
-<div class="flex flex-row align-items-center justify-content-center">
+<div class="flex flex-row align-items-center justify-content-start">
   @if((appUser$ | async) !== null){
   <div class="flex flex-column align-items-center justify-content-start w-30rem">
 
     <div class="flex flex-row align-items-center justify-content-center w-full">
       <div class="mr-3">
+        @if(userPictureObjectUrl) {
         <img class="profile-user-picture" [src]="userPictureObjectUrl" alt="" />
+        } @else {
+        <p-avatar icon="pi pi-user" shape="circle" size="large" class="profile-user-avatar" />
+        }
       </div>
       <div class="flex flex-column align-items-stretch justify-content-stretch w-full">
         <div class="flex flex-column gap-1 w-full">

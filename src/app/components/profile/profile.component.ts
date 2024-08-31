@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { ContentHeaderComponent } from '../miscellaneous/content-header/content-header.component';
 import { UserPictureState } from '../../stores/user-picture/user-picture.reducer';
+import { AvatarModule } from 'primeng/avatar';
 
 @Component({
   selector: 'app-profile',
@@ -18,6 +19,7 @@ import { UserPictureState } from '../../stores/user-picture/user-picture.reducer
     FormsModule,
     InputTextModule,
     ButtonModule,
+    AvatarModule,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
