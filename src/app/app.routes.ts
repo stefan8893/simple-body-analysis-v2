@@ -1,14 +1,14 @@
 import { Routes } from '@angular/router';
-import { LayoutComponent } from './components/layout/layout/layout.component';
+import { MsalGuard } from '@azure/msal-angular';
+import { isUnauthenticatedGuard } from './auth/is-unauthenticated.guard';
+import { DailyAnalysisComponent } from './components/daily-analysis/daily-analysis.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
-import { DailyAnalysisComponent } from './components/daily-analysis/daily-analysis.component';
-import { WeeklyAnalysisComponent } from './components/weekly-analysis/weekly-analysis.component';
-import { TableViewComponent } from './components/table-view/table-view.component';
-import { ProfileComponent } from './components/profile/profile.component';
+import { LayoutComponent } from './components/layout/layout/layout.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
-import { isUnauthenticatedGuard } from './auth/is-unauthenticated.guard';
-import { MsalGuard } from '@azure/msal-angular';
+import { ProfileComponent } from './components/profile/profile.component';
+import { TableViewComponent } from './components/table-view/table-view.component';
+import { WeeklyAnalysisComponent } from './components/weekly-analysis/weekly-analysis.component';
 
 export const routes: Routes = [
   {

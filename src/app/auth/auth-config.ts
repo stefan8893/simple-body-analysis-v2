@@ -3,11 +3,11 @@ import {
   MsalInterceptorConfiguration,
 } from '@azure/msal-angular';
 import {
-  IPublicClientApplication,
-  PublicClientApplication,
-  InteractionType,
   BrowserCacheLocation,
+  InteractionType,
+  IPublicClientApplication,
   LogLevel,
+  PublicClientApplication,
 } from '@azure/msal-browser';
 import { UserProfileService } from './user-profile.service';
 

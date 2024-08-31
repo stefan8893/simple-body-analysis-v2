@@ -1,18 +1,18 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { LayoutComponent } from './components/layout/layout/layout.component';
 import { RouterOutlet } from '@angular/router';
-import { PrimeNGConfig } from 'primeng/api';
 import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
-import { Store } from '@ngrx/store';
-import { AppUserState } from './stores/app-user/app-user.reducer';
-import { getIdToken, IdToken, isAuthenticated } from './auth/auth.functions';
-import { removeUser, setUser } from './stores/app-user/app-user.actions';
-import { filter, Subject, takeUntil } from 'rxjs';
 import { EventType } from '@azure/msal-browser';
+import { Store } from '@ngrx/store';
+import { PrimeNGConfig } from 'primeng/api';
+import { filter, Subject, takeUntil } from 'rxjs';
+import { getIdToken, IdToken, isAuthenticated } from './auth/auth.functions';
 import {
   USER_PICTURE_STORAGE,
   UserPictureStorage,
 } from './auth/user-picture-storage.service';
+import { LayoutComponent } from './components/layout/layout/layout.component';
+import { removeUser, setUser } from './stores/app-user/app-user.actions';
+import { AppUserState } from './stores/app-user/app-user.reducer';
 
 @Component({
   selector: 'app-root',
@@ -51,7 +51,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
       const idToken = getIdToken(this.authService);
       if (!idToken)
-        throw 'User is authenticated, but has no Id. This should really not gonna happen.';
+        throw 'User is authenticated, but has no Id-Token. This should really not gonna happen.';
 
       await this.onAuthenticated(idToken);
     } else {

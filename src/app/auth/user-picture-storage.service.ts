@@ -1,6 +1,6 @@
-import { Injectable, InjectionToken } from '@angular/core';
-import { UserPicture } from '../stores/user-picture/user-picture.reducer';
+import { InjectionToken } from '@angular/core';
 import { addDays } from 'date-fns';
+import { UserPicture } from '../stores/user-picture/user-picture.reducer';
 
 type UserPictureEntry = {
   userId: string;

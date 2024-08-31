@@ -95,7 +95,7 @@ export class UserProfileService {
   }
 
   clearUserPictureCache() {
-    console.log('Clear user picture from storage.');
+    console.log('Remove user picture from storage.');
     this.userPictureStorage.clear();
 
     return EMPTY;

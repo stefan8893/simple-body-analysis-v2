@@ -1,38 +1,38 @@
-import { APP_INITIALIZER, ApplicationConfig, isDevMode } from '@angular/core';
-import { provideRouter } from '@angular/router';
-import { provideAnimations } from '@angular/platform-browser/animations';
-import { routes } from './app.routes';
 import {
   HTTP_INTERCEPTORS,
   provideHttpClient,
   withFetch,
   withInterceptorsFromDi,
 } from '@angular/common/http';
+import { APP_INITIALIZER, ApplicationConfig, isDevMode } from '@angular/core';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideRouter } from '@angular/router';
+import {
+  MSAL_GUARD_CONFIG,
+  MSAL_INSTANCE,
+  MSAL_INTERCEPTOR_CONFIG,
+  MsalBroadcastService,
+  MsalGuard,
+  MsalInterceptor,
+  MsalService,
+} from '@azure/msal-angular';
+import { provideEffects } from '@ngrx/effects';
+import { provideStore } from '@ngrx/store';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { routes } from './app.routes';
 import {
   msalGuardConfigFactory,
   msalInstanceFactory,
   msalInterceptorConfigFactory,
 } from './auth/auth-config';
 import {
-  MsalInterceptor,
-  MSAL_INSTANCE,
-  MSAL_GUARD_CONFIG,
-  MSAL_INTERCEPTOR_CONFIG,
-  MsalService,
-  MsalGuard,
-  MsalBroadcastService,
-} from '@azure/msal-angular';
-import { provideStoreDevtools } from '@ngrx/store-devtools';
-import { provideStore, Store } from '@ngrx/store';
-import { appUserReducer } from './stores/app-user/app-user.reducer';
-import { UserProfileService } from './auth/user-profile.service';
-import { provideEffects } from '@ngrx/effects';
-import { userPictureReducer } from './stores/user-picture/user-picture.reducer';
-import * as userPictureEffects from './stores/user-picture/user-picture.effects';
-import {
   USER_PICTURE_STORAGE,
   useUserPictureStorage,
 } from './auth/user-picture-storage.service';
+import { UserProfileService } from './auth/user-profile.service';
+import { appUserReducer } from './stores/app-user/app-user.reducer';
+import * as userPictureEffects from './stores/user-picture/user-picture.effects';
+import { userPictureReducer } from './stores/user-picture/user-picture.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
