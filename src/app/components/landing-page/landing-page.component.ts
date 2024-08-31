@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MsalService } from '@azure/msal-angular';
 import { ButtonModule } from 'primeng/button';
 
@@ -10,19 +10,9 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './landing-page.component.scss',
 })
 export class LandingPageComponent {
-  constructor(private authService: MsalService) {
-    this.isLoggedIn = this.authService.instance.getAllAccounts().length > 0;
-  }
+  constructor(private authService: MsalService) {}
 
-  isLoggedIn: boolean = false;
-
-  async login() {
-    console.log('Login');
-    await this.authService.instance.loginRedirect();
-  }
-
-  async logout() {
-    console.log('Logout');
-    await this.authService.instance.logoutRedirect();
+  login() {
+    this.authService.instance.loginRedirect();
   }
 }
