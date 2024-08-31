@@ -33,21 +33,25 @@ import { CommonModule } from '@angular/common';
   encapsulation: ViewEncapsulation.None,
 })
 export class HeaderComponent implements OnDestroy {
+  private poisonPill$ = new Subject<void>();
+
   menuTogglerClicked = output();
   appTitleClicked = output();
 
   appUser$: Observable<AppUserState>;
   userPicture$: Observable<UserPictureState>;
-  private poisonPill$ = new Subject<void>();
 
   userPictureObjectUrl = '';
 
   constructor(
     private authService: MsalService,
-    userStore: Store<{ userPicture: UserPictureState; appUser: AppUserState }>
+    appUserStore: Store<{
+      userPicture: UserPictureState;
+      appUser: AppUserState;
+    }>
   ) {
-    this.appUser$ = userStore.select('appUser');
-    this.userPicture$ = userStore.select('userPicture');
+    this.appUser$ = appUserStore.select('appUser');
+    this.userPicture$ = appUserStore.select('userPicture');
 
     this.userPicture$
       .pipe(takeUntil(this.poisonPill$))
@@ -59,44 +63,11 @@ export class HeaderComponent implements OnDestroy {
       separator: true,
     },
     {
-      label: 'Documents',
-      items: [
-        {
-          label: 'New',
-          icon: 'pi pi-plus',
-          shortcut: '⌘+N',
-        },
-        {
-          label: 'Search',
-          icon: 'pi pi-search',
-        },
-      ],
-    },
-    {
-      label: 'Profile',
-      items: [
-        {
-          label: 'Settings',
-          icon: 'pi pi-cog',
-          shortcut: '⌘+O',
-        },
-        {
-          label: 'Messages',
-          icon: 'pi pi-inbox',
-          badge: '2',
-        },
-        {
-          label: 'Logout',
-          icon: 'pi pi-sign-out',
-          shortcut: '⌘+Q',
-          command: () => {
-            this.authService.instance.logout();
-          },
-        },
-      ],
-    },
-    {
-      separator: true,
+      label: 'Logout',
+      icon: 'pi pi-sign-out',
+      command: () => {
+        this.authService.instance.logout();
+      },
     },
   ];
 

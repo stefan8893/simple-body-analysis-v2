@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
+import { ContentHeaderComponent } from '../miscellaneous/content-header/content-header.component';
 
 @Component({
   selector: 'app-table-view',
   standalone: true,
-  imports: [],
+  imports: [ContentHeaderComponent],
   templateUrl: './table-view.component.html',
-  styleUrl: './table-view.component.scss'
+  styleUrl: './table-view.component.scss',
 })
-export class TableViewComponent {
-
-}
+export class TableViewComponent {}

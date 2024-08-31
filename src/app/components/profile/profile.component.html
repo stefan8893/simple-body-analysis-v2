@@ -1,18 +1,27 @@
-<div class="m-6">
+<app-content-header title="Profil"></app-content-header>
+<div class="flex flex-row align-items-center justify-content-center">
   @if((appUser$ | async) !== null){
-  <div class="flex flex-column gap-2">
-    <label for="firstName">Vorname</label>
-    <input pInputText id="firstName" aria-describedby="username-help" [ngModel]="(appUser$ | async)?.firstName"
-      readonly />
-  </div>
-  <div class="flex flex-column gap-2 mt-2">
-    <label for="lastName">Nachname</label>
-    <input pInputText id="lastName" aria-describedby="username-help" [ngModel]="(appUser$ | async)?.lastName"
-      readonly />
-  </div>
-  <div class="flex flex-column gap-2 mt-2">
-    <label for="email">Email</label>
-    <input pInputText id="email" aria-describedby="username-help" [ngModel]="(appUser$ | async)?.email" readonly />
+  <div class="flex flex-column align-items-center justify-content-start w-30rem">
+
+    <div class="flex flex-row align-items-center justify-content-center w-full">
+      <div class="mr-3">
+        <img class="profile-user-picture" [src]="userPictureObjectUrl" alt="" />
+      </div>
+      <div class="flex flex-column align-items-stretch justify-content-stretch w-full">
+        <div class="flex flex-column gap-1 w-full">
+          <label for="firstName">Vorname</label>
+          <input pInputText id="firstName" [ngModel]="(appUser$ | async)?.firstName" readonly />
+        </div>
+        <div class="flex flex-column gap-1 mt-3 w-full">
+          <label for="lastName">Nachname</label>
+          <input pInputText id="lastName" [ngModel]="(appUser$ | async)?.lastName" readonly />
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-column gap-1 mt-3 w-full">
+      <label for="email">Email</label>
+      <input pInputText id="email" [ngModel]="(appUser$ | async)?.email" readonly />
+    </div>
   </div>
   }
   @else {
