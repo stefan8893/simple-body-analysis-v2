@@ -1,10 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from '../header/header.component';
 import { MessageService } from 'primeng/api';
-import { SideNavComponent } from '../side-nav/side-nav.component';
 import { ButtonModule } from 'primeng/button';
+import { fromEvent, Observable, Subject } from 'rxjs';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { layouVariables } from '../../../../styles/layout-variables';
+import { HeaderComponent } from '../header/header.component';
+import { SideNavComponent } from '../side-nav/side-nav.component';
 import {
   calculateSideNavState,
   initialSideNavState,
@@ -12,8 +14,6 @@ import {
   StateChangeTrigger,
   ViewType,
 } from './side-nav.state';
-import { fromEvent, Observable, Subject } from 'rxjs';
-import { debounceTime, take, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-layout',
@@ -24,13 +24,13 @@ import { debounceTime, take, takeUntil } from 'rxjs/operators';
   styleUrl: './layout.component.scss',
 })
 export class LayoutComponent implements OnInit, OnDestroy {
-  windowResize$: Observable<Event>;
+  private windowResize$: Observable<Event>;
+  private poisonPill$ = new Subject<void>();
   private get viewType(): ViewType {
     return window.innerWidth < layouVariables.mobileBreakpoint.value
       ? 'Mobile'
       : 'Browser';
   }
-  private poisonPill$ = new Subject<void>();
   sideNavState: SideNavState = initialSideNavState('Browser');
 
   sideNavCssClassByState = new Map<string, string>([

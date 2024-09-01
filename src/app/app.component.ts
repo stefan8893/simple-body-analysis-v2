@@ -47,8 +47,6 @@ export class AppComponent implements OnInit, OnDestroy {
       });
 
     if (isAuthenticated(this.authService)) {
-      console.log('User is authenticated.');
-
       const idToken = getIdToken(this.authService);
       if (!idToken)
         throw 'User is authenticated, but has no Id-Token. This should really not gonna happen.';
@@ -63,11 +61,19 @@ export class AppComponent implements OnInit, OnDestroy {
   async onAuthenticated(idToken: IdToken): Promise<void> {
     console.log('User is authenticated.');
 
+    this.setActiveAccount();
     this.appUserStore.dispatch(setUser(idToken));
+  }
+
+  setActiveAccount() {
+    const allAccounts = this.authService.instance.getAllAccounts();
+    if (allAccounts.length > 0)
+      this.authService.instance.setActiveAccount(allAccounts[0]);
   }
 
   onAuthenticationChallenge(appUserStore: Store<{ appUser: AppUserState }>) {
     console.log('User is not authenticated.');
+
     console.debug('Remove possible existing user from store.');
     appUserStore.dispatch(removeUser());
   }

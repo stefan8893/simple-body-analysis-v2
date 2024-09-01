@@ -1,7 +1,7 @@
 import { Component, OnInit, output, ViewEncapsulation } from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { MenuModule } from 'primeng/menu';
 import { ChipModule } from 'primeng/chip';
+import { MenuModule } from 'primeng/menu';
 import packageInfo from '../../../../../package.json';
 
 @Component({
@@ -42,7 +42,7 @@ export class SideNavComponent implements OnInit {
         },
       },
       {
-        label: 'Tabellarisch',
+        label: 'Tabellenansicht',
         icon: 'pi pi-table',
         routerLink: '/app/table',
         command: () => {

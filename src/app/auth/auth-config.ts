@@ -39,7 +39,7 @@ export function msalInstanceFactory(): IPublicClientApplication {
               console.error(message);
               return;
             case LogLevel.Info:
-              console.info(message);
+              console.debug(message);
               return;
             case LogLevel.Verbose:
               console.debug(message);

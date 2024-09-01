@@ -7,6 +7,7 @@ import {
 import { APP_INITIALIZER, ApplicationConfig, isDevMode } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
+import { TableClient } from '@azure/data-tables';
 import {
   MSAL_GUARD_CONFIG,
   MSAL_INSTANCE,
@@ -30,6 +31,7 @@ import {
   useUserPictureStorage,
 } from './auth/user-picture-storage.service';
 import { UserProfileService } from './auth/user-profile.service';
+import { useBodyAnalysisTableClient } from './body-analysis-data/use-body-analysis-table-client';
 import { appUserReducer } from './stores/app-user/app-user.reducer';
 import * as userPictureEffects from './stores/user-picture/user-picture.effects';
 import { userPictureReducer } from './stores/user-picture/user-picture.reducer';
@@ -83,6 +85,11 @@ export const appConfig: ApplicationConfig = {
     {
       provide: USER_PICTURE_STORAGE,
       useFactory: useUserPictureStorage,
+    },
+    {
+      provide: TableClient,
+      useFactory: useBodyAnalysisTableClient,
+      deps: [MsalService],
     },
   ],
 };
