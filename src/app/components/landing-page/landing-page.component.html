@@ -1,17 +1,24 @@
-<div class="flex flex-column align-items-stretch justify-content-start h-screen">
-  <div class="flex flex-row align-items-center justify-content-end surface-800">
+<div class="landing-page-layout h-screen">
+
+  <div class="landing-page-header flex flex-row align-items-center justify-content-end surface-800">
     <div class="m-2 mr-4 ">
       <p-button label="Login" severity="secondary" size="small" (click)="login()" />
     </div>
   </div>
-  <div class="flex flex-row flex-wrap-reverse align-items-end justify-content-evenly surface-100 h-full">
-    <div class="mt-8 flex flex-column align-items-center justify-content-start">
-      <div><span class="text-5xl font-semibold text-700 uppercase"><span class="text-primary">Simple</span> Body
-          Analysis</span></div>
-      <div class="mt-2"><span class="text-lg">Take care of your body, you only have that one.</span></div>
+
+
+  <div class="landing-page-content-left flex flex-column align-items-center surface-100">
+    <div class="mt-8 w-16rem lg:w-20rem">
+      <div><span class="text-5xl font-semibold text-700 uppercase">
+          <span class="text-primary">Simple </span>Body Analysis</span>
+      </div>
+      <div class="mt-2 w-16rem lg:w-20rem"><span class="text-lg">Helps you to take care of your body, because you only
+          have that
+          one.</span></div>
     </div>
-    <div class="mt-6">
-      <img src="/assets/scale.jpg" class="scale-image" alt="Foo" />
-    </div>
+  </div>
+
+  <div class="landing-page-content-right surface-100">
+    <img src="/assets/scale.jpg" class="scale-image" width="100%" alt="Scale" />
   </div>
 </div>

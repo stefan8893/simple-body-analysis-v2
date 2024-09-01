@@ -1,3 +1,37 @@
-.scale-image {
-  height: 400px;
+@import '../../../styles/layout-variables';
+
+.landing-page-layout{
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "header header"
+    "content-left content-right";
+}
+
+.landing-page-header{
+  grid-area: header;
+}
+
+
+.landing-page-content-left{
+  grid-area: content-left;
+}
+
+.landing-page-content-right{
+  grid-area: content-right;
+}
+
+
+@media screen and (max-width: calc(#{$md})) {
+  .landing-page-layout{
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas:
+      "header "
+      "content-right"
+      "content-left";
+  }
+
 }
