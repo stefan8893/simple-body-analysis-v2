@@ -57,7 +57,7 @@ export function useUserPictureStorage(): UserPictureStorage {
     pictureObjectUrl: string
   ): Promise<void> => {
     const blob = await dataUrlToBlob(pictureObjectUrl);
-    const dataUrl = await blobToBase64(blob);
+    const dataUrl = await blobToDataUrl(blob);
 
     const pictureEntry: UserPictureEntry = {
       userId,
@@ -77,7 +77,7 @@ export function useUserPictureStorage(): UserPictureStorage {
     return await response.blob();
   };
 
-  const blobToBase64 = (blob: Blob): Promise<string> => {
+  const blobToDataUrl = (blob: Blob): Promise<string> => {
     const reader = new FileReader();
     reader.readAsDataURL(blob);
     return new Promise((resolve, reject) => {
