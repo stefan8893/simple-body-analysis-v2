@@ -43,9 +43,18 @@
   overflow-y: auto;
 }
 
-.mobile-menu-overlay {
+.content-on-show-menu {
+  overflow-y: unset;
+}
+
+.overlay {
+  display: none;
+}
+
+.overlay-show {
   position: absolute;
   display: block;
+  overflow: hidden;
   width: 100%;
   height: 100%;
   top: 0;
