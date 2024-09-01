@@ -1,17 +1,19 @@
 <app-content-header title="Profil"></app-content-header>
 <div class="flex flex-row align-items-center justify-content-start">
   @if((appUser$ | async) !== null){
-  <div class="flex flex-column align-items-center justify-content-start w-30rem">
+  <div class="profile-user-info flex flex-column align-items-center justify-content-start w-full mb-6">
 
-    <div class="flex flex-row align-items-center justify-content-center w-full">
-      <div class="mr-3">
+    <div class="flex flex-row flex-wrap sm:flex-nowrap justify-content-center w-full">
+
+      <div class="flex flex-row flex-nowrap align-items-center justify-content-center sm:justify-content-start">
         @if(userPictureObjectUrl) {
-        <img class="profile-user-picture" [src]="userPictureObjectUrl" alt="" />
+        <img class="profile-user-picture" [src]="userPictureObjectUrl" alt="User Picture" />
         } @else {
         <p-avatar icon="pi pi-user" shape="circle" size="large" class="profile-user-avatar" />
         }
       </div>
-      <div class="flex flex-column align-items-stretch justify-content-stretch w-full">
+
+      <div class="flex flex-column align-items-stretch justify-content-start sm:ml-3 mt-3 sm:mt-0 w-full">
         <div class="flex flex-column gap-1 w-full">
           <label for="firstName">Vorname</label>
           <input pInputText id="firstName" [ngModel]="(appUser$ | async)?.firstName" readonly />
@@ -21,7 +23,11 @@
           <input pInputText id="lastName" [ngModel]="(appUser$ | async)?.lastName" readonly />
         </div>
       </div>
+
+
     </div>
+
+
     <div class="flex flex-column gap-1 mt-3 w-full">
       <label for="email">Email</label>
       <input pInputText id="email" [ngModel]="(appUser$ | async)?.email" readonly />
