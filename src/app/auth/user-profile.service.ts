@@ -1,5 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
+import { MsalService } from '@azure/msal-angular';
 import { select } from '@ngrx/store';
 import { catchError, concatMap, EMPTY, from, map, of, tap } from 'rxjs';
 import { PictureSource } from '../stores/user-picture/user-picture.reducer';
@@ -35,29 +36,51 @@ export class UserProfileService {
   static readonly userInfoEndpoint = new URL(
     'https://graph.microsoft.com/oidc/userinfo'
   );
+
+  private static readonly scopes = ['email', 'profile'];
+
   constructor(
     private httpClient: HttpClient,
     @Inject(USER_PICTURE_STORAGE)
-    private userPictureStorage: UserPictureStorage
+    private userPictureStorage: UserPictureStorage,
+    private authService: MsalService
   ) {}
 
-  loadUserProfile() {
-    return this.httpClient
-      .get<UserInfoDto>(UserProfileService.userInfoEndpoint.href)
+  private acquireAccessToken() {
+    return this.authService
+      .acquireTokenSilent({
+        scopes: UserProfileService.scopes,
+      })
       .pipe(
-        tap((x) => console.debug('UserProfile:', x)),
-        select((x) => ({
-          id: x.sub,
-          firstName: x.given_name,
-          lastName: x.family_name,
-          email: x.email ?? '',
-          pictureUrl: x.picture ?? '',
-        })),
-        catchError((error: HttpErrorResponse) => {
-          console.error('Error while loading user profile', error);
-          throw { message: error.message };
-        })
+        catchError(() =>
+          this.authService.acquireTokenPopup({
+            scopes: UserProfileService.scopes,
+          })
+        )
       );
+  }
+
+  loadUserProfile() {
+    const loadUserProfile = () => {
+      return this.httpClient
+        .get<UserInfoDto>(UserProfileService.userInfoEndpoint.href)
+        .pipe(
+          tap((x) => console.debug('UserProfile:', x)),
+          select((x) => ({
+            id: x.sub,
+            firstName: x.given_name,
+            lastName: x.family_name,
+            email: x.email ?? '',
+            pictureUrl: x.picture ?? '',
+          })),
+          catchError((error: HttpErrorResponse) => {
+            console.error('Error while loading user profile', error);
+            throw { message: error.message };
+          })
+        );
+    };
+
+    return this.acquireAccessToken().pipe(concatMap(() => loadUserProfile()));
   }
 
   loadUserPicture(userId: string) {
