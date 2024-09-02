@@ -10,13 +10,33 @@ export function useBodyAnalysisTableClient(
   const storageAccountTableName = 'BodyAnalysis';
   const scope = 'https://storage.azure.com/user_impersonation';
 
-  const tokenAdapter: TokenCredential = {
-    getToken: async (): Promise<AccessToken | null> => {
-      const accessTokenResult = await firstValueFrom(
+  const getToken = async () => {
+    try {
+      return await firstValueFrom(
         authService.acquireTokenSilent({
+          scopes: [scope],
+          forceRefresh: true,
+        })
+      );
+    } catch {
+      await firstValueFrom(
+        authService.acquireTokenRedirect({
           scopes: [scope],
         })
       );
+
+      return await firstValueFrom(
+        authService.acquireTokenSilent({
+          scopes: [scope],
+          forceRefresh: true,
+        })
+      );
+    }
+  };
+
+  const tokenAdapter: TokenCredential = {
+    getToken: async (): Promise<AccessToken | null> => {
+      const accessTokenResult = await getToken();
 
       return {
         token: accessTokenResult.accessToken,

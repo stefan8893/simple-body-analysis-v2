@@ -59,9 +59,6 @@ export class TableViewComponent implements OnInit {
     const fromSearchString = this.formatToSearchString(fromLocalTime);
     const toLocalTimeAsSearchString = this.formatToSearchString(toLocalTime);
 
-    console.log('from local search string', fromSearchString);
-    console.log('to local search string', toLocalTimeAsSearchString);
-
     let entitiesIterator = this.bodyAnalysisTable.listEntities({
       queryOptions: {
         filter: `PartitionKey eq 'body_data' and RowKey ge '${fromSearchString}' and RowKey le '${toLocalTimeAsSearchString}'`,
