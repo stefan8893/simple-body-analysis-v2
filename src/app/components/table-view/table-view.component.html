@@ -1,7 +1,7 @@
 <div class="table-view-grid-table mb-6">
   <app-content-header title="Tabellenansicht" />
   <div class="mb-3 md:mb-5">
-    <app-date-range-picker [(dateRange)]="dateRangeFilter" />
+    <app-date-range-picker [(dateRange)]="dateRangeFilter" (refresh)="onRefreshTriggered()" />
   </div>
 
   <p-table [value]="rows" [paginator]="true" [rows]="15" [rowsPerPageOptions]="[5, 10, 15, 20, 40, 50]"

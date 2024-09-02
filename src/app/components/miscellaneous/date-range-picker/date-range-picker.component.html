@@ -1,4 +1,6 @@
 <div>
   <p-calendar [(ngModel)]="dateRange" selectionMode="range" dateFormat="dd.mm.yy" [minDate]="minDate"
     [maxDate]="maxDate" />
+  <p-button icon="pi pi-refresh" [rounded]="true" [text]="true" (click)="triggerRefresh()"
+    [disabled]="!isRefreshButtonEnabled()" />
 </div>

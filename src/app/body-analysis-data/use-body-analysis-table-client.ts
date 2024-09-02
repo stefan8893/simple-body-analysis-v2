@@ -19,16 +19,9 @@ export function useBodyAnalysisTableClient(
         })
       );
     } catch {
-      await firstValueFrom(
-        authService.acquireTokenRedirect({
-          scopes: [scope],
-        })
-      );
-
       return await firstValueFrom(
-        authService.acquireTokenSilent({
+        authService.acquireTokenPopup({
           scopes: [scope],
-          forceRefresh: true,
         })
       );
     }

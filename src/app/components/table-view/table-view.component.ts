@@ -51,6 +51,13 @@ export class TableViewComponent implements OnInit {
     return format(date, `yyyy-MM-dd'T'HH:mm`);
   }
 
+  async onRefreshTriggered() {
+    const [from, to] = this.dateRangeFilter() ?? [];
+    if (!!from && !!to) {
+      this.loadTableData(from, to);
+    }
+  }
+
   async loadTableData(from: Date, to: Date) {
     this.isLoading = true;
     const fromLocalTime = this.convertToLocal(from);
