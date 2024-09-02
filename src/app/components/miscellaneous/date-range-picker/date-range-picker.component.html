@@ -1,6 +1,12 @@
-<div>
+<div class="flex flex-row align-items-center justify-content-start">
   <p-calendar [(ngModel)]="dateRange" selectionMode="range" dateFormat="dd.mm.yy" [minDate]="minDate"
-    [maxDate]="maxDate" />
+    [maxDate]="maxDate">
+  </p-calendar>
+
+  <p-button icon="pi pi-ellipsis-v" [rounded]="true" [text]="true" (onClick)="menu.toggle($event)" />
+
   <p-button icon="pi pi-refresh" [rounded]="true" [text]="true" (click)="triggerRefresh()"
     [disabled]="!isRefreshButtonEnabled()" />
+
 </div>
+<p-menu #menu [model]="fastSelectionItems" [popup]="true" appendTo="body" />
