@@ -37,7 +37,8 @@ export function useUserPictureStorage(): UserPictureStorage {
     }
 
     const now = new Date();
-    if (now > pictureEntry.expiresAt) {
+    const expirationDate = new Date(pictureEntry.expiresAt);
+    if (now > expirationDate) {
       // CQS violation (again):
       // remove outdated entry from storage
       localStorage.removeItem(storageKey);
