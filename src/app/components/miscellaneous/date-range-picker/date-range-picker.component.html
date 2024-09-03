@@ -3,6 +3,5 @@
     selectionMode="range" dateFormat="dd.mm.yy" [minDate]="minDate" [maxDate]="maxDate" [numberOfMonths]="2">
   </p-calendar>
   <p-dropdown [options]="quickSelections" class="date-range-picker-quick-selection" [(ngModel)]="selectedQuickSelection"
-    [checkmark]="true" optionLabel="name" [placeholder]="showQuickSelectionPlaceholder() ? 'Schnellauswahl' : undefined"
-    (onChange)="onQuickSelectionChanged($event)" />
+    [checkmark]="true" optionLabel="name" placeholder="Schnellauswahl" (onChange)="onQuickSelectionChanged($event)" />
 </div>

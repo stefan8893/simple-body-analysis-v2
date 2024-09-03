@@ -54,8 +54,12 @@ export class TableViewComponent {
 
   onPreparedDateRangeChanged(event: string[]) {
     const [from, to] = event;
-    console.log(event);
-    this.loadTableData(from, to);
+
+    if (event.length === 0) {
+      this.rows = [];
+    } else {
+      this.loadTableData(from, to);
+    }
   }
 
   async loadTableData(from: string, to: string) {

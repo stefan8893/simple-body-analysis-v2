@@ -1,6 +1,5 @@
 import {
   Component,
-  computed,
   effect,
   input,
   model,
@@ -122,15 +121,21 @@ export class DateRangePickerComponent implements OnInit {
   ];
 
   selectedQuickSelection: QuickSelection | undefined;
-  showQuickSelectionPlaceholder = computed(
-    () => this.dateRangeRaw()?.length === 0
-  );
 
   constructor() {
     effect(() => {
-      const [from, to] = this.dateRangeRaw() ?? [];
+      const rawRange = this.dateRangeRaw() ?? [];
 
-      if (!from || !to) return;
+      if (rawRange.length === 0) {
+        this.preparedDateRangeChanged.emit([]);
+        this.selectedQuickSelection = undefined;
+        return;
+      }
+
+      const [from, to] = rawRange;
+      if (!from || !to) {
+        return;
+      }
 
       const timeZone = 'Europe/Vienna';
       const fromLocalTime = startOfDay(toZonedTime(from, timeZone));
@@ -138,6 +143,11 @@ export class DateRangePickerComponent implements OnInit {
 
       const fromSearchString = this.formatToSearchString(fromLocalTime);
       const toSearchString = this.formatToSearchString(toLocalTime);
+
+      console.debug('Prepared DateRange changed event get emitted:', {
+        from: fromSearchString,
+        to: toSearchString,
+      });
 
       this.preparedDateRangeChanged.emit([fromSearchString, toSearchString]);
     });
