@@ -57,10 +57,10 @@ export function msalInstanceFactory(): IPublicClientApplication {
 
 export function msalInterceptorConfigFactory(): MsalInterceptorConfiguration {
   const protectedResourceMap = new Map<string, Array<string>>();
-  protectedResourceMap.set(UserProfileService.userInfoEndpoint.href, [
-    'profile',
-    'email',
-  ]);
+  protectedResourceMap.set(
+    UserProfileService.userInfoEndpoint.href,
+    UserProfileService.scopes
+  );
 
   protectedResourceMap.set('https://graph.microsoft.com/v1.0/me/photo/*', [
     'profile',

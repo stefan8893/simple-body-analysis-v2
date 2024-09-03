@@ -37,7 +37,7 @@ export class UserProfileService {
     'https://graph.microsoft.com/oidc/userinfo'
   );
 
-  private static readonly scopes = ['email', 'profile'];
+  static readonly scopes = ['email', 'openid', 'profile', 'user.read'];
 
   constructor(
     private httpClient: HttpClient,
@@ -52,11 +52,11 @@ export class UserProfileService {
         scopes: UserProfileService.scopes,
       })
       .pipe(
-        catchError(() =>
-          this.authService.acquireTokenPopup({
+        catchError(() => {
+          return this.authService.acquireTokenPopup({
             scopes: UserProfileService.scopes,
-          })
-        )
+          });
+        })
       );
   }
 
