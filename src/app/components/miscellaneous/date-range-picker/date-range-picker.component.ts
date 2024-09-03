@@ -1,4 +1,10 @@
-import { Component, computed, model, output } from '@angular/core';
+import {
+  Component,
+  input,
+  model,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   addDays,
@@ -18,12 +24,24 @@ import { MenuModule } from 'primeng/menu';
   imports: [CalendarModule, MenuModule, FormsModule],
   templateUrl: './date-range-picker.component.html',
   styleUrl: './date-range-picker.component.scss',
+  encapsulation: ViewEncapsulation.None,
 })
-export class DateRangePickerComponent {
+export class DateRangePickerComponent implements OnInit {
   dateRange = model<Date[] | undefined>(undefined);
-  refresh = output<void>();
+  initialRange = input<Date[] | null>(null);
   minDate = parseISO('2021-01-01T00:00:00Z');
   maxDate = addDays(new Date(), 2);
+
+  ngOnInit(): void {
+    const [initialFrom, initialTo] = this.initialRange() ?? [];
+
+    if (!initialFrom || !initialTo) return;
+
+    if (initialFrom >= this.minDate && initialTo <= this.maxDate) {
+      this.dateRange.set([initialFrom, initialTo]);
+    }
+  }
+
   fastSelectionItems = [
     {
       label: 'Schnellauswahl',
@@ -34,7 +52,7 @@ export class DateRangePickerComponent {
             const from = startOfDay(subDays(new Date(), 6));
             const to = endOfDay(new Date());
 
-            this.dateRange.update((x) => [from, to]);
+            this.dateRange.update(() => [from, to]);
           },
         },
         {
@@ -43,7 +61,7 @@ export class DateRangePickerComponent {
             const from = startOfDay(subDays(new Date(), 27));
             const to = endOfDay(new Date());
 
-            this.dateRange.update((x) => [from, to]);
+            this.dateRange.update(() => [from, to]);
           },
         },
         {
@@ -52,16 +70,16 @@ export class DateRangePickerComponent {
             const from = startOfDay(subMonths(subDays(new Date(), 1), 2));
             const to = endOfDay(new Date());
 
-            this.dateRange.update((x) => [from, to]);
+            this.dateRange.update(() => [from, to]);
           },
         },
         {
-          label: 'Letztes halbe Jahr',
+          label: 'Letzte 6 Monate',
           command: () => {
             const from = startOfDay(subMonths(subDays(new Date(), 1), 6));
             const to = endOfDay(new Date());
 
-            this.dateRange.update((x) => [from, to]);
+            this.dateRange.update(() => [from, to]);
           },
         },
         {
@@ -70,18 +88,10 @@ export class DateRangePickerComponent {
             const from = startOfYear(new Date());
             const to = endOfDay(new Date());
 
-            this.dateRange.update((x) => [from, to]);
+            this.dateRange.update(() => [from, to]);
           },
         },
       ],
     },
   ];
-
-  isRefreshButtonEnabled = computed(
-    () => this.dateRange()?.filter((x) => !!x).length === 2
-  );
-
-  triggerRefresh() {
-    this.refresh.emit();
-  }
 }

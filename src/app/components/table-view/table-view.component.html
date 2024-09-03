@@ -1,7 +1,10 @@
 <div class="table-view-grid-table mb-6">
   <app-content-header title="Tabellenansicht" />
-  <div class="mb-3 md:mb-5">
-    <app-date-range-picker [(dateRange)]="dateRangeFilter" (refresh)="onRefreshTriggered()" />
+  <div class="mb-3 md:mb-5 flex flex-row flex-wrap align-items-center justify-content-start">
+    <app-date-range-picker [(dateRange)]="dateRangeFilter" />
+
+    <p-button icon="pi pi-refresh" [rounded]="true" [text]="true" (click)="refresh()"
+      [disabled]="!isRefreshButtonEnabled()" />
   </div>
 
   <p-table [value]="rows" [paginator]="true" [rows]="15" [rowsPerPageOptions]="[5, 10, 15, 20, 40, 50]"
@@ -23,12 +26,12 @@
     <ng-template pTemplate="body" let-row>
       <tr>
         <td>{{ row.analysedAt | formatDate:'Pp' }}</td>
-        <td>{{ row.weight }} kg</td>
-        <td>{{ row.bodyFat }} %</td>
-        <td>{{ row.muscleMass }} %</td>
-        <td>{{ row.bodyWater }} %</td>
-        <td>{{ row.bmi }}</td>
-        <td>{{ row.dailyCalorieRequirement }} kcal</td>
+        <td>{{ row.weight | number }} kg</td>
+        <td>{{ row.bodyFat | number }} %</td>
+        <td>{{ row.muscleMass | number }} %</td>
+        <td>{{ row.bodyWater | number }} %</td>
+        <td>{{ row.bmi | number }}</td>
+        <td>{{ row.dailyCalorieRequirement | number }} kcal</td>
       </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">

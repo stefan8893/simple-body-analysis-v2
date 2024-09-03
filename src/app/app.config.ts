@@ -1,10 +1,18 @@
+import { registerLocaleData } from '@angular/common';
 import {
   HTTP_INTERCEPTORS,
   provideHttpClient,
   withFetch,
   withInterceptorsFromDi,
 } from '@angular/common/http';
-import { APP_INITIALIZER, ApplicationConfig, isDevMode } from '@angular/core';
+import localeDeAT from '@angular/common/locales/de-AT';
+import localeDeAtExtra from '@angular/common/locales/extra/de-AT';
+import {
+  APP_INITIALIZER,
+  ApplicationConfig,
+  isDevMode,
+  LOCALE_ID,
+} from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { TableClient } from '@azure/data-tables';
@@ -83,6 +91,10 @@ export const appConfig: ApplicationConfig = {
       multi: true,
     },
     {
+      provide: LOCALE_ID,
+      useValue: 'de-AT',
+    },
+    {
       provide: USER_PICTURE_STORAGE,
       useFactory: useUserPictureStorage,
     },
@@ -97,10 +109,15 @@ export const appConfig: ApplicationConfig = {
 function initializeApp(authService: MsalService) {
   return async () => {
     await initializeAuthentication(authService);
+    initializeLocale();
   };
 }
 
 async function initializeAuthentication(authService: MsalService) {
   await authService.instance.initialize();
   await authService.instance.handleRedirectPromise().catch(console.error);
+}
+
+function initializeLocale() {
+  registerLocaleData(localeDeAT, 'de-AT', localeDeAtExtra);
 }

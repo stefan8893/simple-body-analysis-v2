@@ -4,7 +4,7 @@ $primaryDarkColor: scale-color($primaryColor, $lightness: -5%) !default;
 $primaryDarkerColor: scale-color($primaryColor, $lightness: -10%) !default;
 $primaryTextColor: #ffffff !default;
 
-$highlightBg: #e2dcfc !default;
+$highlightBg: #E2E8F0 !default;
 $highlightTextColor: #5472d4 !default;
 $highlightFocusBg: darken($highlightBg, 6%) !default;
 

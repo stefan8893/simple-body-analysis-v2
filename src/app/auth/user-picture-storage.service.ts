@@ -1,11 +1,11 @@
 import { InjectionToken } from '@angular/core';
-import { addDays } from 'date-fns';
+import { addDays, formatISO } from 'date-fns';
 import { UserPicture } from '../stores/user-picture/user-picture.reducer';
 
 type UserPictureEntry = {
   userId: string;
   dataUrl: string;
-  expiresAt: Date;
+  expiresAt: string;
 };
 
 export const USER_PICTURE_STORAGE = new InjectionToken<UserPictureStorage>(
@@ -63,7 +63,7 @@ export function useUserPictureStorage(): UserPictureStorage {
     const pictureEntry: UserPictureEntry = {
       userId,
       dataUrl,
-      expiresAt: addDays(new Date(), 1),
+      expiresAt: formatISO(addDays(new Date(), 1)),
     };
 
     localStorage.setItem(storageKey, JSON.stringify(pictureEntry));
