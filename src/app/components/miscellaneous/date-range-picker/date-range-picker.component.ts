@@ -26,7 +26,6 @@ import { DropdownModule } from 'primeng/dropdown';
 
 type QuickSelection = {
   name: string;
-  code: string;
   range: () => Date[];
 };
 
@@ -47,7 +46,6 @@ export class DateRangePickerComponent implements OnInit {
 
   quickSelections: QuickSelection[] = [
     {
-      code: 'L7D',
       name: 'Letzte 7 Tage',
       range: () => {
         const from = startOfDay(subDays(new Date(), 6));
@@ -57,7 +55,6 @@ export class DateRangePickerComponent implements OnInit {
       },
     },
     {
-      code: 'L30D',
       name: 'Letzte 30 Tage',
       range: () => {
         const from = startOfDay(subDays(new Date(), 29));
@@ -67,7 +64,6 @@ export class DateRangePickerComponent implements OnInit {
       },
     },
     {
-      code: 'L2M',
       name: 'Letzte 2 Monate',
       range: () => {
         const from = startOfDay(subMonths(addDays(new Date(), 1), 2));
@@ -77,7 +73,6 @@ export class DateRangePickerComponent implements OnInit {
       },
     },
     {
-      code: 'L6M',
       name: 'Letzte 6 Monate',
       range: () => {
         const from = startOfDay(subMonths(addDays(new Date(), 1), 6));
@@ -87,7 +82,6 @@ export class DateRangePickerComponent implements OnInit {
       },
     },
     {
-      code: 'L1M',
       name: 'Letztes Jahr',
       range: () => {
         const from = startOfDay(subYears(addDays(new Date(), 1), 1));
@@ -97,7 +91,6 @@ export class DateRangePickerComponent implements OnInit {
       },
     },
     {
-      code: 'CY',
       name: 'Akutelles Jahr',
       range: () => {
         const from = startOfYear(new Date());
@@ -107,7 +100,6 @@ export class DateRangePickerComponent implements OnInit {
       },
     },
     {
-      code: 'LY',
       name: 'Letztes Jahr',
       range: () => {
         const oneYearAgo = subYears(new Date(), 1);
@@ -118,7 +110,6 @@ export class DateRangePickerComponent implements OnInit {
       },
     },
     {
-      code: 'L2Y',
       name: 'Letzte 2 Jahre',
       range: () => {
         const from = subYears(addDays(new Date(), 1), 2);
@@ -166,13 +157,29 @@ export class DateRangePickerComponent implements OnInit {
     return format(date, `yyyy-MM-dd'T'HH:mm`);
   }
 
+  applyDefaultInitialRange() {
+    const last7Days = this.quickSelections.find(
+      (x) => x.name === 'Letzte 7 Tage'
+    );
+
+    if (!last7Days) return;
+
+    this.selectedQuickSelection = last7Days;
+    this.dateRangeRaw.update(() => last7Days.range());
+  }
+
   ngOnInit(): void {
     const [initialFrom, initialTo] = this.initialRange() ?? [];
 
-    if (!initialFrom || !initialTo) return;
+    if (!initialFrom || !initialTo) {
+      this.applyDefaultInitialRange();
+      return;
+    }
 
     if (initialFrom >= this.minDate && initialTo <= this.maxDate) {
       this.dateRangeRaw.set([initialFrom, initialTo]);
+    } else {
+      this.applyDefaultInitialRange();
     }
   }
 
