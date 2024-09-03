@@ -1,1 +1,11 @@
-<app-content-header title="coming soon ..."></app-content-header>
+<div class="table-view-grid-table mb-6">
+  <app-content-header title="Tagesanalyse" />
+  <div class="mb-3 md:mb-5 flex flex-row flex-wrap align-items-center justify-content-start">
+    <app-date-range-picker initialRange="L30D" (preparedDateRangeChanged)="onPreparedDateRangeChanged($event)" />
+  </div>
+
+  <div class="chart-container">
+    <p-chart type="line" [data]="data" [options]="options" />
+  </div>
+
+</div>

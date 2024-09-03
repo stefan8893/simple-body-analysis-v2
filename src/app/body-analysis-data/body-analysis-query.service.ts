@@ -11,8 +11,12 @@ export class BodyAnalysisQueryService {
   private getBoundariesOfAlreadyQueriedData() {
     if (this.cache.length < 2) return null;
 
-    const latest = this.cache[0].analysedAt;
-    const oldest = this.cache[this.cache.length - 1].analysedAt;
+    const sorted = this.cache
+      .map((x) => x.analysedAt)
+      .sort((a, b) => (a === b ? 0 : a < b ? -1 : 1));
+
+    const oldest = sorted[0];
+    const latest = sorted[sorted.length - 1];
 
     return {
       latest,
@@ -20,7 +24,7 @@ export class BodyAnalysisQueryService {
     };
   }
 
-  private isInAlreadyQueriedRange(from: Date, to: Date) {
+  private isInCacheRange(from: Date, to: Date) {
     const boundaries = this.getBoundariesOfAlreadyQueriedData();
 
     if (!boundaries) return false;
@@ -64,7 +68,7 @@ export class BodyAnalysisQueryService {
     const fromAsDate = parseISO(from);
     const toAsDate = parseISO(to);
 
-    if (this.isInAlreadyQueriedRange(fromAsDate, toAsDate))
+    if (this.isInCacheRange(fromAsDate, toAsDate))
       return this.queryCache(fromAsDate, toAsDate);
 
     const result = await this.queryAzureTables(from, to);
