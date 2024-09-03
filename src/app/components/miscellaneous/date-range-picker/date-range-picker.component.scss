@@ -2,3 +2,16 @@
 .date-range-picker > .p-calendar > .p-inputtext{
   min-width: 11.6rem;
 }
+
+.date-range-picker-quick-selection > .p-dropdown.p-inputwrapper {
+  background: unset;
+  border: none;
+  border-radius: 0;
+  outline: none;
+}
+
+
+
+.date-range-picker-quick-selection > .p-dropdown.p-inputwrapper > .p-inputtext {
+  font-size: .75rem;
+}

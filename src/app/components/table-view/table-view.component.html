@@ -1,10 +1,8 @@
 <div class="table-view-grid-table mb-6">
   <app-content-header title="Tabellenansicht" />
   <div class="mb-3 md:mb-5 flex flex-row flex-wrap align-items-center justify-content-start">
-    <app-date-range-picker [(dateRange)]="dateRangeFilter" />
-
-    <p-button icon="pi pi-refresh" [rounded]="true" [text]="true" (click)="refresh()"
-      [disabled]="!isRefreshButtonEnabled()" />
+    <app-date-range-picker [(dateRangeRaw)]="dateRangeRaw"
+      (preparedDateRangeChanged)="onPreparedDateRangeChanged($event)" />
   </div>
 
   <p-table [value]="rows" [paginator]="true" [rows]="15" [rowsPerPageOptions]="[5, 10, 15, 20, 40, 50]"

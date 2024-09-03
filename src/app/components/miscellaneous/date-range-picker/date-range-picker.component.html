@@ -1,8 +1,8 @@
 <div class="flex flex-row flex-nowrap align-items-center justify-content-start">
-  <p-calendar [(ngModel)]="dateRange" class="date-range-picker" selectionMode="range" dateFormat="dd.mm.yy"
-    [minDate]="minDate" [maxDate]="maxDate">
+  <p-calendar [(ngModel)]="dateRangeRaw" (onSelect)="onDateRangeSelected($event)" class="date-range-picker"
+    selectionMode="range" dateFormat="dd.mm.yy" [minDate]="minDate" [maxDate]="maxDate" [numberOfMonths]="2">
   </p-calendar>
-
-  <p-button icon="pi pi-ellipsis-v" [rounded]="true" [text]="true" (onClick)="menu.toggle($event)" />
+  <p-dropdown [options]="quickSelections" class="date-range-picker-quick-selection" [(ngModel)]="selectedQuickSelection"
+    [checkmark]="true" optionLabel="name" [placeholder]="showQuickSelectionPlaceholder() ? 'Schnellauswahl' : undefined"
+    (onChange)="onQuickSelectionChanged($event)" />
 </div>
-<p-menu #menu [model]="fastSelectionItems" [popup]="true" appendTo="body" />
