@@ -10,8 +10,10 @@
   outline: none;
 }
 
-
-
 .date-range-picker-quick-selection > .p-dropdown.p-inputwrapper > .p-inputtext {
   font-size: .75rem;
+}
+
+.date-range-picker-quick-selection .p-dropdown-items-wrapper{
+  max-height: 300px !important;
 }

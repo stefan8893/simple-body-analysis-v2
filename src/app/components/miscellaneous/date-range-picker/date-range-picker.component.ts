@@ -23,7 +23,6 @@ import {
 import { toZonedTime } from 'date-fns-tz';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
-import { MenuModule } from 'primeng/menu';
 
 type QuickSelection = {
   name: string;
@@ -34,7 +33,7 @@ type QuickSelection = {
 @Component({
   selector: 'app-date-range-picker',
   standalone: true,
-  imports: [CalendarModule, MenuModule, DropdownModule, FormsModule],
+  imports: [CalendarModule, DropdownModule, FormsModule],
   templateUrl: './date-range-picker.component.html',
   styleUrl: './date-range-picker.component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -82,6 +81,16 @@ export class DateRangePickerComponent implements OnInit {
       name: 'Letzte 6 Monate',
       range: () => {
         const from = startOfDay(subMonths(addDays(new Date(), 1), 6));
+        const to = endOfDay(new Date());
+
+        return [from, to];
+      },
+    },
+    {
+      code: 'L1M',
+      name: 'Letztes Jahr',
+      range: () => {
+        const from = startOfDay(subYears(addDays(new Date(), 1), 1));
         const to = endOfDay(new Date());
 
         return [from, to];
