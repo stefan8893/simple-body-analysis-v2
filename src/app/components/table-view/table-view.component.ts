@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal, ViewEncapsulation } from '@angular/core';
-import { TableClient, TableEntityResult } from '@azure/data-tables';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
+import { BodyAnalysisQueryService } from '../../body-analysis-data/body-analysis-query.service';
 import { BodyAnalysis } from '../../body-analysis-data/body-analysis.types';
 import { FormatDatePipe } from '../../pipes/date-fns-format.pipe';
 import { ContentHeaderComponent } from '../miscellaneous/content-header/content-header.component';
@@ -28,29 +28,7 @@ export class TableViewComponent {
   rows: BodyAnalysis[] = [];
   isLoading = false;
 
-  constructor(private bodyAnalysisTable: TableClient) {}
-
-  private mapEntityToBodyAnalysis(
-    entity: TableEntityResult<Record<string, unknown>>
-  ): BodyAnalysis {
-    return {
-      analysedAt: new Date(entity.rowKey!),
-      weight: entity['Weight'] as number,
-      bmi: entity['Bmi'] as number,
-      bodyFat: entity['BodyFat'] as number,
-      bodyWater: entity['BodyWater'] as number,
-      muscleMass: entity['MuscleMass'] as number,
-      dailyCalorieRequirement: entity['DailyCalorieRequirement'] as number,
-    };
-  }
-
-  private queryAzureTables(from: string, to: string) {
-    return this.bodyAnalysisTable.listEntities({
-      queryOptions: {
-        filter: `PartitionKey eq 'body_data' and RowKey ge '${from}' and RowKey le '${to}'`,
-      },
-    });
-  }
+  constructor(private bodyAnalysisQueryService: BodyAnalysisQueryService) {}
 
   onPreparedDateRangeChanged(event: string[]) {
     const [from, to] = event;
@@ -65,13 +43,7 @@ export class TableViewComponent {
   async loadTableData(from: string, to: string) {
     try {
       this.isLoading = true;
-
-      let entitiesIterator = this.queryAzureTables(from, to);
-
-      let result: BodyAnalysis[] = [];
-      for await (const entity of entitiesIterator) {
-        result.push(this.mapEntityToBodyAnalysis(entity));
-      }
+      const result = await this.bodyAnalysisQueryService.query(from, to);
 
       this.rows = result;
     } catch (error) {

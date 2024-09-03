@@ -39,6 +39,7 @@ import {
   useUserPictureStorage,
 } from './auth/user-picture-storage.service';
 import { UserProfileService } from './auth/user-profile.service';
+import { BodyAnalysisQueryService } from './body-analysis-data/body-analysis-query.service';
 import { useBodyAnalysisTableClient } from './body-analysis-data/use-body-analysis-table-client';
 import { appUserReducer } from './stores/app-user/app-user.reducer';
 import * as userPictureEffects from './stores/user-picture/user-picture.effects';
@@ -84,6 +85,7 @@ export const appConfig: ApplicationConfig = {
     MsalGuard,
     MsalBroadcastService,
     UserProfileService,
+    BodyAnalysisQueryService,
     {
       provide: APP_INITIALIZER,
       useFactory: initializeApp,
