@@ -5,7 +5,9 @@
       (preparedDateRangeChanged)="onPreparedDateRangeChanged($event)" />
   </div>
 
-  <p-card>
+  <app-loading-spinner [show]="isLoading" [debounceTimeInMilliseconds]="400" />
+
+  <p-card [hidden]="isLoading">
     <p-table [value]="rows" [paginator]="true" [rows]="15" [rowsPerPageOptions]="[5, 10, 15, 20, 40, 50]"
       [loading]="isLoading" sortField="analysedAt" [sortOrder]="-1" [showCurrentPageReport]="true"
       currentPageReportTemplate="{first} bis {last} von {totalRecords} Einträgen"

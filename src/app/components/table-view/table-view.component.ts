@@ -8,6 +8,7 @@ import { BodyAnalysis } from '../../body-analysis-data/body-analysis.types';
 import { FormatDatePipe } from '../../pipes/date-fns-format.pipe';
 import { ContentHeaderComponent } from '../miscellaneous/content-header/content-header.component';
 import { DateRangePickerComponent } from '../miscellaneous/date-range-picker/date-range-picker.component';
+import { LoadingSpinnerComponent } from '../miscellaneous/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-table-view',
@@ -16,6 +17,7 @@ import { DateRangePickerComponent } from '../miscellaneous/date-range-picker/dat
     CommonModule,
     ContentHeaderComponent,
     DateRangePickerComponent,
+    LoadingSpinnerComponent,
     ButtonModule,
     TableModule,
     CardModule,
