@@ -1,10 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { fromEvent, Observable, Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { layouVariables } from '../../../../styles/layout-variables';
+import { setVisibility } from '../../../stores/side-nav/side-nav.actions';
 import { HeaderComponent } from '../header/header.component';
 import { SideNavComponent } from '../side-nav/side-nav.component';
 import {
@@ -40,7 +42,14 @@ export class LayoutComponent implements OnInit, OnDestroy {
     ['hideAnimatedAndSlowly', 'side-nav-closed-slowly-animated'],
   ]);
 
-  constructor() {
+  sideNavCloseDelayInMillisecondsByState = new Map<string, number>([
+    ['show', 0],
+    ['hideInstantly', 0],
+    ['hideAnimated', 300],
+    ['hideAnimatedAndSlowly', 1000],
+  ]);
+
+  constructor(private sideNavStore: Store<{ sideNav: SideNavState }>) {
     this.windowResize$ = fromEvent(window, 'resize');
   }
   ngOnInit(): void {
@@ -49,6 +58,10 @@ export class LayoutComponent implements OnInit, OnDestroy {
     this.windowResize$
       .pipe(debounceTime(50), takeUntil(this.poisonPill$))
       .subscribe(() => this.updateSideNavState('WindowResized'));
+
+    this.sideNavStore.dispatch(
+      setVisibility({ isVisible: this.sideNavState.state === 'show' })
+    );
   }
 
   updateSideNavState(trigger: StateChangeTrigger) {
@@ -57,6 +70,16 @@ export class LayoutComponent implements OnInit, OnDestroy {
       trigger,
       this.viewType
     );
+
+    const delay = this.sideNavCloseDelayInMillisecondsByState.get(
+      this.sideNavState.state
+    );
+
+    setTimeout(() => {
+      this.sideNavStore.dispatch(
+        setVisibility({ isVisible: this.sideNavState.state === 'show' })
+      );
+    }, delay);
   }
 
   onMenuTogglerClicked() {

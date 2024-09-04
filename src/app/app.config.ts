@@ -42,6 +42,7 @@ import { UserProfileService } from './auth/user-profile.service';
 import { BodyAnalysisQueryService } from './body-analysis-data/body-analysis-query.service';
 import { useBodyAnalysisTableClient } from './body-analysis-data/use-body-analysis-table-client';
 import { appUserReducer } from './stores/app-user/app-user.reducer';
+import { sideNavReducer } from './stores/side-nav/side-nav.reducer';
 import * as userPictureEffects from './stores/user-picture/user-picture.effects';
 import { userPictureReducer } from './stores/user-picture/user-picture.reducer';
 
@@ -52,6 +53,7 @@ export const appConfig: ApplicationConfig = {
     provideStore({
       appUser: appUserReducer,
       userPicture: userPictureReducer,
+      sideNav: sideNavReducer,
     }),
     provideEffects(userPictureEffects),
     provideStoreDevtools({

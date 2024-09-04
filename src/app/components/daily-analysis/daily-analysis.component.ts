@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import {
   CategoryScale,
   Chart,
+  CoreChartOptions,
   Filler,
   Legend,
   LinearScale,
@@ -12,18 +14,15 @@ import {
   Tooltip,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
-import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels';
-import { de } from 'date-fns/locale';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { CardModule } from 'primeng/card';
 import { debounceTime, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
-import { layouVariables } from '../../../styles/layout-variables';
 import { BodyAnalysisQueryService } from '../../body-analysis-data/body-analysis-query.service';
 import { BodyAnalysis } from '../../body-analysis-data/body-analysis.types';
-import { sampleData } from '../../body-analysis-data/sample-data';
+import { commonOptions } from '../../charting/common.options';
+import { SideNavState } from '../layout/layout/side-nav.state';
 import { ContentHeaderComponent } from '../miscellaneous/content-header/content-header.component';
 import { DateRangePickerComponent } from '../miscellaneous/date-range-picker/date-range-picker.component';
-
-type TShirtSize = 'Small' | 'Medium' | 'Large';
 
 @Component({
   selector: 'app-daily-analysis',
@@ -38,7 +37,10 @@ export class DailyAnalysisComponent implements OnInit, OnDestroy {
 
   isLoading = false;
 
-  constructor(private bodyAnalysisQueryService: BodyAnalysisQueryService) {
+  constructor(
+    private bodyAnalysisQueryService: BodyAnalysisQueryService,
+    private sideNavStore: Store<{ sideNav: SideNavState }>
+  ) {
     Chart.register(
       LineController,
       PointElement,
@@ -61,39 +63,12 @@ export class DailyAnalysisComponent implements OnInit, OnDestroy {
 
   dailyChart: any;
 
-  private unitOfMeasureByDatasetLabel = new Map<string, string>([
-    ['Gewicht', 'kg'],
-    ['Körperfett', '%'],
-    ['Muskeln', '%'],
-    ['Wasser', '%'],
-    ['Bmi', ''],
-    ['Täglicher Kalorienbedarf', 'kcal'],
-  ]);
-
-  private getUnitOfMeasureOrDefault(label: string | undefined): string {
-    return this.unitOfMeasureByDatasetLabel.has(label ?? '')
-      ? this.unitOfMeasureByDatasetLabel.get(label ?? '')!
-      : '';
-  }
-
   ngOnInit() {
     const documentStyle = getComputedStyle(document.documentElement);
     const weightColor = documentStyle.getPropertyValue('--primary-color');
     const muscleMassColor = documentStyle.getPropertyValue('--purple-700');
     const bodyFatColor = documentStyle.getPropertyValue('--orange-500');
     const bodyWaterColor = documentStyle.getPropertyValue('--cyan-500');
-
-    const textColor = documentStyle.getPropertyValue('--text-color');
-    const textColorSecondary = documentStyle.getPropertyValue(
-      '--text-color-secondary'
-    );
-    const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
-
-    const xAxis = sampleData.map((x) => x.analysedAt);
-    const weightSeries = sampleData.map((x) => x.weight);
-    const bodyFatSeries = sampleData.map((x) => x.bodyFat);
-    const muscleMass = sampleData.map((x) => x.muscleMass);
-    const bodyWater = sampleData.map((x) => x.bodyWater);
 
     this.dailyChart = new Chart('daily-chart', {
       type: 'line',
@@ -130,126 +105,17 @@ export class DailyAnalysisComponent implements OnInit, OnDestroy {
         ],
       },
       options: {
-        locale: 'de-AT',
-        responsive: true,
-        maintainAspectRatio: true,
-        elements: {
-          line: {
-            cubicInterpolationMode: 'monotone',
-          },
-          point: {
-            radius: (ctx) => {
-              if (this.showDataPoint(ctx)) {
-                return 3;
-              } else {
-                return 0;
-              }
-            },
-          },
-        },
-        plugins: {
-          datalabels: {
-            display: (ctx) => {
-              return ctx.chart.width > layouVariables.mobileBreakpoint.value;
-            },
-            anchor: 'end',
-            offset: 5,
-            align: 'top',
-            color: textColor,
-            formatter: (value, ctx) => {
-              const unit = this.getUnitOfMeasureOrDefault(ctx.dataset.label);
-
-              if (this.showDataPoint(ctx)) {
-                return `${value} ${unit}`;
-              } else {
-                return '';
-              }
-            },
-          },
-          tooltip: {
-            callbacks: {
-              label: (ctx) => {
-                const unit = this.getUnitOfMeasureOrDefault(ctx.dataset.label);
-                return `${ctx.dataset.label}: ${ctx.formattedValue} ${unit}`;
-              },
-            },
-          },
-          legend: {
-            labels: {
-              color: textColor,
-            },
-          },
-        },
-        scales: {
-          x: {
-            type: 'time',
-            time: {
-              unit: 'day',
-              displayFormats: {
-                day: 'P',
-              },
-              tooltipFormat: 'Pp',
-            },
-            ticks: {
-              color: textColor,
-              stepSize: 4,
-              maxTicksLimit: 12,
-            },
-            grid: {
-              color: surfaceBorder,
-              display: false,
-            },
-            adapters: {
-              date: {
-                locale: de,
-              },
-            },
-          },
-          yLeft: {
-            position: 'left',
-            grace: '10%',
-            ticks: {
-              padding: 20,
-            },
-          },
-          yRight: {
-            position: 'right',
-            grace: '30%',
-            ticks: {
-              padding: 20,
-            },
-            grid: {
-              drawOnChartArea: false,
-            },
-          },
-        },
+        ...(commonOptions as unknown as CoreChartOptions<'line'>),
       },
     });
 
     this.windowResize$
       .pipe(debounceTime(150), takeUntil(this.poisonPill$))
       .subscribe(() => this.dailyChart.resize());
-  }
 
-  getDataSize(ctx: Context): TShirtSize {
-    const length = ctx.dataset.data.length;
-
-    if (length < 30) return 'Small';
-    else if (length < 90) return 'Medium';
-    else return 'Large';
-  }
-
-  showDataPoint(ctx: Context) {
-    if (ctx.chart.width <= layouVariables.mobileBreakpoint.value) return false;
-
-    const tShirtSize = this.getDataSize(ctx);
-
-    const showLabelEveryNthPoint =
-      tShirtSize === 'Large' ? 20 : tShirtSize == 'Medium' ? 5 : 1;
-
-    if (ctx.dataIndex === ctx.dataset.data.length - 1) return true;
-
-    return ctx.dataIndex % showLabelEveryNthPoint === 0;
+    this.sideNavStore.pipe(takeUntil(this.poisonPill$)).subscribe(() => {
+      setTimeout(() => this.dailyChart.resize(), 500);
+    });
   }
 
   onPreparedDateRangeChanged(event: string[]) {
