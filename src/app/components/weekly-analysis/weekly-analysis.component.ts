@@ -16,7 +16,7 @@ import {
   Tooltip,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
+import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels';
 import { Options } from 'chartjs-plugin-datalabels/types/options';
 import {
   isFriday,
@@ -32,6 +32,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { debounceTime, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 import { BodyAnalysisQueryService } from '../../body-analysis-data/body-analysis-query.service';
 import { BodyAnalysis } from '../../body-analysis-data/body-analysis.types';
+import { getUnitOfMeasureOrDefault } from '../../charting/chart-utils';
 import { commonOptions } from '../../charting/common.options';
 import { SideNavState } from '../layout/layout/side-nav.state';
 import { ContentHeaderComponent } from '../miscellaneous/content-header/content-header.component';
@@ -166,7 +167,15 @@ export class WeeklyAnalysisComponent implements OnInit, OnDestroy {
           ...commonOptions.plugins,
           datalabels: {
             ...(commonOptions.plugins.datalabels as unknown as Options),
-            formatter: undefined,
+            formatter: (value: any, ctx: Context) => {
+              const unit = getUnitOfMeasureOrDefault(ctx.dataset.label);
+
+              if (ctx.dataIndex % 2 === 0) {
+                return `${value} ${unit}`;
+              } else {
+                return '';
+              }
+            },
           },
         },
       },
