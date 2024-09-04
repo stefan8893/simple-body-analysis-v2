@@ -35,8 +35,6 @@ export class DailyAnalysisComponent implements OnInit, OnDestroy {
   private windowResize$: Observable<Event>;
   private poisonPill$ = new Subject<void>();
 
-  isLoading = false;
-
   constructor(
     private bodyAnalysisQueryService: BodyAnalysisQueryService,
     private sideNavStore: Store<{ sideNav: SideNavState }>
@@ -56,12 +54,17 @@ export class DailyAnalysisComponent implements OnInit, OnDestroy {
 
     this.windowResize$ = fromEvent(window, 'resize');
   }
-  ngOnDestroy(): void {
-    this.poisonPill$.next();
-    this.poisonPill$.complete();
-  }
 
   dailyChart: any;
+
+  private clearChart() {
+    this.dailyChart.data.labels = [];
+    this.dailyChart.data.datasets[0].data = [];
+    this.dailyChart.data.datasets[1].data = [];
+    this.dailyChart.data.datasets[2].data = [];
+    this.dailyChart.data.datasets[3].data = [];
+    this.dailyChart.update();
+  }
 
   ngOnInit() {
     const documentStyle = getComputedStyle(document.documentElement);
@@ -123,19 +126,18 @@ export class DailyAnalysisComponent implements OnInit, OnDestroy {
 
     if (event.length !== 0) {
       this.loadTableData(from, to);
+    } else {
+      this.clearChart();
     }
   }
 
   async loadTableData(from: string, to: string) {
     try {
-      this.isLoading = true;
       const result = await this.bodyAnalysisQueryService.query(from, to);
 
       this.updateChart(result);
     } catch (error) {
       console.error(error);
-    } finally {
-      this.isLoading = false;
     }
   }
 
@@ -152,5 +154,10 @@ export class DailyAnalysisComponent implements OnInit, OnDestroy {
     this.dailyChart.data.datasets[2].data = bodyWaterSeries;
     this.dailyChart.data.datasets[3].data = bodyFatSeries;
     this.dailyChart.update();
+  }
+
+  ngOnDestroy(): void {
+    this.poisonPill$.next();
+    this.poisonPill$.complete();
   }
 }

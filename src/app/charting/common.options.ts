@@ -24,6 +24,7 @@ export const commonOptions = {
           return 0;
         }
       },
+      pointHitRadius: 10,
     },
   },
   plugins: {
