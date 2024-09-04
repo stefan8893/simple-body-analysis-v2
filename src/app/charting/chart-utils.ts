@@ -24,9 +24,6 @@ export function showDataPoint(ctx: Context): boolean {
     return 20;
   };
 
-  // always show last point
-  if (ctx.dataIndex === ctx.dataset.data.length - 1) return true;
-
   return ctx.dataIndex % showLabelEveryNthPoint() === 0;
 }
 
