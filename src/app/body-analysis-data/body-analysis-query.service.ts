@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TableClient, TableEntityResult } from '@azure/data-tables';
-import { endOfDay, parseISO, startOfDay } from 'date-fns';
+import { compareAsc, endOfDay, parseISO, startOfDay } from 'date-fns';
 import { BodyAnalysis } from './body-analysis.types';
 import { sampleData } from './sample-data';
 
@@ -12,9 +12,7 @@ export class BodyAnalysisQueryService {
   private getBoundariesOfAlreadyQueriedData() {
     if (this.cache.length < 2) return null;
 
-    const sorted = this.cache
-      .map((x) => x.analysedAt)
-      .sort((a, b) => (a === b ? 0 : a < b ? -1 : 1));
+    const sorted = this.cache.map((x) => x.analysedAt).sort(compareAsc);
 
     const oldest = sorted[0];
     const latest = sorted[sorted.length - 1];
