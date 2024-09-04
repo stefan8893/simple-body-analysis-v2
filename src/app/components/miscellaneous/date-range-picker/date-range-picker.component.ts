@@ -87,20 +87,20 @@ export class DateRangePickerComponent implements OnInit {
       },
     },
     {
-      name: 'Letztes Jahr',
-      code: 'LY',
+      name: 'Akutelles Jahr',
+      code: 'CY',
       range: () => {
-        const from = startOfDay(subYears(addDays(new Date(), 1), 1));
+        const from = startOfYear(new Date());
         const to = endOfDay(new Date());
 
         return [from, to];
       },
     },
     {
-      name: 'Akutelles Jahr',
-      code: 'CY',
+      name: 'Letztes Jahr',
+      code: 'LY',
       range: () => {
-        const from = startOfYear(new Date());
+        const from = startOfDay(subYears(addDays(new Date(), 1), 1));
         const to = endOfDay(new Date());
 
         return [from, to];

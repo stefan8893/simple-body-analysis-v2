@@ -1,14 +1,15 @@
-import { Component, OnDestroy, ViewEncapsulation } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { AppUserState } from '../../stores/app-user/app-user.reducer';
-import { Observable, Subject, takeUntil } from 'rxjs';
-import { InputTextModule } from 'primeng/inputtext';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ButtonModule } from 'primeng/button';
-import { ContentHeaderComponent } from '../miscellaneous/content-header/content-header.component';
-import { UserPictureState } from '../../stores/user-picture/user-picture.reducer';
+import { Component, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Store } from '@ngrx/store';
 import { AvatarModule } from 'primeng/avatar';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { InputTextModule } from 'primeng/inputtext';
+import { Observable, Subject, takeUntil } from 'rxjs';
+import { AppUserState } from '../../stores/app-user/app-user.reducer';
+import { UserPictureState } from '../../stores/user-picture/user-picture.reducer';
+import { ContentHeaderComponent } from '../miscellaneous/content-header/content-header.component';
 
 @Component({
   selector: 'app-profile',
@@ -20,6 +21,7 @@ import { AvatarModule } from 'primeng/avatar';
     InputTextModule,
     ButtonModule,
     AvatarModule,
+    CardModule,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',

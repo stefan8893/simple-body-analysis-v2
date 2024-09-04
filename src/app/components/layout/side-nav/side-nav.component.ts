@@ -26,7 +26,7 @@ export class SideNavComponent implements OnInit {
         },
       },
       {
-        label: 'Täglich',
+        label: 'Tagesanalyse',
         icon: 'pi pi-calendar',
         routerLink: '/app/daily',
         command: () => {
@@ -34,7 +34,7 @@ export class SideNavComponent implements OnInit {
         },
       },
       {
-        label: 'Wöchentlich',
+        label: 'Wochenanalyse',
         icon: 'pi pi-calendar-minus',
         routerLink: '/app/weekly',
         command: () => {

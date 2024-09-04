@@ -1,93 +1,255 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  CategoryScale,
+  Chart,
+  Filler,
+  Legend,
+  LinearScale,
+  LineController,
+  LineElement,
+  PointElement,
+  TimeScale,
+  Tooltip,
+} from 'chart.js';
 import 'chartjs-adapter-date-fns';
+import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels';
 import { de } from 'date-fns/locale';
-import { ChartModule } from 'primeng/chart';
+import { CardModule } from 'primeng/card';
+import { debounceTime, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
+import { layouVariables } from '../../../styles/layout-variables';
 import { BodyAnalysisQueryService } from '../../body-analysis-data/body-analysis-query.service';
 import { BodyAnalysis } from '../../body-analysis-data/body-analysis.types';
+import { sampleData } from '../../body-analysis-data/sample-data';
 import { ContentHeaderComponent } from '../miscellaneous/content-header/content-header.component';
 import { DateRangePickerComponent } from '../miscellaneous/date-range-picker/date-range-picker.component';
+
+type TShirtSize = 'Small' | 'Medium' | 'Large';
 
 @Component({
   selector: 'app-daily-analysis',
   standalone: true,
-  imports: [ContentHeaderComponent, DateRangePickerComponent, ChartModule],
+  imports: [ContentHeaderComponent, CardModule, DateRangePickerComponent],
   templateUrl: './daily-analysis.component.html',
   styleUrl: './daily-analysis.component.scss',
 })
-export class DailyAnalysisComponent implements OnInit {
+export class DailyAnalysisComponent implements OnInit, OnDestroy {
+  private windowResize$: Observable<Event>;
+  private poisonPill$ = new Subject<void>();
+
   isLoading = false;
 
-  constructor(private bodyAnalysisQueryService: BodyAnalysisQueryService) {}
+  constructor(private bodyAnalysisQueryService: BodyAnalysisQueryService) {
+    Chart.register(
+      LineController,
+      PointElement,
+      CategoryScale,
+      LinearScale,
+      TimeScale,
+      LineElement,
+      ChartDataLabels,
+      Filler,
+      Legend,
+      Tooltip
+    );
 
-  data: any;
+    this.windowResize$ = fromEvent(window, 'resize');
+  }
+  ngOnDestroy(): void {
+    this.poisonPill$.next();
+    this.poisonPill$.complete();
+  }
 
-  options: any;
+  dailyChart: any;
+
+  private unitOfMeasureByDatasetLabel = new Map<string, string>([
+    ['Gewicht', 'kg'],
+    ['Körperfett', '%'],
+    ['Muskeln', '%'],
+    ['Wasser', '%'],
+    ['Bmi', ''],
+    ['Täglicher Kalorienbedarf', 'kcal'],
+  ]);
+
+  private getUnitOfMeasureOrDefault(label: string | undefined): string {
+    return this.unitOfMeasureByDatasetLabel.has(label ?? '')
+      ? this.unitOfMeasureByDatasetLabel.get(label ?? '')!
+      : '';
+  }
 
   ngOnInit() {
     const documentStyle = getComputedStyle(document.documentElement);
+    const weightColor = documentStyle.getPropertyValue('--primary-color');
+    const muscleMassColor = documentStyle.getPropertyValue('--purple-700');
+    const bodyFatColor = documentStyle.getPropertyValue('--orange-500');
+    const bodyWaterColor = documentStyle.getPropertyValue('--cyan-500');
+
     const textColor = documentStyle.getPropertyValue('--text-color');
     const textColorSecondary = documentStyle.getPropertyValue(
       '--text-color-secondary'
     );
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
-    this.data = {
-      labels: [],
-      datasets: [
-        // {
-        //   label: 'First Dataset',
-        //   data: [65, 59, 80, 81, 56, 55, 40],
-        //   fill: false,
-        //   borderColor: documentStyle.getPropertyValue('--blue-500'),
-        //   tension: 0.4,
-        // },
-      ],
-    };
+    const xAxis = sampleData.map((x) => x.analysedAt);
+    const weightSeries = sampleData.map((x) => x.weight);
+    const bodyFatSeries = sampleData.map((x) => x.bodyFat);
+    const muscleMass = sampleData.map((x) => x.muscleMass);
+    const bodyWater = sampleData.map((x) => x.bodyWater);
 
-    this.options = {
-      maintainAspectRatio: false,
-      aspectRatio: 0.6,
-      plugins: {
-        legend: {
-          labels: {
+    this.dailyChart = new Chart('daily-chart', {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [
+          {
+            label: 'Gewicht',
+            data: [],
+            borderColor: weightColor,
+            yAxisID: 'yLeft',
+          },
+          {
+            label: 'Muskeln',
+            data: [],
+            hidden: true,
+            borderColor: muscleMassColor,
+            yAxisID: 'yLeft',
+          },
+          {
+            label: 'Wasser',
+            data: [],
+            hidden: true,
+            borderColor: bodyWaterColor,
+            yAxisID: 'yLeft',
+          },
+          {
+            label: 'Körperfett',
+            data: [],
+            hidden: true,
+            borderColor: bodyFatColor,
+            yAxisID: 'yRight',
+          },
+        ],
+      },
+      options: {
+        locale: 'de-AT',
+        responsive: true,
+        maintainAspectRatio: true,
+        elements: {
+          line: {
+            cubicInterpolationMode: 'monotone',
+          },
+          point: {
+            radius: (ctx) => {
+              if (this.showDataPoint(ctx)) {
+                return 3;
+              } else {
+                return 0;
+              }
+            },
+          },
+        },
+        plugins: {
+          datalabels: {
+            display: (ctx) => {
+              return ctx.chart.width > layouVariables.mobileBreakpoint.value;
+            },
+            anchor: 'end',
+            offset: 5,
+            align: 'top',
             color: textColor,
-          },
-        },
-      },
-      scales: {
-        x: {
-          type: 'time',
-          time: {
-            unit: 'day',
-            displayFormats: {
-              day: 'P',
+            formatter: (value, ctx) => {
+              const unit = this.getUnitOfMeasureOrDefault(ctx.dataset.label);
+
+              if (this.showDataPoint(ctx)) {
+                return `${value} ${unit}`;
+              } else {
+                return '';
+              }
             },
-            tooltipFormat: 'Pp',
           },
-          ticks: {
-            color: textColorSecondary,
+          tooltip: {
+            callbacks: {
+              label: (ctx) => {
+                const unit = this.getUnitOfMeasureOrDefault(ctx.dataset.label);
+                return `${ctx.dataset.label}: ${ctx.formattedValue} ${unit}`;
+              },
+            },
           },
-          grid: {
-            color: surfaceBorder,
-            drawBorder: false,
-          },
-          adapters: {
-            date: {
-              locale: de,
+          legend: {
+            labels: {
+              color: textColor,
             },
           },
         },
-        y: {
-          ticks: {
-            color: textColorSecondary,
+        scales: {
+          x: {
+            type: 'time',
+            time: {
+              unit: 'day',
+              displayFormats: {
+                day: 'P',
+              },
+              tooltipFormat: 'Pp',
+            },
+            ticks: {
+              color: textColor,
+              stepSize: 4,
+              maxTicksLimit: 12,
+            },
+            grid: {
+              color: surfaceBorder,
+              display: false,
+            },
+            adapters: {
+              date: {
+                locale: de,
+              },
+            },
           },
-          grid: {
-            color: surfaceBorder,
-            drawBorder: false,
+          yLeft: {
+            position: 'left',
+            grace: '10%',
+            ticks: {
+              padding: 20,
+            },
+          },
+          yRight: {
+            position: 'right',
+            grace: '30%',
+            ticks: {
+              padding: 20,
+            },
+            grid: {
+              drawOnChartArea: false,
+            },
           },
         },
       },
-    };
+    });
+
+    this.windowResize$
+      .pipe(debounceTime(150), takeUntil(this.poisonPill$))
+      .subscribe(() => this.dailyChart.resize());
+  }
+
+  getDataSize(ctx: Context): TShirtSize {
+    const length = ctx.dataset.data.length;
+
+    if (length < 30) return 'Small';
+    else if (length < 90) return 'Medium';
+    else return 'Large';
+  }
+
+  showDataPoint(ctx: Context) {
+    if (ctx.chart.width <= layouVariables.mobileBreakpoint.value) return false;
+
+    const tShirtSize = this.getDataSize(ctx);
+
+    const showLabelEveryNthPoint =
+      tShirtSize === 'Large' ? 20 : tShirtSize == 'Medium' ? 5 : 1;
+
+    if (ctx.dataIndex === ctx.dataset.data.length - 1) return true;
+
+    return ctx.dataIndex % showLabelEveryNthPoint === 0;
   }
 
   onPreparedDateRangeChanged(event: string[]) {
@@ -103,8 +265,6 @@ export class DailyAnalysisComponent implements OnInit {
       this.isLoading = true;
       const result = await this.bodyAnalysisQueryService.query(from, to);
 
-      console.log('result', result);
-
       this.updateChart(result);
     } catch (error) {
       console.error(error);
@@ -116,24 +276,15 @@ export class DailyAnalysisComponent implements OnInit {
   updateChart(result: BodyAnalysis[]) {
     const xAxis = result.map((x) => x.analysedAt);
     const weightSeries = result.map((x) => x.weight);
+    const muscleMassSeries = result.map((x) => x.muscleMass);
+    const bodyWaterSeries = result.map((x) => x.bodyWater);
     const bodyFatSeries = result.map((x) => x.bodyFat);
 
-    this.data.labels = xAxis;
-    this.data.datasets = [
-      {
-        label: 'Gewicht',
-        data: weightSeries,
-        fill: false,
-        tension: 0.4,
-      },
-      {
-        label: 'Körperfett',
-        data: bodyFatSeries,
-        fill: false,
-        tension: 0.4,
-      },
-    ];
-
-    this.data = { ...this.data };
+    this.dailyChart.data.labels = xAxis;
+    this.dailyChart.data.datasets[0].data = weightSeries;
+    this.dailyChart.data.datasets[1].data = muscleMassSeries;
+    this.dailyChart.data.datasets[2].data = bodyWaterSeries;
+    this.dailyChart.data.datasets[3].data = bodyFatSeries;
+    this.dailyChart.update();
   }
 }

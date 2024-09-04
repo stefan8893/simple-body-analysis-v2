@@ -1,7 +1,7 @@
 <app-content-header title="Profil"></app-content-header>
 <div class="flex flex-row align-items-center justify-content-start">
   @if((appUser$ | async) !== null){
-  <div class="profile-user-info flex flex-column align-items-center justify-content-start w-full mb-6">
+  <p-card class="profile-user-info flex flex-column align-items-center justify-content-start w-full">
 
     <div class="flex flex-row flex-wrap sm:flex-nowrap justify-content-center w-full">
 
@@ -32,7 +32,7 @@
       <label for="email">Email</label>
       <input pInputText id="email" [ngModel]="(appUser$ | async)?.email" readonly />
     </div>
-  </div>
+  </p-card>
   }
   @else {
   <div>

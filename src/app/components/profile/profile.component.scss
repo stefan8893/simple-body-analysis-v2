@@ -1,5 +1,9 @@
 @import '../../../styles/layout-variables';
 
+.profile-user-info > .p-card {
+  width: 100%;
+}
+
 .profile-user-picture {
   overflow: hidden;
   object-fit: cover;

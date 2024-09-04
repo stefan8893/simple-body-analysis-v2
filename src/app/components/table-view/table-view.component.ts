@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal, ViewEncapsulation } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { BodyAnalysisQueryService } from '../../body-analysis-data/body-analysis-query.service';
 import { BodyAnalysis } from '../../body-analysis-data/body-analysis.types';
@@ -17,6 +18,7 @@ import { DateRangePickerComponent } from '../miscellaneous/date-range-picker/dat
     DateRangePickerComponent,
     ButtonModule,
     TableModule,
+    CardModule,
     FormatDatePipe,
   ],
   templateUrl: './table-view.component.html',

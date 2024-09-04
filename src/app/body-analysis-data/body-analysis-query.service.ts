@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { TableClient, TableEntityResult } from '@azure/data-tables';
 import { endOfDay, parseISO, startOfDay } from 'date-fns';
 import { BodyAnalysis } from './body-analysis.types';
+import { sampleData } from './sample-data';
 
 @Injectable({ providedIn: 'root' })
 export class BodyAnalysisQueryService {
@@ -68,12 +69,18 @@ export class BodyAnalysisQueryService {
     const fromAsDate = parseISO(from);
     const toAsDate = parseISO(to);
 
-    if (this.isInCacheRange(fromAsDate, toAsDate))
-      return this.queryCache(fromAsDate, toAsDate);
+    return sampleData.filter(
+      (x) => x.analysedAt >= fromAsDate && x.analysedAt <= toAsDate
+    );
 
-    const result = await this.queryAzureTables(from, to);
-    this.cache = result;
+    // if (this.isInCacheRange(fromAsDate, toAsDate))
+    //   return this.queryCache(fromAsDate, toAsDate);
 
-    return result;
+    // const result = await this.queryAzureTables(from, to);
+    // this.cache = result;
+
+    // console.log(JSON.stringify(result));
+
+    // return result;
   }
 }

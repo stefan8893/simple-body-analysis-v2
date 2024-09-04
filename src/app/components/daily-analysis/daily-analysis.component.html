@@ -1,11 +1,13 @@
-<div class="table-view-grid-table mb-6">
+<div class="daily-analysis">
   <app-content-header title="Tagesanalyse" />
   <div class="mb-3 md:mb-5 flex flex-row flex-wrap align-items-center justify-content-start">
     <app-date-range-picker initialRange="L30D" (preparedDateRangeChanged)="onPreparedDateRangeChanged($event)" />
   </div>
 
   <div class="chart-container">
-    <p-chart type="line" [data]="data" [options]="options" />
+    <p-card>
+      <canvas id="daily-chart">{{ dailyChart }}</canvas>
+    </p-card>
   </div>
 
 </div>
