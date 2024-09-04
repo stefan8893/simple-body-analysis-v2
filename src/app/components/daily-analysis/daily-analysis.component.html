@@ -4,12 +4,7 @@
     <app-date-range-picker initialRange="L30D" (preparedDateRangeChanged)="onPreparedDateRangeChanged($event)" />
   </div>
 
-  @if(isLoading) {
-  <div class="card flex justify-content-center">
-    <p-progressSpinner ariaLabel="loading" />
-  </div>
-
-  }
+  <app-loading-spinner [show]="isLoading" [debounceTimeInMilliseconds]="400" />
 
   <div [hidden]="isLoading">
     <p-card>

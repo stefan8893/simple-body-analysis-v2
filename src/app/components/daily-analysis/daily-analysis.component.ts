@@ -16,7 +16,6 @@ import {
 import 'chartjs-adapter-date-fns';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { CardModule } from 'primeng/card';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { debounceTime, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 import { BodyAnalysisQueryService } from '../../body-analysis-data/body-analysis-query.service';
 import { BodyAnalysis } from '../../body-analysis-data/body-analysis.types';
@@ -24,14 +23,15 @@ import { commonOptions } from '../../charting/common.options';
 import { SideNavState } from '../layout/layout/side-nav.state';
 import { ContentHeaderComponent } from '../miscellaneous/content-header/content-header.component';
 import { DateRangePickerComponent } from '../miscellaneous/date-range-picker/date-range-picker.component';
+import { LoadingSpinnerComponent } from '../miscellaneous/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-daily-analysis',
   standalone: true,
   imports: [
     ContentHeaderComponent,
+    LoadingSpinnerComponent,
     CardModule,
-    ProgressSpinnerModule,
     DateRangePickerComponent,
   ],
   templateUrl: './daily-analysis.component.html',
