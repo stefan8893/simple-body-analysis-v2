@@ -1,0 +1,12 @@
+@import 'primeflex/core/_variables.scss';
+
+.weekly-analysis {
+  margin: 0 auto;
+  width: 100%;
+}
+
+@media screen and (min-width: calc(#{$xl})) {
+  .weekly-analysis {
+    width: 70%;
+  }
+}

@@ -1,1 +1,15 @@
-<app-content-header title="coming soon ..."></app-content-header>
+<div class="weekly-analysis">
+  <app-content-header title="Wochenanalyse" />
+  <div class="mb-3 md:mb-5 flex flex-row flex-wrap align-items-center justify-content-start">
+    <app-date-range-picker initialRange="L6M" (preparedDateRangeChanged)="onPreparedDateRangeChanged($event)" />
+  </div>
+
+  <app-loading-spinner [show]="isLoading" [debounceTimeInMilliseconds]="400" />
+
+  <div [hidden]="isLoading">
+    <p-card>
+      <canvas id="weekly-chart">{{ weeklyChart }}</canvas>
+    </p-card>
+  </div>
+
+</div>
