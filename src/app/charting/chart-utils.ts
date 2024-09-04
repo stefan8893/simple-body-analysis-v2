@@ -17,9 +17,9 @@ export function showDataPoint(ctx: Context): boolean {
   const tShirtSize = getDataSize(ctx);
 
   const showLabelEveryNthPoint =
-    tShirtSize === 'Large' ? 20 : tShirtSize == 'Medium' ? 5 : 1;
+    tShirtSize === 'Large' ? 20 : tShirtSize == 'Medium' ? 4 : 1;
 
-  // always show first point
+  // always show last point
   if (ctx.dataIndex === ctx.dataset.data.length - 1) return true;
 
   return ctx.dataIndex % showLabelEveryNthPoint === 0;

@@ -67,10 +67,10 @@ export class DateRangePickerComponent implements OnInit {
       },
     },
     {
-      name: 'Letzte 2 Monate',
+      name: 'Letzte 3 Monate',
       code: 'L2M',
       range: () => {
-        const from = startOfDay(subMonths(addDays(new Date(), 1), 2));
+        const from = startOfDay(subMonths(addDays(new Date(), 1), 3));
         const to = endOfDay(new Date());
 
         return [from, to];
