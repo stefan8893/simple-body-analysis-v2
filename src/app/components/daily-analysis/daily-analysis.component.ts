@@ -16,6 +16,7 @@ import {
 import 'chartjs-adapter-date-fns';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { CardModule } from 'primeng/card';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { debounceTime, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 import { BodyAnalysisQueryService } from '../../body-analysis-data/body-analysis-query.service';
 import { BodyAnalysis } from '../../body-analysis-data/body-analysis.types';
@@ -27,13 +28,20 @@ import { DateRangePickerComponent } from '../miscellaneous/date-range-picker/dat
 @Component({
   selector: 'app-daily-analysis',
   standalone: true,
-  imports: [ContentHeaderComponent, CardModule, DateRangePickerComponent],
+  imports: [
+    ContentHeaderComponent,
+    CardModule,
+    ProgressSpinnerModule,
+    DateRangePickerComponent,
+  ],
   templateUrl: './daily-analysis.component.html',
   styleUrl: './daily-analysis.component.scss',
 })
 export class DailyAnalysisComponent implements OnInit, OnDestroy {
   private windowResize$: Observable<Event>;
   private poisonPill$ = new Subject<void>();
+
+  isLoading = false;
 
   constructor(
     private bodyAnalysisQueryService: BodyAnalysisQueryService,
@@ -133,11 +141,14 @@ export class DailyAnalysisComponent implements OnInit, OnDestroy {
 
   async loadTableData(from: string, to: string) {
     try {
+      this.isLoading = true;
       const result = await this.bodyAnalysisQueryService.query(from, to);
 
       this.updateChart(result);
     } catch (error) {
       console.error(error);
+    } finally {
+      this.isLoading = false;
     }
   }
 

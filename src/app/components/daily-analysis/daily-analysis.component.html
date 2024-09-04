@@ -4,7 +4,14 @@
     <app-date-range-picker initialRange="L30D" (preparedDateRangeChanged)="onPreparedDateRangeChanged($event)" />
   </div>
 
-  <div class="chart-container">
+  @if(isLoading) {
+  <div class="card flex justify-content-center">
+    <p-progressSpinner ariaLabel="loading" />
+  </div>
+
+  }
+
+  <div [hidden]="isLoading">
     <p-card>
       <canvas id="daily-chart">{{ dailyChart }}</canvas>
     </p-card>
