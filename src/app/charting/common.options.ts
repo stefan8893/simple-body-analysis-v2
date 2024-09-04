@@ -19,7 +19,7 @@ export const commonOptions = {
     point: {
       radius: (ctx: Context) => {
         if (showDataPoint(ctx)) {
-          return 3;
+          return 5;
         } else {
           return 0;
         }
