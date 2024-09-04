@@ -133,13 +133,13 @@ export class DailyAnalysisComponent implements OnInit, OnDestroy {
     const [from, to] = event;
 
     if (event.length !== 0) {
-      this.loadTableData(from, to);
+      this.loadBodyAnalysisData(from, to);
     } else {
       this.clearChart();
     }
   }
 
-  async loadTableData(from: string, to: string) {
+  async loadBodyAnalysisData(from: string, to: string) {
     try {
       this.isLoading = true;
       const result = await this.bodyAnalysisQueryService.query(from, to);
