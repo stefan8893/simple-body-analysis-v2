@@ -5,6 +5,10 @@
   width: 100%;
 }
 
+.weekly-analysis-week-day-selection .p-dropdown-items-wrapper{
+  max-height: 300px !important;
+}
+
 @media screen and (min-width: calc(#{$xl})) {
   .weekly-analysis {
     width: 70%;

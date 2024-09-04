@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import {
   CategoryScale,
@@ -17,8 +18,17 @@ import {
 import 'chartjs-adapter-date-fns';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Options } from 'chartjs-plugin-datalabels/types/options';
-import { isMonday } from 'date-fns';
+import {
+  isFriday,
+  isMonday,
+  isSaturday,
+  isSunday,
+  isThursday,
+  isTuesday,
+  isWednesday,
+} from 'date-fns';
 import { CardModule } from 'primeng/card';
+import { DropdownModule } from 'primeng/dropdown';
 import { debounceTime, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 import { BodyAnalysisQueryService } from '../../body-analysis-data/body-analysis-query.service';
 import { BodyAnalysis } from '../../body-analysis-data/body-analysis.types';
@@ -35,16 +45,44 @@ import { LoadingSpinnerComponent } from '../miscellaneous/loading-spinner/loadin
     ContentHeaderComponent,
     LoadingSpinnerComponent,
     CardModule,
+    DropdownModule,
     DateRangePickerComponent,
+    FormsModule,
   ],
   templateUrl: './weekly-analysis.component.html',
   styleUrl: './weekly-analysis.component.scss',
+  encapsulation: ViewEncapsulation.None,
 })
 export class WeeklyAnalysisComponent implements OnInit, OnDestroy {
   private windowResize$: Observable<Event>;
   private poisonPill$ = new Subject<void>();
 
+  private filterFnByWeekDay = new Map<string, (date: Date) => boolean>([
+    ['Montag', (x: Date) => isMonday(x)],
+    ['Dienstag', (x: Date) => isTuesday(x)],
+    ['Mittwoch', (x: Date) => isWednesday(x)],
+    ['Donnerstag', (x: Date) => isThursday(x)],
+    ['Freitag', (x: Date) => isFriday(x)],
+    ['Samstag', (x: Date) => isSaturday(x)],
+    ['Sonntag', (x: Date) => isSunday(x)],
+  ]);
+
+  weekDays = [
+    'Montag',
+    'Dienstag',
+    'Mittwoch',
+    'Donnerstag',
+    'Freitag',
+    'Samstag',
+    'Sonntag',
+  ];
+  selectedWeekDay = 'Montag';
+
+  private latestPreparedDateRange: string[] = [];
+
   isLoading = false;
+
+  weeklyChart: any;
 
   constructor(
     private bodyAnalysisQueryService: BodyAnalysisQueryService,
@@ -65,8 +103,6 @@ export class WeeklyAnalysisComponent implements OnInit, OnDestroy {
 
     this.windowResize$ = fromEvent(window, 'resize');
   }
-
-  weeklyChart: any;
 
   private clearChart() {
     this.weeklyChart.data.labels = [];
@@ -145,8 +181,13 @@ export class WeeklyAnalysisComponent implements OnInit, OnDestroy {
     });
   }
 
+  onWeekDayChanged() {
+    this.onPreparedDateRangeChanged(this.latestPreparedDateRange);
+  }
+
   onPreparedDateRangeChanged(event: string[]) {
     const [from, to] = event;
+    this.latestPreparedDateRange = event;
 
     if (event.length !== 0) {
       this.loadBodyAnalysisData(from, to);
@@ -159,9 +200,11 @@ export class WeeklyAnalysisComponent implements OnInit, OnDestroy {
     try {
       this.isLoading = true;
       const result = await this.bodyAnalysisQueryService.query(from, to);
-      const onlyMondays = result.filter((x) => isMonday(x.analysedAt));
+      const filtered = result.filter((x) =>
+        this.filterFnByWeekDay.get(this.selectedWeekDay)!(x.analysedAt)
+      );
 
-      this.updateChart(onlyMondays);
+      this.updateChart(filtered);
     } catch (error) {
       console.error(error);
     } finally {
@@ -169,12 +212,12 @@ export class WeeklyAnalysisComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateChart(result: BodyAnalysis[]) {
-    const xAxis = result.map((x) => x.analysedAt);
-    const weightSeries = result.map((x) => x.weight);
-    const muscleMassSeries = result.map((x) => x.muscleMass);
-    const bodyWaterSeries = result.map((x) => x.bodyWater);
-    const bodyFatSeries = result.map((x) => x.bodyFat);
+  updateChart(data: BodyAnalysis[]) {
+    const xAxis = data.map((x) => x.analysedAt);
+    const weightSeries = data.map((x) => x.weight);
+    const muscleMassSeries = data.map((x) => x.muscleMass);
+    const bodyWaterSeries = data.map((x) => x.bodyWater);
+    const bodyFatSeries = data.map((x) => x.bodyFat);
 
     this.weeklyChart.data.labels = xAxis;
     this.weeklyChart.data.datasets[0].data = weightSeries;
