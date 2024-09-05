@@ -213,11 +213,11 @@ export class WeeklyAnalysisComponent implements OnInit, OnDestroy {
         this.filterFnByWeekDay.get(this.selectedWeekDay)!(x.analysedAt)
       );
 
-      this.updateChart(filtered);
+      setTimeout(() => this.updateChart(filtered), 2000);
     } catch (error) {
       console.error(error);
     } finally {
-      this.isLoading = false;
+      setTimeout(() => (this.isLoading = false), 2000);
     }
   }
 

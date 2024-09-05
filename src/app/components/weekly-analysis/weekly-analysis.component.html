@@ -6,12 +6,14 @@
       [(ngModel)]="selectedWeekDay" (onChange)="onWeekDayChanged()" />
   </div>
 
-  <app-loading-spinner [show]="isLoading" [debounceTimeInMilliseconds]="400" />
+  <app-loading-spinner [show]="isLoading" [debounceTimeInMilliseconds]="400">
 
-  <div [hidden]="isLoading">
-    <p-card>
-      <canvas id="weekly-chart">{{ weeklyChart }}</canvas>
-    </p-card>
-  </div>
+    <div>
+      <p-card>
+        <canvas id="weekly-chart">{{ weeklyChart }}</canvas>
+      </p-card>
+    </div>
+
+  </app-loading-spinner>
 
 </div>

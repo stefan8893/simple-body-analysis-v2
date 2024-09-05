@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { TableClient, TableEntityResult } from '@azure/data-tables';
-import { compareAsc, endOfDay, parseISO, startOfDay } from 'date-fns';
+import { endOfDay, parseISO, startOfDay } from 'date-fns';
 import { BodyAnalysis } from './body-analysis.types';
+import { sampleData } from './sample-data';
 
 @Injectable({ providedIn: 'root' })
 export class BodyAnalysisQueryService {
@@ -11,10 +12,8 @@ export class BodyAnalysisQueryService {
   private getBoundariesOfAlreadyQueriedData() {
     if (this.cache.length < 2) return null;
 
-    const sorted = this.cache.map((x) => x.analysedAt).sort(compareAsc);
-
-    const oldest = sorted[0];
-    const latest = sorted[sorted.length - 1];
+    const oldest = this.cache[0].analysedAt;
+    const latest = this.cache[this.cache.length - 1].analysedAt;
 
     return {
       latest,
@@ -66,16 +65,16 @@ export class BodyAnalysisQueryService {
     const fromAsDate = parseISO(from);
     const toAsDate = parseISO(to);
 
-    // return sampleData.filter(
-    //   (x) => x.analysedAt >= fromAsDate && x.analysedAt <= toAsDate
-    // );
+    return sampleData.filter(
+      (x) => x.analysedAt >= fromAsDate && x.analysedAt <= toAsDate
+    );
 
-    if (this.isInCacheRange(fromAsDate, toAsDate))
-      return this.queryCache(fromAsDate, toAsDate);
+    // if (this.isInCacheRange(fromAsDate, toAsDate))
+    //   return this.queryCache(fromAsDate, toAsDate);
 
-    const result = await this.queryAzureTables(from, to);
-    this.cache = result;
+    // const result = await this.queryAzureTables(from, to);
+    // this.cache = result.sort((a, b) => compareAsc(a.analysedAt, b.analysedAt));
 
-    return result;
+    // return result;
   }
 }
