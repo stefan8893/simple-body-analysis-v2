@@ -91,14 +91,24 @@ export const commonOptions = {
     yLeft: {
       position: 'left',
       grace: '10%',
-      ticks: {},
+      ticks: {
+        padding: 20,
+      },
+      border: {
+        display: false,
+      },
     },
     yRight: {
       position: 'right',
       grace: '30%',
-      ticks: {},
+      ticks: {
+        padding: 20,
+      },
       grid: {
-        drawOnChartArea: false,
+        drawOnChartArea: true,
+      },
+      border: {
+        display: false,
       },
     },
   },
