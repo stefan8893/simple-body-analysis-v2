@@ -19,7 +19,13 @@ import { CardModule } from 'primeng/card';
 import { debounceTime, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 import { BodyAnalysisQueryService } from '../../body-analysis-data/body-analysis-query.service';
 import { BodyAnalysis } from '../../body-analysis-data/body-analysis.types';
-import { commonOptions } from '../../charting/common.options';
+import {
+  bodyFatColor,
+  bodyWaterColor,
+  commonOptions,
+  muscleMassColor,
+  weightColor,
+} from '../../charting/common.options';
 import { SideNavState } from '../layout/layout/side-nav.state';
 import { ContentHeaderComponent } from '../miscellaneous/content-header/content-header.component';
 import { DateRangePickerComponent } from '../miscellaneous/date-range-picker/date-range-picker.component';
@@ -75,12 +81,6 @@ export class DailyAnalysisComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const documentStyle = getComputedStyle(document.documentElement);
-    const weightColor = documentStyle.getPropertyValue('--primary-color');
-    const muscleMassColor = documentStyle.getPropertyValue('--purple-700');
-    const bodyFatColor = documentStyle.getPropertyValue('--orange-500');
-    const bodyWaterColor = documentStyle.getPropertyValue('--cyan-500');
-
     this.dailyChart = new Chart('daily-chart', {
       type: 'line',
       data: {
@@ -125,14 +125,14 @@ export class DailyAnalysisComponent implements OnInit, OnDestroy {
       .subscribe(() => this.dailyChart.resize());
 
     this.sideNavStore.pipe(takeUntil(this.poisonPill$)).subscribe(() => {
-      setTimeout(() => this.dailyChart.resize(), 500);
+      setTimeout(() => this.dailyChart.resize(), 20);
     });
   }
 
   onPreparedDateRangeChanged(event: string[]) {
     const [from, to] = event;
 
-    if (event.length !== 0) {
+    if (event.length === 2) {
       this.loadBodyAnalysisData(from, to);
     } else {
       this.clearChart();
@@ -152,12 +152,12 @@ export class DailyAnalysisComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateChart(result: BodyAnalysis[]) {
-    const xAxis = result.map((x) => x.analysedAt);
-    const weightSeries = result.map((x) => x.weight);
-    const muscleMassSeries = result.map((x) => x.muscleMass);
-    const bodyWaterSeries = result.map((x) => x.bodyWater);
-    const bodyFatSeries = result.map((x) => x.bodyFat);
+  updateChart(data: BodyAnalysis[]) {
+    const xAxis = data.map((x) => x.analysedAt);
+    const weightSeries = data.map((x) => x.weight);
+    const muscleMassSeries = data.map((x) => x.muscleMass);
+    const bodyWaterSeries = data.map((x) => x.bodyWater);
+    const bodyFatSeries = data.map((x) => x.bodyFat);
 
     this.dailyChart.data.labels = xAxis;
     this.dailyChart.data.datasets[0].data = weightSeries;

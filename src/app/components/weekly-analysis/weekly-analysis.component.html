@@ -1,7 +1,8 @@
 <div class="weekly-analysis">
   <app-content-header title="Wochenanalyse" />
-  <div class="mb-3 md:mb-5 mr-3 flex flex-row flex-wrap align-items-center justify-content-start">
-    <app-date-range-picker initialRange="L6M" (preparedDateRangeChanged)="onPreparedDateRangeChanged($event)" />
+  <div class="mb-3 md:mb-5 flex flex-row flex-wrap align-items-center justify-content-start">
+    <app-date-range-picker initialRange="L6M" (preparedDateRangeChanged)="onPreparedDateRangeChanged($event)"
+      class="mr-3" />
     <p-dropdown class="weekly-analysis-week-day-selection" [checkmark]="false" [options]="weekDays"
       [(ngModel)]="selectedWeekDay" (onChange)="onWeekDayChanged()" />
   </div>

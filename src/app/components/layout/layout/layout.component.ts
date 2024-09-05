@@ -43,7 +43,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   ]);
 
   sideNavCloseDelayInMillisecondsByState = new Map<string, number>([
-    ['show', 0],
+    ['show', 300],
     ['hideInstantly', 0],
     ['hideAnimated', 300],
     ['hideAnimatedAndSlowly', 1000],

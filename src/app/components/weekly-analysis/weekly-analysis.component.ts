@@ -16,8 +16,7 @@ import {
   Tooltip,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
-import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels';
-import { Options } from 'chartjs-plugin-datalabels/types/options';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import {
   isFriday,
   isMonday,
@@ -32,8 +31,13 @@ import { DropdownModule } from 'primeng/dropdown';
 import { debounceTime, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 import { BodyAnalysisQueryService } from '../../body-analysis-data/body-analysis-query.service';
 import { BodyAnalysis } from '../../body-analysis-data/body-analysis.types';
-import { getUnitOfMeasureOrDefault } from '../../charting/chart-utils';
-import { commonOptions } from '../../charting/common.options';
+import {
+  bodyFatColor,
+  bodyWaterColor,
+  commonOptions,
+  muscleMassColor,
+  weightColor,
+} from '../../charting/common.options';
 import { SideNavState } from '../layout/layout/side-nav.state';
 import { ContentHeaderComponent } from '../miscellaneous/content-header/content-header.component';
 import { DateRangePickerComponent } from '../miscellaneous/date-range-picker/date-range-picker.component';
@@ -115,12 +119,6 @@ export class WeeklyAnalysisComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const documentStyle = getComputedStyle(document.documentElement);
-    const weightColor = documentStyle.getPropertyValue('--primary-color');
-    const muscleMassColor = documentStyle.getPropertyValue('--purple-700');
-    const bodyFatColor = documentStyle.getPropertyValue('--orange-500');
-    const bodyWaterColor = documentStyle.getPropertyValue('--cyan-500');
-
     this.weeklyChart = new Chart('weekly-chart', {
       type: 'line',
       data: {
@@ -163,21 +161,6 @@ export class WeeklyAnalysisComponent implements OnInit, OnDestroy {
             radius: undefined,
           },
         },
-        plugins: {
-          ...commonOptions.plugins,
-          datalabels: {
-            ...(commonOptions.plugins.datalabels as unknown as Options),
-            formatter: (value: any, ctx: Context) => {
-              const unit = getUnitOfMeasureOrDefault(ctx.dataset.label);
-
-              if (ctx.dataIndex % 2 === 0) {
-                return `${value} ${unit}`;
-              } else {
-                return '';
-              }
-            },
-          },
-        },
       },
     });
 
@@ -186,7 +169,7 @@ export class WeeklyAnalysisComponent implements OnInit, OnDestroy {
       .subscribe(() => this.weeklyChart.resize());
 
     this.sideNavStore.pipe(takeUntil(this.poisonPill$)).subscribe(() => {
-      setTimeout(() => this.weeklyChart.resize(), 50);
+      setTimeout(() => this.weeklyChart.resize(), 20);
     });
   }
 
@@ -198,7 +181,7 @@ export class WeeklyAnalysisComponent implements OnInit, OnDestroy {
     const [from, to] = event;
     this.latestPreparedDateRange = event;
 
-    if (event.length !== 0) {
+    if (event.length === 2) {
       this.loadBodyAnalysisData(from, to);
     } else {
       this.clearChart();
@@ -213,11 +196,11 @@ export class WeeklyAnalysisComponent implements OnInit, OnDestroy {
         this.filterFnByWeekDay.get(this.selectedWeekDay)!(x.analysedAt)
       );
 
-      setTimeout(() => this.updateChart(filtered), 2000);
+      this.updateChart(filtered);
     } catch (error) {
       console.error(error);
     } finally {
-      setTimeout(() => (this.isLoading = false), 2000);
+      this.isLoading = false;
     }
   }
 

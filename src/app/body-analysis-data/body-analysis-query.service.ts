@@ -9,7 +9,7 @@ export class BodyAnalysisQueryService {
   private cache: BodyAnalysis[] = [];
   constructor(private bodyAnalysisTable: TableClient) {}
 
-  private getBoundariesOfAlreadyQueriedData() {
+  private getBoundariesOfCachedData() {
     if (this.cache.length < 2) return null;
 
     const oldest = this.cache[0].analysedAt;
@@ -22,7 +22,7 @@ export class BodyAnalysisQueryService {
   }
 
   private isInCacheRange(from: Date, to: Date) {
-    const boundaries = this.getBoundariesOfAlreadyQueriedData();
+    const boundaries = this.getBoundariesOfCachedData();
 
     if (!boundaries) return false;
 

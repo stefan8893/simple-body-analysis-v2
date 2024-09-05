@@ -4,6 +4,10 @@ import { layouVariables } from '../../styles/layout-variables';
 import { getUnitOfMeasureOrDefault, showDataPoint } from './chart-utils';
 
 const documentStyle = getComputedStyle(document.documentElement);
+export const weightColor = documentStyle.getPropertyValue('--primary-color');
+export const muscleMassColor = documentStyle.getPropertyValue('--purple-700');
+export const bodyFatColor = documentStyle.getPropertyValue('--orange-500');
+export const bodyWaterColor = documentStyle.getPropertyValue('--cyan-500');
 
 const textColor = documentStyle.getPropertyValue('--text-color');
 const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
@@ -13,9 +17,7 @@ export const commonOptions = {
   responsive: true,
   maintainAspectRatio: true,
   elements: {
-    line: {
-      cubicInterpolationMode: 'monotone',
-    },
+    line: {},
     point: {
       radius: (ctx: Context) => {
         if (showDataPoint(ctx)) {
@@ -33,7 +35,7 @@ export const commonOptions = {
         return ctx.chart.width > layouVariables.mobileBreakpoint.value;
       },
       anchor: 'end',
-      offset: 5,
+      offset: 4,
       align: 'top',
       color: textColor,
       formatter: (value: any, ctx: Context) => {

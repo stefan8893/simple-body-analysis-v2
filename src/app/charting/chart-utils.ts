@@ -19,10 +19,12 @@ export function showDataPoint(ctx: Context): boolean {
 
   const showLabelEveryNthPoint = () => {
     if (tShirtSize === 'Small') return 1;
-    if (tShirtSize === 'Medium') return 5;
-    if (tShirtSize === 'Large') return 9;
+    if (tShirtSize === 'Medium') return 3;
+    if (tShirtSize === 'Large') return 7;
     return 20;
   };
+
+  if (ctx.dataIndex === ctx.dataset.data.length - 1) return true;
 
   return ctx.dataIndex % showLabelEveryNthPoint() === 0;
 }
