@@ -1,1 +1,21 @@
-<p>Dashboard works!</p>
+<div class="dashboard">
+
+  <div class="mb-3 md:mb-5 flex flex-row flex-wrap align-items-center justify-content-start">
+    <app-date-range-picker initialRange="L6M" (preparedDateRangeChanged)="onPreparedDateRangeChanged($event)"
+      class="mr-3" />
+    <p-dropdown class="dashboard-week-day-selection" [checkmark]="false" [options]="weekDays"
+      [(ngModel)]="selectedWeekDay" (onChange)="onWeekDayChanged()" />
+  </div>
+
+  <div class="grid mb-3 md:mb-5">
+    <p-card class="dashboard-card col-12 md:col-6 lg:col-3">Aktuellste Werte</p-card>
+    <p-card class="dashboard-card col-12 md:col-6 lg:col-3">Gewichtsabnahme</p-card>
+    <p-card class="dashboard-card col-12 md:col-6 lg:col-3">Fettreduktion</p-card>
+    <p-card class="dashboard-card col-12 md:col-6 lg:col-3">Muskelwachstum</p-card>
+  </div>
+
+  <div class="">
+    <p-card class="">Foo 2 </p-card>
+  </div>
+
+</div>

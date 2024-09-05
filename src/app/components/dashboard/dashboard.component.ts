@@ -1,12 +1,47 @@
-import { Component } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
+import { Component, ViewEncapsulation } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { CardModule } from 'primeng/card';
+import { DropdownModule } from 'primeng/dropdown';
 import { ContentHeaderComponent } from '../miscellaneous/content-header/content-header.component';
+import { DateRangePickerComponent } from '../miscellaneous/date-range-picker/date-range-picker.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [ButtonModule, ContentHeaderComponent],
+  imports: [
+    CardModule,
+    ContentHeaderComponent,
+    DateRangePickerComponent,
+    DropdownModule,
+    FormsModule,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
+  encapsulation: ViewEncapsulation.None,
 })
-export class DashboardComponent {}
+export class DashboardComponent {
+  weekDays = [
+    'Montag',
+    'Dienstag',
+    'Mittwoch',
+    'Donnerstag',
+    'Freitag',
+    'Samstag',
+    'Sonntag',
+  ];
+  selectedWeekDay = 'Montag';
+
+  onWeekDayChanged() {
+    console.log('week day changed', this.selectedWeekDay);
+  }
+
+  onPreparedDateRangeChanged(event: string[]) {
+    const [from, to] = event;
+
+    if (event.length === 2) {
+      console.log('load data and refresh dashboard');
+    } else {
+      console.log('clear dashborad');
+    }
+  }
+}
