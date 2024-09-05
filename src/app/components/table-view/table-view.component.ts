@@ -46,6 +46,10 @@ export class TableViewComponent {
 
   async loadTableData(from: string, to: string) {
     try {
+      this.bodyAnalysisTableData = {
+        state: 'loading',
+      };
+
       const result = await this.bodyAnalysisQueryService.query(from, to);
 
       this.bodyAnalysisTableData = {

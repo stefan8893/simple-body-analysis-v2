@@ -193,6 +193,10 @@ export class WeeklyAnalysisComponent implements OnInit, OnDestroy {
 
   async loadBodyAnalysisData(from: string, to: string) {
     try {
+      this.bodyAnalysisTableData = {
+        state: 'loading',
+      };
+
       const result = await this.bodyAnalysisQueryService.query(from, to);
       const filtered = result.filter((x) =>
         this.filterFnByWeekDay.get(this.selectedWeekDay)!(x.analysedAt)

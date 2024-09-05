@@ -144,6 +144,10 @@ export class DailyAnalysisComponent implements OnInit, OnDestroy {
 
   async loadBodyAnalysisData(from: string, to: string) {
     try {
+      this.bodyAnalysisTableData = {
+        state: 'loading',
+      };
+
       const result = await this.bodyAnalysisQueryService.query(from, to);
 
       this.bodyAnalysisTableData = {
