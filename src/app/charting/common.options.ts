@@ -65,6 +65,7 @@ export const commonOptions = {
   scales: {
     x: {
       type: 'time',
+      offset: true,
       time: {
         unit: 'day',
         displayFormats: {
