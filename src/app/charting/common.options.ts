@@ -90,7 +90,7 @@ export const commonOptions = {
     },
     yLeft: {
       position: 'left',
-      grace: '10%',
+      grace: '50%',
       ticks: {
         padding: 20,
       },
