@@ -170,7 +170,7 @@ export class WeeklyAnalysisComponent implements OnInit, OnDestroy {
       .subscribe(() => this.weeklyChart.resize());
 
     this.sideNavStore.pipe(takeUntil(this.poisonPill$)).subscribe(() => {
-      setTimeout(() => this.weeklyChart.resize(), 20);
+      setTimeout(() => this.weeklyChart.resize(), 50);
     });
   }
 

@@ -126,7 +126,7 @@ export class DailyAnalysisComponent implements OnInit, OnDestroy {
       .subscribe(() => this.dailyChart.resize());
 
     this.sideNavStore.pipe(takeUntil(this.poisonPill$)).subscribe(() => {
-      setTimeout(() => this.dailyChart.resize(), 20);
+      setTimeout(() => this.dailyChart.resize(), 50);
     });
   }
 
