@@ -6,7 +6,7 @@ type TShirtSize = 'Small' | 'Medium' | 'Large' | 'XLarge';
 export function getDataSize(ctx: Context): TShirtSize {
   const length = ctx.dataset.data.length;
 
-  if (length <= 10) return 'Small';
+  if (length <= 14) return 'Small';
   else if (length <= 30) return 'Medium';
   else if (length <= 60) return 'Large';
   else return 'XLarge';
