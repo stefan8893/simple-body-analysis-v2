@@ -4,9 +4,9 @@
     <app-date-range-picker initialRange="L30D" (preparedDateRangeChanged)="onPreparedDateRangeChanged($event)" />
   </div>
 
-  <app-loading-spinner [show]="isLoading" [debounceTimeInMilliseconds]="400">
-    <p-card>
-      <canvas id="daily-chart">{{ dailyChart }}</canvas>
-    </p-card>
-  </app-loading-spinner>
+  <app-loading-spinner [show]="bodyAnalysisTableData.state === 'loading'" [debounceTimeInMilliseconds]="400" />
+
+  <p-card [hidden]="bodyAnalysisTableData.state !== 'loaded'">
+    <canvas id="daily-chart">{{ dailyChart }}</canvas>
+  </p-card>
 </div>

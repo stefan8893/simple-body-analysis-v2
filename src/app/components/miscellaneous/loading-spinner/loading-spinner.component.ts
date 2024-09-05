@@ -11,7 +11,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 })
 export class LoadingSpinnerComponent {
   show = input(false);
-  debounceTimeInMilliseconds = input(200);
+  debounceTimeInMilliseconds = input(400);
 
   spin = false;
   startUpDelay: NodeJS.Timeout | undefined;
@@ -27,10 +27,9 @@ export class LoadingSpinnerComponent {
   }
 
   startSpinning() {
-    this.startUpDelay = setTimeout(
-      () => (this.spin = true),
-      this.debounceTimeInMilliseconds()
-    );
+    this.startUpDelay = setTimeout(() => {
+      this.spin = true;
+    }, this.debounceTimeInMilliseconds());
   }
 
   stopSpinning() {

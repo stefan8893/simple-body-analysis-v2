@@ -38,6 +38,7 @@ import {
   muscleMassColor,
   weightColor,
 } from '../../charting/common.options';
+import { Resource } from '../../infrastructure/resource.state';
 import { SideNavState } from '../layout/layout/side-nav.state';
 import { ContentHeaderComponent } from '../miscellaneous/content-header/content-header.component';
 import { DateRangePickerComponent } from '../miscellaneous/date-range-picker/date-range-picker.component';
@@ -72,6 +73,8 @@ export class WeeklyAnalysisComponent implements OnInit, OnDestroy {
     ['Sonntag', (x: Date) => isSunday(x)],
   ]);
 
+  private latestPreparedDateRange: string[] = [];
+
   weekDays = [
     'Montag',
     'Dienstag',
@@ -83,9 +86,7 @@ export class WeeklyAnalysisComponent implements OnInit, OnDestroy {
   ];
   selectedWeekDay = 'Montag';
 
-  private latestPreparedDateRange: string[] = [];
-
-  isLoading = false;
+  bodyAnalysisTableData: Resource<BodyAnalysis[]> = { state: 'loading' };
 
   weeklyChart: any;
 
@@ -190,17 +191,23 @@ export class WeeklyAnalysisComponent implements OnInit, OnDestroy {
 
   async loadBodyAnalysisData(from: string, to: string) {
     try {
-      this.isLoading = true;
       const result = await this.bodyAnalysisQueryService.query(from, to);
       const filtered = result.filter((x) =>
         this.filterFnByWeekDay.get(this.selectedWeekDay)!(x.analysedAt)
       );
 
-      this.updateChart(filtered);
+      this.bodyAnalysisTableData = {
+        state: 'loaded',
+        value: filtered,
+      };
+
+      this.updateChart(this.bodyAnalysisTableData.value);
     } catch (error) {
       console.error(error);
-    } finally {
-      this.isLoading = false;
+      this.bodyAnalysisTableData = {
+        state: 'error',
+        errorDetails: `${error}`,
+      };
     }
   }
 

@@ -5,6 +5,7 @@ import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { BodyAnalysisQueryService } from '../../body-analysis-data/body-analysis-query.service';
 import { BodyAnalysis } from '../../body-analysis-data/body-analysis.types';
+import { Resource } from '../../infrastructure/resource.state';
 import { FormatDatePipe } from '../../pipes/date-fns-format.pipe';
 import { ContentHeaderComponent } from '../miscellaneous/content-header/content-header.component';
 import { DateRangePickerComponent } from '../miscellaneous/date-range-picker/date-range-picker.component';
@@ -29,16 +30,15 @@ import { LoadingSpinnerComponent } from '../miscellaneous/loading-spinner/loadin
 })
 export class TableViewComponent {
   dateRangeRaw = signal<Date[]>([]);
-  rows: BodyAnalysis[] = [];
-  isLoading = false;
+  bodyAnalysisTableData: Resource<BodyAnalysis[]> = { state: 'loading' };
 
   constructor(private bodyAnalysisQueryService: BodyAnalysisQueryService) {}
 
   onPreparedDateRangeChanged(event: string[]) {
     const [from, to] = event;
 
-    if (event.length === 0) {
-      this.rows = [];
+    if (event.length === 0 && this.bodyAnalysisTableData.state === 'loaded') {
+      this.bodyAnalysisTableData.value = [];
     } else {
       this.loadTableData(from, to);
     }
@@ -46,15 +46,18 @@ export class TableViewComponent {
 
   async loadTableData(from: string, to: string) {
     try {
-      this.isLoading = true;
       const result = await this.bodyAnalysisQueryService.query(from, to);
 
-      this.rows = result;
+      this.bodyAnalysisTableData = {
+        state: 'loaded',
+        value: result,
+      };
     } catch (error) {
-      this.rows = [];
+      this.bodyAnalysisTableData = {
+        state: 'error',
+        errorDetails: `${error}`,
+      };
       console.error(error);
-    } finally {
-      this.isLoading = false;
     }
   }
 }

@@ -26,6 +26,7 @@ import {
   muscleMassColor,
   weightColor,
 } from '../../charting/common.options';
+import { Resource } from '../../infrastructure/resource.state';
 import { SideNavState } from '../layout/layout/side-nav.state';
 import { ContentHeaderComponent } from '../miscellaneous/content-header/content-header.component';
 import { DateRangePickerComponent } from '../miscellaneous/date-range-picker/date-range-picker.component';
@@ -47,8 +48,6 @@ export class DailyAnalysisComponent implements OnInit, OnDestroy {
   private windowResize$: Observable<Event>;
   private poisonPill$ = new Subject<void>();
 
-  isLoading = false;
-
   constructor(
     private bodyAnalysisQueryService: BodyAnalysisQueryService,
     private sideNavStore: Store<{ sideNav: SideNavState }>
@@ -68,6 +67,8 @@ export class DailyAnalysisComponent implements OnInit, OnDestroy {
 
     this.windowResize$ = fromEvent(window, 'resize');
   }
+
+  bodyAnalysisTableData: Resource<BodyAnalysis[]> = { state: 'loading' };
 
   dailyChart: any;
 
@@ -141,14 +142,20 @@ export class DailyAnalysisComponent implements OnInit, OnDestroy {
 
   async loadBodyAnalysisData(from: string, to: string) {
     try {
-      this.isLoading = true;
       const result = await this.bodyAnalysisQueryService.query(from, to);
 
-      this.updateChart(result);
+      this.bodyAnalysisTableData = {
+        state: 'loaded',
+        value: result,
+      };
+
+      this.updateChart(this.bodyAnalysisTableData.value);
     } catch (error) {
       console.error(error);
-    } finally {
-      this.isLoading = false;
+      this.bodyAnalysisTableData = {
+        state: 'error',
+        errorDetails: `${error}`,
+      };
     }
   }
 

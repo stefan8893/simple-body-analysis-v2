@@ -5,43 +5,42 @@
       (preparedDateRangeChanged)="onPreparedDateRangeChanged($event)" />
   </div>
 
-  <app-loading-spinner [show]="isLoading" [debounceTimeInMilliseconds]="400">
+  <app-loading-spinner [show]="bodyAnalysisTableData.state === 'loading'" [debounceTimeInMilliseconds]="400" />
 
-    <p-card>
-      <p-table [value]="rows" [paginator]="true" [rows]="15" [rowsPerPageOptions]="[5, 10, 15, 20, 40, 50]"
-        [loading]="isLoading" sortField="analysedAt" [sortOrder]="-1" [showCurrentPageReport]="true"
-        currentPageReportTemplate="{first} bis {last} von {totalRecords} Einträgen"
-        [tableStyle]="{ 'min-width': '750px' }" styleClass="p-datatable-sm">
-        <ng-template pTemplate="header">
-          <tr>
-            <th pSortableColumn="analysedAt">Erfasst <p-sortIcon field="analysedAt" /></th>
-            <th pSortableColumn="weight">Gewicht <p-sortIcon field="weight" /></th>
-            <th pSortableColumn="bodyFat">Fett <p-sortIcon field="bodyFat" /></th>
-            <th pSortableColumn="muscleMass">Muskeln <p-sortIcon field="muscleMass" /></th>
-            <th pSortableColumn="bodyWater">Wasser <p-sortIcon field="bodyWater" /></th>
-            <th pSortableColumn="bmi">Bmi <p-sortIcon field="bmi" /></th>
-            <th pSortableColumn="dailyCalorieRequirement">Täglicher Kalorienbedarf <p-sortIcon
-                field="dailyCalorieRequirement" /></th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-row>
-          <tr>
-            <td>{{ row.analysedAt | formatDate:'Pp' }}</td>
-            <td>{{ row.weight | number }} kg</td>
-            <td>{{ row.bodyFat | number }} %</td>
-            <td>{{ row.muscleMass | number }} %</td>
-            <td>{{ row.bodyWater | number }} %</td>
-            <td>{{ row.bmi | number }}</td>
-            <td>{{ row.dailyCalorieRequirement | number }} kcal</td>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="emptymessage">
-          <tr>
-            <td colspan="7">Keine Einträge</td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </p-card>
-
-  </app-loading-spinner>
+  <p-card [hidden]="bodyAnalysisTableData.state !== 'loaded'">
+    <p-table [value]="bodyAnalysisTableData.state === 'loaded' ? bodyAnalysisTableData.value : []" [paginator]="true"
+      [rows]="15" [rowsPerPageOptions]="[5, 10, 15, 20, 40, 50]" [loading]="bodyAnalysisTableData.state === 'loading'"
+      sortField="analysedAt" [sortOrder]="-1" [showCurrentPageReport]="true"
+      currentPageReportTemplate="{first} bis {last} von {totalRecords} Einträgen"
+      [tableStyle]="{ 'min-width': '750px' }" styleClass="p-datatable-sm">
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="analysedAt">Erfasst <p-sortIcon field="analysedAt" /></th>
+          <th pSortableColumn="weight">Gewicht <p-sortIcon field="weight" /></th>
+          <th pSortableColumn="bodyFat">Fett <p-sortIcon field="bodyFat" /></th>
+          <th pSortableColumn="muscleMass">Muskeln <p-sortIcon field="muscleMass" /></th>
+          <th pSortableColumn="bodyWater">Wasser <p-sortIcon field="bodyWater" /></th>
+          <th pSortableColumn="bmi">Bmi <p-sortIcon field="bmi" /></th>
+          <th pSortableColumn="dailyCalorieRequirement">Täglicher Kalorienbedarf <p-sortIcon
+              field="dailyCalorieRequirement" /></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td>{{ row.analysedAt | formatDate:'Pp' }}</td>
+          <td>{{ row.weight | number }} kg</td>
+          <td>{{ row.bodyFat | number }} %</td>
+          <td>{{ row.muscleMass | number }} %</td>
+          <td>{{ row.bodyWater | number }} %</td>
+          <td>{{ row.bmi | number }}</td>
+          <td>{{ row.dailyCalorieRequirement | number }} kcal</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7">Keine Einträge</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
 </div>
