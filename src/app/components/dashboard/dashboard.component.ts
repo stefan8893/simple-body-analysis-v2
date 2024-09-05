@@ -30,6 +30,17 @@ export class DashboardComponent {
     'Sonntag',
   ];
   selectedWeekDay = 'Montag';
+  offerQuickSelections = [
+    'L14D',
+    'L30D',
+    'L2M',
+    'L3M',
+    'L6M',
+    'CY',
+    'LY',
+    'PY',
+    'L2Y',
+  ];
 
   onWeekDayChanged() {
     console.log('week day changed', this.selectedWeekDay);

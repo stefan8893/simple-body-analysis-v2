@@ -75,6 +75,8 @@ export class WeeklyAnalysisComponent implements OnInit, OnDestroy {
 
   private latestPreparedDateRange: string[] = [];
 
+  offerQuickSelections = ['L30D', 'L2M', 'L3M', 'L6M', 'CY', 'LY', 'PY', 'L2Y'];
+
   weekDays = [
     'Montag',
     'Dienstag',

@@ -10,6 +10,17 @@
   outline: none;
 }
 
+.date-range-picker-quick-selection .p-dropdown-trigger {
+  width: unset;
+}
+
+
+.date-range-picker-quick-selection .p-element.p-dropdown-label.p-inputtext {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+
 .date-range-picker-quick-selection > .p-dropdown.p-inputwrapper > .p-inputtext {
   font-size: .75rem;
 }

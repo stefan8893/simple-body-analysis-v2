@@ -8,27 +8,14 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {
-  addDays,
-  endOfDay,
-  endOfYear,
-  format,
-  parseISO,
-  startOfDay,
-  startOfYear,
-  subDays,
-  subMonths,
-  subYears,
-} from 'date-fns';
+import { addDays, endOfDay, format, parseISO, startOfDay } from 'date-fns';
 import { toZonedTime } from 'date-fns-tz';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
-
-type QuickSelection = {
-  name: string;
-  code: string;
-  range: () => Date[];
-};
+import {
+  availableQuickSelections,
+  QuickSelection,
+} from './available-quick-selections';
 
 @Component({
   selector: 'app-date-range-picker',
@@ -42,112 +29,11 @@ export class DateRangePickerComponent implements OnInit {
   dateRangeRaw = model<Date[] | undefined>(undefined);
   preparedDateRangeChanged = output<string[]>();
   initialRange = input<string | null>(null);
+  offerQuickSelections = input<string[] | undefined>(undefined);
   minDate = parseISO('2000-01-01T00:00:00Z');
   maxDate = addDays(new Date(), 2);
 
-  quickSelections: QuickSelection[] = [
-    {
-      name: 'Letzte 7 Tage',
-      code: 'L7D',
-      range: () => {
-        const from = startOfDay(subDays(new Date(), 6));
-        const to = endOfDay(new Date());
-
-        return [from, to];
-      },
-    },
-    {
-      name: 'Letzte 14 Tage',
-      code: 'L14D',
-      range: () => {
-        const from = startOfDay(subDays(new Date(), 13));
-        const to = endOfDay(new Date());
-
-        return [from, to];
-      },
-    },
-    {
-      name: 'Letzte 30 Tage',
-      code: 'L30D',
-      range: () => {
-        const from = startOfDay(subDays(new Date(), 29));
-        const to = endOfDay(new Date());
-
-        return [from, to];
-      },
-    },
-    {
-      name: 'Letzte 2 Monate',
-      code: 'L2M',
-      range: () => {
-        const from = startOfDay(subMonths(addDays(new Date(), 1), 2));
-        const to = endOfDay(new Date());
-
-        return [from, to];
-      },
-    },
-    {
-      name: 'Letzte 3 Monate',
-      code: 'L3M',
-      range: () => {
-        const from = startOfDay(subMonths(addDays(new Date(), 1), 3));
-        const to = endOfDay(new Date());
-
-        return [from, to];
-      },
-    },
-    {
-      name: 'Letzte 6 Monate',
-      code: 'L6M',
-      range: () => {
-        const from = startOfDay(subMonths(addDays(new Date(), 1), 6));
-        const to = endOfDay(new Date());
-
-        return [from, to];
-      },
-    },
-    {
-      name: 'Akutelles Jahr',
-      code: 'CY',
-      range: () => {
-        const from = startOfYear(new Date());
-        const to = endOfDay(new Date());
-
-        return [from, to];
-      },
-    },
-    {
-      name: 'Letztes Jahr',
-      code: 'LY',
-      range: () => {
-        const from = startOfDay(subYears(addDays(new Date(), 1), 1));
-        const to = endOfDay(new Date());
-
-        return [from, to];
-      },
-    },
-    {
-      name: 'Vorheriges Jahr',
-      code: 'PY',
-      range: () => {
-        const oneYearAgo = subYears(new Date(), 1);
-        const from = startOfYear(oneYearAgo);
-        const to = endOfYear(oneYearAgo);
-
-        return [from, to];
-      },
-    },
-    {
-      name: 'Letzte 2 Jahre',
-      code: 'L2Y',
-      range: () => {
-        const from = subYears(addDays(new Date(), 1), 2);
-        const to = endOfDay(new Date());
-
-        return [from, to];
-      },
-    },
-  ];
+  quickSelections: QuickSelection[] = [];
 
   selectedQuickSelection: QuickSelection | undefined;
 
@@ -186,7 +72,7 @@ export class DateRangePickerComponent implements OnInit {
     return format(date, `yyyy-MM-dd'T'HH:mm`);
   }
 
-  applyQuickSelectionDateRange(code: string) {
+  applyInitialQuickSelection(code: string) {
     const quickSelection = this.quickSelections.find((x) => x.code === code);
 
     if (!quickSelection) return;
@@ -196,11 +82,22 @@ export class DateRangePickerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (!!this.offerQuickSelections()) {
+      this.quickSelections = availableQuickSelections.filter((available) =>
+        this.offerQuickSelections()?.some((offer) => offer === available.code)
+      );
+    } else {
+      this.quickSelections = availableQuickSelections;
+    }
+
     const code = this.initialRange() ?? 'L7D';
-    this.applyQuickSelectionDateRange(code);
+
+    if (this.quickSelections.some((x) => x.code === code)) {
+      this.applyInitialQuickSelection(code);
+    }
   }
 
-  onDateRangeSelected(event: any) {
+  onDateRangeSelected(_event: any) {
     this.selectedQuickSelection = undefined;
   }
 

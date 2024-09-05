@@ -1,8 +1,8 @@
 <div class="dashboard">
 
   <div class="mb-3 md:mb-5 flex flex-row flex-wrap align-items-center justify-content-start">
-    <app-date-range-picker initialRange="L6M" (preparedDateRangeChanged)="onPreparedDateRangeChanged($event)"
-      class="mr-3" />
+    <app-date-range-picker [offerQuickSelections]="offerQuickSelections" initialRange="L6M"
+      (preparedDateRangeChanged)="onPreparedDateRangeChanged($event)" class="mr-3" />
     <p-dropdown class="dashboard-week-day-selection" [checkmark]="false" [options]="weekDays"
       [(ngModel)]="selectedWeekDay" (onChange)="onWeekDayChanged()" />
   </div>

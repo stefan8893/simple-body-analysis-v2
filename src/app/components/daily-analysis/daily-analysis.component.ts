@@ -72,6 +72,8 @@ export class DailyAnalysisComponent implements OnInit, OnDestroy {
 
   dailyChart: any;
 
+  offerQuickSelections = ['L7D', 'L14D', 'L30D', 'L2M', 'L3M', 'L6M', 'CY'];
+
   private clearChart() {
     this.dailyChart.data.labels = [];
     this.dailyChart.data.datasets[0].data = [];
