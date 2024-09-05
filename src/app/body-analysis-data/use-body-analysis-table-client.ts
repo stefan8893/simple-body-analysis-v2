@@ -15,15 +15,16 @@ export function useBodyAnalysisTableClient(
       return await firstValueFrom(
         authService.acquireTokenSilent({
           scopes: [scope],
-          forceRefresh: true,
         })
       );
     } catch {
-      return await firstValueFrom(
-        authService.acquireTokenPopup({
+      await firstValueFrom(
+        authService.acquireTokenRedirect({
           scopes: [scope],
         })
       );
+
+      throw 'This path will never be reached.';
     }
   };
 

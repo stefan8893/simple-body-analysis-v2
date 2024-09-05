@@ -53,9 +53,11 @@ export class UserProfileService {
       })
       .pipe(
         catchError(() => {
-          return this.authService.acquireTokenPopup({
+          this.authService.acquireTokenRedirect({
             scopes: UserProfileService.scopes,
           });
+
+          throw 'This path will never be reached.';
         })
       );
   }
