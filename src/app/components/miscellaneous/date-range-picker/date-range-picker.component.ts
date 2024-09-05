@@ -57,6 +57,16 @@ export class DateRangePickerComponent implements OnInit {
       },
     },
     {
+      name: 'Letzte 14 Tage',
+      code: 'L14D',
+      range: () => {
+        const from = startOfDay(subDays(new Date(), 13));
+        const to = endOfDay(new Date());
+
+        return [from, to];
+      },
+    },
+    {
       name: 'Letzte 30 Tage',
       code: 'L30D',
       range: () => {
@@ -67,8 +77,18 @@ export class DateRangePickerComponent implements OnInit {
       },
     },
     {
-      name: 'Letzte 3 Monate',
+      name: 'Letzte 2 Monate',
       code: 'L2M',
+      range: () => {
+        const from = startOfDay(subMonths(addDays(new Date(), 1), 2));
+        const to = endOfDay(new Date());
+
+        return [from, to];
+      },
+    },
+    {
+      name: 'Letzte 3 Monate',
+      code: 'L3M',
       range: () => {
         const from = startOfDay(subMonths(addDays(new Date(), 1), 3));
         const to = endOfDay(new Date());
