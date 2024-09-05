@@ -75,8 +75,8 @@ export const commonOptions = {
       },
       ticks: {
         color: textColor,
-        stepSize: 4,
-        maxTicksLimit: 12,
+        stepSize: 2,
+        maxTicksLimit: 8,
       },
       grid: {
         color: surfaceBorder,
