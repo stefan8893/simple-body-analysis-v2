@@ -19,16 +19,17 @@ import { CardModule } from 'primeng/card';
 import { debounceTime, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 import { BodyAnalysisQueryService } from '../../body-analysis-data/body-analysis-query.service';
 import { BodyAnalysis } from '../../body-analysis-data/body-analysis.types';
+import { commonOptions } from '../../charting/common.options';
+import { Resource } from '../../infrastructure/resource.state';
 import {
   bodyFatColor,
   bodyWaterColor,
-  commonOptions,
   muscleMassColor,
   weightColor,
-} from '../../charting/common.options';
-import { Resource } from '../../infrastructure/resource.state';
+} from '../body-analysis.colors';
 import { SideNavState } from '../layout/layout/side-nav.state';
 import { ContentHeaderComponent } from '../miscellaneous/content-header/content-header.component';
+import { QuickSelectionCode } from '../miscellaneous/date-range-picker/available-quick-selections';
 import { DateRangePickerComponent } from '../miscellaneous/date-range-picker/date-range-picker.component';
 import { LoadingSpinnerComponent } from '../miscellaneous/loading-spinner/loading-spinner.component';
 
@@ -72,7 +73,15 @@ export class DailyAnalysisComponent implements OnInit, OnDestroy {
 
   dailyChart: any;
 
-  offerQuickSelections = ['L7D', 'L14D', 'L30D', 'L2M', 'L3M', 'L6M', 'CY'];
+  offerQuickSelections: QuickSelectionCode[] = [
+    'L7D',
+    'L14D',
+    'L30D',
+    'L2M',
+    'L3M',
+    'L6M',
+    'CY',
+  ];
 
   private clearChart() {
     this.dailyChart.data.labels = [];
@@ -110,7 +119,7 @@ export class DailyAnalysisComponent implements OnInit, OnDestroy {
             yAxisID: 'yLeft',
           },
           {
-            label: 'Körperfett',
+            label: 'Fett',
             data: [],
             hidden: true,
             borderColor: bodyFatColor,

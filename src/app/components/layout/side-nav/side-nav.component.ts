@@ -1,13 +1,13 @@
 import { Component, OnInit, output, ViewEncapsulation } from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { ChipModule } from 'primeng/chip';
 import { MenuModule } from 'primeng/menu';
+import { TagModule } from 'primeng/tag';
 import packageInfo from '../../../../../package.json';
 
 @Component({
   selector: 'app-side-nav',
   standalone: true,
-  imports: [MenuModule, ChipModule],
+  imports: [MenuModule, TagModule],
   templateUrl: './side-nav.component.html',
   styleUrl: './side-nav.component.scss',
   encapsulation: ViewEncapsulation.None,

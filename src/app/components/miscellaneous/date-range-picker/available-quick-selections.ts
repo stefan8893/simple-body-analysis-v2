@@ -9,9 +9,21 @@ import {
   subYears,
 } from 'date-fns';
 
+export type QuickSelectionCode =
+  | 'L7D'
+  | 'L14D'
+  | 'L30D'
+  | 'L2M'
+  | 'L3M'
+  | 'L6M'
+  | 'CY'
+  | 'LY'
+  | 'PY'
+  | 'L2Y';
+
 export type QuickSelection = {
   name: string;
-  code: string;
+  code: QuickSelectionCode;
   range: () => Date[];
 };
 
@@ -109,7 +121,7 @@ export const availableQuickSelections: QuickSelection[] = [
   },
   {
     name: 'Letzte 2 Jahre',
-    code: ' ',
+    code: 'L2Y',
     range: () => {
       const from = subYears(addDays(new Date(), 1), 2);
       const to = endOfDay(new Date());

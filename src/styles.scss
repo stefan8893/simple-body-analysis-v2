@@ -13,8 +13,8 @@ body, html {
 
 body,
 body .p-component {
-  font-family: 'Roboto', sans-serif;
-  font-size: .875rem;
+  font-family: 'Roboto', sans-serif !important;
+  font-size: .875rem !important;
 }
 
 .disable-link-styling {
@@ -37,4 +37,9 @@ body .p-component {
 
 .p-button.p-button-sm {
   padding: 0.3875rem 0.8rem;
+}
+
+.p-inputtext {
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
 }

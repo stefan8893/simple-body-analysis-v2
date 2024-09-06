@@ -31,9 +31,9 @@ export function showDataPoint(ctx: Context): boolean {
 
 const unitOfMeasureByDatasetLabel = new Map<string, string>([
   ['Gewicht', 'kg'],
-  ['Körperfett', '%'],
   ['Muskeln', '%'],
   ['Wasser', '%'],
+  ['Fett', '%'],
   ['Bmi', ''],
   ['Täglicher Kalorienbedarf', 'kcal'],
 ]);

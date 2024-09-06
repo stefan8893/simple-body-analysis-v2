@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
 import { DropdownModule } from 'primeng/dropdown';
 import { ContentHeaderComponent } from '../miscellaneous/content-header/content-header.component';
+import { QuickSelectionCode } from '../miscellaneous/date-range-picker/available-quick-selections';
 import { DateRangePickerComponent } from '../miscellaneous/date-range-picker/date-range-picker.component';
 
 @Component({
@@ -30,7 +31,7 @@ export class DashboardComponent {
     'Sonntag',
   ];
   selectedWeekDay = 'Montag';
-  offerQuickSelections = [
+  offerQuickSelections: QuickSelectionCode[] = [
     'L14D',
     'L30D',
     'L2M',

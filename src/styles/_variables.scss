@@ -30,8 +30,8 @@ $shade950: #020617 !default;
 $disabledInputBg: $shade200 !default;
 
 //global
-$fontFamily: "Inter var", sans-serif !default;
-$fontSize: 1rem !default;
+$fontFamily: "Roboto", sans-serif !default;
+$fontSize: .875rem !default;
 $fontWeight: normal !default;
 $textColor: $shade700 !default;
 $textSecondaryColor: $shade500 !default;
@@ -78,7 +78,7 @@ $actionIconBorderRadius: 50% !default;
 
 //input field (e.g. inputtext, spinner, inputmask)
 $inputPadding: 0.5rem 0.75rem !default;
-$inputTextFontSize: 1rem !default;
+$inputTextFontSize: .875rem !default;
 
 $inputBg: $shade000 !default;
 $inputTextColor: $textColor !default;
@@ -871,10 +871,10 @@ $imagePreviewActionIconFontSize: 1.5rem !default;
 $imagePreviewActionIconBorderRadius: 50% !default;
 
 :root {
-    font-family: "Inter var", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     font-variation-settings: normal;
-    --font-family: "Inter var", sans-serif;
+    --font-family: "Roboto", sans-serif;
     --font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     --text-color: #{$shade700};
     --text-color-secondary: #{$shade500};

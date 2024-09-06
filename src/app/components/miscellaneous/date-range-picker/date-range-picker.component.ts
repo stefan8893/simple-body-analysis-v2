@@ -15,6 +15,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import {
   availableQuickSelections,
   QuickSelection,
+  QuickSelectionCode,
 } from './available-quick-selections';
 
 @Component({
@@ -29,7 +30,7 @@ export class DateRangePickerComponent implements OnInit {
   dateRangeRaw = model<Date[] | undefined>(undefined);
   preparedDateRangeChanged = output<string[]>();
   initialRange = input<string | null>(null);
-  offerQuickSelections = input<string[] | undefined>(undefined);
+  offerQuickSelections = input<QuickSelectionCode[] | undefined>(undefined);
   minDate = parseISO('2000-01-01T00:00:00Z');
   maxDate = addDays(new Date(), 2);
 

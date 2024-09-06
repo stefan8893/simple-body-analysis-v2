@@ -4,10 +4,6 @@ import { layouVariables } from '../../styles/layout-variables';
 import { getUnitOfMeasureOrDefault, showDataPoint } from './chart-utils';
 
 const documentStyle = getComputedStyle(document.documentElement);
-export const weightColor = documentStyle.getPropertyValue('--primary-color');
-export const muscleMassColor = documentStyle.getPropertyValue('--purple-700');
-export const bodyFatColor = documentStyle.getPropertyValue('--orange-500');
-export const bodyWaterColor = documentStyle.getPropertyValue('--cyan-500');
 
 const textColor = documentStyle.getPropertyValue('--text-color');
 const surfaceBorder = documentStyle.getPropertyValue('--surface-border');

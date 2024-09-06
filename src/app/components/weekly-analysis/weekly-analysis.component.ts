@@ -31,16 +31,17 @@ import { DropdownModule } from 'primeng/dropdown';
 import { debounceTime, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 import { BodyAnalysisQueryService } from '../../body-analysis-data/body-analysis-query.service';
 import { BodyAnalysis } from '../../body-analysis-data/body-analysis.types';
+import { commonOptions } from '../../charting/common.options';
+import { Resource } from '../../infrastructure/resource.state';
 import {
   bodyFatColor,
   bodyWaterColor,
-  commonOptions,
   muscleMassColor,
   weightColor,
-} from '../../charting/common.options';
-import { Resource } from '../../infrastructure/resource.state';
+} from '../body-analysis.colors';
 import { SideNavState } from '../layout/layout/side-nav.state';
 import { ContentHeaderComponent } from '../miscellaneous/content-header/content-header.component';
+import { QuickSelectionCode } from '../miscellaneous/date-range-picker/available-quick-selections';
 import { DateRangePickerComponent } from '../miscellaneous/date-range-picker/date-range-picker.component';
 import { LoadingSpinnerComponent } from '../miscellaneous/loading-spinner/loading-spinner.component';
 
@@ -75,7 +76,16 @@ export class WeeklyAnalysisComponent implements OnInit, OnDestroy {
 
   private latestPreparedDateRange: string[] = [];
 
-  offerQuickSelections = ['L30D', 'L2M', 'L3M', 'L6M', 'CY', 'LY', 'PY', 'L2Y'];
+  offerQuickSelections: QuickSelectionCode[] = [
+    'L30D',
+    'L2M',
+    'L3M',
+    'L6M',
+    'CY',
+    'LY',
+    'PY',
+    'L2Y',
+  ];
 
   weekDays = [
     'Montag',
@@ -148,7 +158,7 @@ export class WeeklyAnalysisComponent implements OnInit, OnDestroy {
             yAxisID: 'yLeft',
           },
           {
-            label: 'Körperfett',
+            label: 'Fett',
             data: [],
             hidden: true,
             borderColor: bodyFatColor,
