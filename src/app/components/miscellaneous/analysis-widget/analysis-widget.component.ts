@@ -45,14 +45,14 @@ export class AnalysisWidgetComponent {
   lossGainInSelectedDateRangeAbs = computed(() => {
     const lossGain = this.lossGainInSelectedDateRange();
 
-    if (!!lossGain) return Math.abs(lossGain);
+    if (lossGain != undefined || lossGain != null) return Math.abs(lossGain);
     else return null;
   });
 
   averageWeeklyLossGainAbs = computed(() => {
     const lossGain = this.averageWeeklyLossGain();
 
-    if (!!lossGain) return Math.abs(lossGain);
+    if (lossGain != undefined || lossGain != null) return Math.abs(lossGain);
     else return null;
   });
 
