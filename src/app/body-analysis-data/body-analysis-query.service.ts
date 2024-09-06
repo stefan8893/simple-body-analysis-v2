@@ -75,8 +75,7 @@ export class BodyAnalysisQueryService {
     const resultSorted = result.sort((a, b) =>
       compareAsc(a.analysedAt, b.analysedAt)
     );
-    this.cache = resultSorted;
 
-    return resultSorted;
+    return (this.cache = resultSorted);
   }
 }
