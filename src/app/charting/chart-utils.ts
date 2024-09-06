@@ -1,5 +1,6 @@
 import { Context } from 'chartjs-plugin-datalabels';
 import { layouVariables } from '../../styles/layout-variables';
+import { Unit } from '../infrastructure/units';
 
 type TShirtSize = 'Small' | 'Medium' | 'Large' | 'XLarge';
 
@@ -29,7 +30,7 @@ export function showDataPoint(ctx: Context): boolean {
   return ctx.dataIndex % showLabelEveryNthPoint() === 0;
 }
 
-const unitOfMeasureByDatasetLabel = new Map<string, string>([
+const unitOfMeasureByDatasetLabel = new Map<string, Unit>([
   ['Gewicht', 'kg'],
   ['Muskeln', '%'],
   ['Wasser', '%'],

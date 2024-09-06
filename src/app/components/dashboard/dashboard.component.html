@@ -3,77 +3,29 @@
   <div class="mb-3 md:mb-5 flex flex-row flex-wrap align-items-center justify-content-start">
     <app-date-range-picker [offerQuickSelections]="offerQuickSelections" initialRange="L6M"
       (preparedDateRangeChanged)="onPreparedDateRangeChanged($event)" class="mr-3" />
-    <p-dropdown class="dashboard-week-day-selection" [checkmark]="false" [options]="weekDays"
-      [(ngModel)]="selectedWeekDay" (onChange)="onWeekDayChanged()" />
   </div>
 
   <div class="grid mb-3 md:mb-5">
-    <p-card class="dashboard-card col-12 sm:col-6 lg:col-3">
-      Aktuellste Werte
-      <ul>
-        <li>Gewicht</li>
-      </ul>
-    </p-card>
-    <p-card class="dashboard-card col-12 sm:col-6 lg:col-3">
-      Aktuellste Werte
-      <ul>
-        <li>Muskeln</li>
-      </ul>
-    </p-card>
-
-    <p-card class="dashboard-card col-12 sm:col-6 lg:col-3">
-      Aktuellste Werte
-      <ul>
-        <li>Wasser</li>
-      </ul>
-    </p-card>
-
-    <p-card class="dashboard-card col-12 sm:col-6 lg:col-3">
-      Aktuellste Werte
-      <ul>
-        <li>Fett</li>
-      </ul>
-    </p-card>
-
-    <p-card class="dashboard-card col-12 sm:col-6 lg:col-3">
-      Gewicht
-      <ul>
-        <li>Differenz Min/Max</li>
-        <li>Differenz Von/Bis filter</li>
-        <li>Durchschnitt</li>
-        <li>Durchschnittliche Zu- und Abnahme pro Woche</li>
-      </ul>
-    </p-card>
-
-    <p-card class="dashboard-card col-12 sm:col-6 lg:col-3">
-      Muskeln
-      <ul>
-        <li>Differenz Min/Max</li>
-        <li>Differenz Von/Bis filter</li>
-        <li>Durchschnitt</li>
-        <li>Durchschnittliche Zu- und Abnahme pro Woche</li>
-      </ul>
-    </p-card>
-
-    <p-card class="dashboard-card col-12 sm:col-6 lg:col-3">
-      Wasser
-      <ul>
-        <li>Differenz Min/Max</li>
-        <li>Differenz Von/Bis filter</li>
-        <li>Durchschnitt</li>
-        <li>Durchschnittliche Zu- und Abnahme pro Woche</li>
-      </ul>
-    </p-card>
-
-    <p-card class="dashboard-card col-12 sm:col-6 lg:col-3">
-      Fett
-      <ul>
-        <li>Differenz Min/Max</li>
-        <li>Differenz Von/Bis filter</li>
-        <li>Durchschnitt</li>
-        <li>Durchschnittliche Zu- und Abnahme pro Woche</li>
-      </ul>
-    </p-card>
+    <app-analysis-widget title="Gewicht" [isLoading]="bodyAnalysisTableData().state === 'loading'"
+      [latestValue]="weightWidgetValues().latestValue"
+      [lossGainInSelectedDateRange]="weightWidgetValues().lossGainInSelectedDateRange"
+      [averageWeeklyLossGain]="weightWidgetValues().averageWeeklyLossGain" [knobSettings]="weightKnobSettings"
+      class="dashboard-card col-12 sm:col-6 lg:col-3" />
+    <app-analysis-widget title="Muskeln" [isLoading]="bodyAnalysisTableData().state === 'loading'"
+      [latestValue]="muscleMassWidgetValues().latestValue"
+      [lossGainInSelectedDateRange]="muscleMassWidgetValues().lossGainInSelectedDateRange"
+      [averageWeeklyLossGain]="muscleMassWidgetValues().averageWeeklyLossGain" [knobSettings]="muscleMassKnobSettings"
+      class="dashboard-card col-12 sm:col-6 lg:col-3" />
+    <app-analysis-widget title="Wasser" [isLoading]="bodyAnalysisTableData().state === 'loading'"
+      [latestValue]="bodyWaterWidgetValues().latestValue"
+      [lossGainInSelectedDateRange]="bodyWaterWidgetValues().lossGainInSelectedDateRange"
+      [averageWeeklyLossGain]="bodyWaterWidgetValues().averageWeeklyLossGain" [knobSettings]="bodyWaterKnobSettings"
+      class="dashboard-card col-12 sm:col-6 lg:col-3" />
+    <app-analysis-widget title="Fett" [isLoading]="bodyAnalysisTableData().state === 'loading'"
+      [latestValue]="bodyFatWidgetValues().latestValue"
+      [lossGainInSelectedDateRange]="bodyFatWidgetValues().lossGainInSelectedDateRange"
+      [averageWeeklyLossGain]="bodyFatWidgetValues().averageWeeklyLossGain" [knobSettings]="bodyFatKnobSettings"
+      class="dashboard-card col-12 sm:col-6 lg:col-3" />
   </div>
 
   <div class="">

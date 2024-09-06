@@ -76,7 +76,7 @@ export function msalGuardConfigFactory(): MsalGuardConfiguration {
   return {
     interactionType: InteractionType.Redirect,
     authRequest: {
-      scopes: ['openid', 'email', 'offline_access'],
+      scopes: ['email', 'openid', 'profile', 'user.read', 'offline_access'],
     },
     loginFailedRoute: '/',
   };

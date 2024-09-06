@@ -72,8 +72,11 @@ export class BodyAnalysisQueryService {
       return this.queryCache(fromAsDate, toAsDate);
 
     const result = await this.queryAzureTables(from, to);
-    this.cache = result.sort((a, b) => compareAsc(a.analysedAt, b.analysedAt));
+    const resultSorted = result.sort((a, b) =>
+      compareAsc(a.analysedAt, b.analysedAt)
+    );
+    this.cache = resultSorted;
 
-    return result;
+    return resultSorted;
   }
 }

@@ -1,3 +1,9 @@
+export type BodyAnalysisProperty =
+  | 'weight'
+  | 'muscleMass'
+  | 'bodyWater'
+  | 'bodyFat';
+
 export type BodyAnalysis = {
   analysedAt: Date;
   weight: number;
