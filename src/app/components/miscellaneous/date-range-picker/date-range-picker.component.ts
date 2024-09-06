@@ -33,6 +33,7 @@ export class DateRangePickerComponent implements OnInit {
   offerQuickSelections = input<QuickSelectionCode[] | undefined>(undefined);
   minDate = parseISO('2000-01-01T00:00:00Z');
   maxDate = addDays(new Date(), 2);
+  hideInput = input(false);
 
   quickSelections: QuickSelection[] = [];
 

@@ -55,7 +55,6 @@ export class DashboardComponent {
     'L6M',
     'CY',
     'LY',
-    'PY',
     'L2Y',
   ];
 
