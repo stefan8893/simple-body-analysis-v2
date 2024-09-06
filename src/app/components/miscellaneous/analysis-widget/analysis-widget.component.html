@@ -46,7 +46,7 @@
       }
       @else if (averageWeeklyLossGain() !== null) {
       <div class="flex flex-row flex-nowrap align-items-center justify-content-center h-2rem">
-
+        <span class="text-color-secondary pr-1 text-overflow-ellipsis">Wochen</span>
         <span class="unicode-character text-color-secondary pr-1">&#x2300;</span>
         <span class="font-medium text-lg">
           {{averageWeeklyLossGainAbs() | number : '1.2-2'}} <span class="text-color-secondary text-sm">{{
