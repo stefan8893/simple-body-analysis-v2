@@ -5,9 +5,6 @@
   width: 100%;
 }
 
-.dashboard-card {
-}
-
 .dashboard .p-element > .p-card.p-component {
   height: 100%;
 }
@@ -15,6 +12,13 @@
 .dashboard-week-day-selection .p-dropdown-items-wrapper{
   max-height: 300px !important;
 }
+
+@media screen and (max-width: calc(#{$md})) {
+  .dashboard {
+    margin-top: 1rem;
+  }
+}
+
 
 @media screen and (min-width: calc(#{$xl})) {
   .dashboard {
