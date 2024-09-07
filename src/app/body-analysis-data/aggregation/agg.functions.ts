@@ -1,10 +1,14 @@
 import {
+  addWeeks,
+  compareAsc,
   differenceInCalendarDays,
-  getISOWeek,
-  isMonday,
+  differenceInCalendarISOWeeks,
+  endOfISOWeek,
   startOfDay,
+  startOfISOWeek,
 } from 'date-fns';
 import { BodyAnalysis, BodyAnalysisProperty } from '../body-analysis.types';
+import { BodyAnalysisDataInterpolation } from './body-analysis-data-interpolation';
 import { BodyAnalysisWeekly, WidgetValues } from './data.types';
 
 export const nullWidgetValues = {
@@ -67,27 +71,37 @@ export function calculateWeekDifferences(
 ): BodyAnalysisWeekly[] {
   if (data.length < 2) return [];
 
-  let specialGrouping = new Map<number, BodyAnalysis[]>();
-  for (const day of data) {
-    const week = getISOWeek(day.analysedAt);
+  const firstEntry = data[0];
+  const firstWeek = startOfISOWeek(firstEntry.analysedAt);
+  const lastEntry = data[data.length - 1];
 
-    if (!specialGrouping.has(week)) {
-      specialGrouping.set(week, [day]);
-    } else {
-      specialGrouping.get(week)?.push(day);
-    }
+  const weeksInBetween = differenceInCalendarISOWeeks(
+    lastEntry.analysedAt,
+    firstEntry.analysedAt
+  );
 
-    if (isMonday(day.analysedAt) && specialGrouping.has(week - 1)) {
-      specialGrouping.get(week - 1)?.push(day);
-    }
-  }
+  if (weeksInBetween <= 0) return [];
 
-  return Array.from(specialGrouping).map((keyValuePair) => {
-    const [, data] = keyValuePair;
+  const interpolation = new BodyAnalysisDataInterpolation(data);
 
-    return {
-      firstDayOfWeek: startOfDay(data[0].analysedAt),
-      weightDiff: data[data.length - 1].weight - data[0].weight,
-    };
-  });
+  const result = Array.from({ length: weeksInBetween }, (x, i) => i)
+    .map((x, i) => ({
+      startOfWeek: startOfISOWeek(addWeeks(firstWeek, i)),
+      endOfWeek: endOfISOWeek(addWeeks(firstWeek, i)),
+    }))
+    .map(({ startOfWeek, endOfWeek }) => ({
+      first: interpolation.at(startOfWeek),
+      last: interpolation.at(endOfWeek),
+    }))
+    .filter(({ first, last }) => !!first?.analysedAt && !!last?.analysedAt)
+    .filter(({ first, last }) => !!first?.weight && !!last?.weight)
+    .filter(
+      ({ first, last }) => compareAsc(first!.analysedAt, last!.analysedAt) <= 0
+    )
+    .map(({ first, last }) => ({
+      firstDayOfWeek: startOfDay(first!.analysedAt),
+      weightDiff: last!.weight - first!.weight,
+    }));
+
+  return result;
 }

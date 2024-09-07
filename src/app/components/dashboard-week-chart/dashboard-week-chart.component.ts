@@ -22,7 +22,6 @@ import {
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels';
-import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
 import { CardModule } from 'primeng/card';
 import { debounceTime, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
@@ -138,22 +137,20 @@ export class DashboardWeekChartComponent implements OnInit, OnDestroy {
               else return 'top';
             },
             color: textColor,
-            formatter: (value: any, ctx: Context) => {
+            formatter: (value: number, ctx: Context) => {
               const unit = getUnitOfMeasureOrDefault(ctx.dataset.label);
 
-              return `${value.toLocaleString('de-AT')}${unit}`;
+              return `${(Math.round(value * 100) / 100).toLocaleString(
+                'de-AT'
+              )}${unit}`;
             },
           },
           tooltip: {
             callbacks: {
               title: (ctx: any) => {
                 const weekNumber = ctx[0].label;
-                const unixTimeStampInMilliseconds = ctx[0].parsed.x;
-                const firstDayOfWeek = new Date(unixTimeStampInMilliseconds);
 
-                return `KW ${weekNumber}\nStart ${format(firstDayOfWeek, 'P', {
-                  locale: de,
-                })}`;
+                return `KW ${weekNumber}`;
               },
               label: (ctx: any) => {
                 const unit = getUnitOfMeasureOrDefault(ctx.dataset.label);
