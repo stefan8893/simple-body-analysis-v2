@@ -54,7 +54,7 @@ export class DashboardWeekChartComponent implements OnInit, OnDestroy {
     return calculateWeekDifferences(bodyAnalysisTableData.value);
   });
 
-  weeklyChart: any;
+  weeklyDashboardChart: any;
 
   constructor(private sideNavStore: Store<{ sideNav: SideNavState }>) {
     Chart.register(
@@ -74,7 +74,7 @@ export class DashboardWeekChartComponent implements OnInit, OnDestroy {
     effect(() => {
       const weeklyDifferences = this.weeklyDifferences();
 
-      if (weeklyDifferences.length === 0 || !this.weeklyChart) {
+      if (weeklyDifferences.length === 0 || !this.weeklyDashboardChart) {
         this.clearChart();
         return;
       }
@@ -82,22 +82,22 @@ export class DashboardWeekChartComponent implements OnInit, OnDestroy {
       const xAxis = weeklyDifferences.map((x) => x.firstDayOfWeek);
       const weightSeries = weeklyDifferences.map((x) => x.weightDiff);
 
-      this.weeklyChart.data.labels = xAxis;
-      this.weeklyChart.data.datasets[0].data = weightSeries;
-      this.weeklyChart.update();
+      this.weeklyDashboardChart.data.labels = xAxis;
+      this.weeklyDashboardChart.data.datasets[0].data = weightSeries;
+      this.weeklyDashboardChart.update();
     });
 
     this.windowResize$ = fromEvent(window, 'resize');
   }
 
   clearChart() {
-    this.weeklyChart.data.labels = [];
-    this.weeklyChart.data.datasets[0].data = [];
-    this.weeklyChart.update();
+    this.weeklyDashboardChart.data.labels = [];
+    this.weeklyDashboardChart.data.datasets[0].data = [];
+    this.weeklyDashboardChart.update();
   }
 
   ngOnInit(): void {
-    this.weeklyChart = new Chart('weekly-chart', {
+    this.weeklyDashboardChart = new Chart('weekly-dashboard-chart', {
       type: 'bar',
       data: {
         labels: [],
@@ -207,10 +207,10 @@ export class DashboardWeekChartComponent implements OnInit, OnDestroy {
 
     this.windowResize$
       .pipe(debounceTime(150), takeUntil(this.poisonPill$))
-      .subscribe(() => this.weeklyChart.resize());
+      .subscribe(() => this.weeklyDashboardChart.resize());
 
     this.sideNavStore.pipe(takeUntil(this.poisonPill$)).subscribe(() => {
-      setTimeout(() => this.weeklyChart.resize(), 50);
+      setTimeout(() => this.weeklyDashboardChart.resize(), 50);
     });
   }
 
