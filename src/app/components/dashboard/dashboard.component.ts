@@ -7,14 +7,14 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
-import { BodyAnalysisQueryService } from '../../body-analysis-data/body-analysis-query.service';
-import { BodyAnalysis } from '../../body-analysis-data/body-analysis.types';
-import { Resource } from '../../infrastructure/resource.state';
 import {
   calculateWidgetValues,
   nullWidgetValues,
-} from '../../widget-data/widget-data.functions';
-import { WidgetValues } from '../../widget-data/widget-data.types';
+} from '../../body-analysis-data/aggregation/agg.functions';
+import { WidgetValues } from '../../body-analysis-data/aggregation/data.types';
+import { BodyAnalysisQueryService } from '../../body-analysis-data/body-analysis-query.service';
+import { BodyAnalysis } from '../../body-analysis-data/body-analysis.types';
+import { Resource } from '../../infrastructure/resource.state';
 import { DashboardWeekChartComponent } from '../dashboard-week-chart/dashboard-week-chart.component';
 import { DashboardWidgetComponent } from '../dashboard-widget/dashboard-widget.component';
 import { ContentHeaderComponent } from '../miscellaneous/content-header/content-header.component';

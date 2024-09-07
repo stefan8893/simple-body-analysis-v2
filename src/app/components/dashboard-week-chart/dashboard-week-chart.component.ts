@@ -22,36 +22,17 @@ import {
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels';
-import { format, isMonday, startOfDay } from 'date-fns';
+import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
 import { CardModule } from 'primeng/card';
 import { debounceTime, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 import { layouVariables } from '../../../styles/layout-variables';
+import { calculateWeekDifferences } from '../../body-analysis-data/aggregation/agg.functions';
 import { BodyAnalysis } from '../../body-analysis-data/body-analysis.types';
 import { getUnitOfMeasureOrDefault } from '../../charting/chart-utils';
 import { Resource } from '../../infrastructure/resource.state';
 import { surfaceBorder, textColor, weightColor } from '../body-analysis.colors';
 import { SideNavState } from '../layout/layout/side-nav.state';
-
-type BodyAnalysisWeekly = {
-  firstDayOfWeek: Date;
-  weightDiff: number;
-};
-
-function calculateWeekDifferences(data: BodyAnalysis[]): BodyAnalysisWeekly[] {
-  const mondays = data.filter((x) => isMonday(x.analysedAt));
-
-  if (mondays.length < 2) return [];
-
-  const firstMondaySkipped = mondays.slice(1);
-
-  const weightDiff: BodyAnalysisWeekly[] = firstMondaySkipped.map((x, i) => ({
-    firstDayOfWeek: startOfDay(mondays[i].analysedAt),
-    weightDiff: x.weight - mondays[i].weight,
-  }));
-
-  return weightDiff;
-}
 
 @Component({
   selector: 'app-dashboard-week-chart',
@@ -93,7 +74,10 @@ export class DashboardWeekChartComponent implements OnInit, OnDestroy {
     effect(() => {
       const weeklyDifferences = this.weeklyDifferences();
 
-      if (weeklyDifferences.length === 0 || !this.weeklyChart) return;
+      if (weeklyDifferences.length === 0 || !this.weeklyChart) {
+        this.clearChart();
+        return;
+      }
 
       const xAxis = weeklyDifferences.map((x) => x.firstDayOfWeek);
       const weightSeries = weeklyDifferences.map((x) => x.weightDiff);
@@ -104,6 +88,11 @@ export class DashboardWeekChartComponent implements OnInit, OnDestroy {
     });
 
     this.windowResize$ = fromEvent(window, 'resize');
+  }
+  clearChart() {
+    this.weeklyChart.data.labels = [];
+    this.weeklyChart.data.datasets[0].data = [];
+    this.weeklyChart.update();
   }
 
   ngOnInit(): void {
