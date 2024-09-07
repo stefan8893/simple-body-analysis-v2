@@ -3,6 +3,7 @@ import { MsalGuard } from '@azure/msal-angular';
 import { isUnauthenticatedGuard } from './auth/is-unauthenticated.guard';
 import { DailyAnalysisComponent } from './components/daily-analysis/daily-analysis.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { DataUploadComponent } from './components/data-upload/data-upload.component';
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
 import { LayoutComponent } from './components/layout/layout/layout.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
@@ -34,6 +35,11 @@ export const routes: Routes = [
       {
         path: 'table',
         component: TableViewComponent,
+        canActivate: [MsalGuard],
+      },
+      {
+        path: 'upload',
+        component: DataUploadComponent,
         canActivate: [MsalGuard],
       },
       {

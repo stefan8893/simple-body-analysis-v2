@@ -50,6 +50,14 @@ export class SideNavComponent implements OnInit {
         },
       },
       {
+        label: 'Daten Upload',
+        icon: 'pi pi-cloud-upload',
+        routerLink: '/app/upload',
+        command: () => {
+          this.notifyParent();
+        },
+      },
+      {
         label: 'Profil',
         icon: 'pi pi-user',
         routerLink: '/app/profile',
