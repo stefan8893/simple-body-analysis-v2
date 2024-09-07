@@ -3,28 +3,13 @@
   min-width: 11.6rem;
 }
 
-.date-range-picker-quick-selection > .p-dropdown.p-inputwrapper {
-  background: unset;
-  border: none;
-  border-radius: 0;
-  outline: none;
-}
-
-.date-range-picker-quick-selection .p-dropdown-trigger {
-  width: unset;
-}
-
-
-.date-range-picker-quick-selection .p-element.p-dropdown-label.p-inputtext {
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-}
-
-
-.date-range-picker-quick-selection.small-font-size > .p-dropdown.p-inputwrapper > .p-inputtext {
-  font-size: .75rem;
-}
+// .date-range-picker-quick-selection > .p-dropdown.p-inputwrapper {
+//   background: unset;
+//   border: none;
+//   border-radius: 0;
+//   outline: none;
+// }
 
 .date-range-picker-quick-selection .p-dropdown-items-wrapper{
-  max-height: 360px !important;
+  max-height: 390px !important;
 }

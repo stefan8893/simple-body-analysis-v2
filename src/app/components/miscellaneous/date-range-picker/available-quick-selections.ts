@@ -19,7 +19,8 @@ export type QuickSelectionCode =
   | 'CY'
   | 'LY'
   | 'PY'
-  | 'L2Y';
+  | 'L2Y'
+  | 'CUSTOM';
 
 export type QuickSelection = {
   name: string;
@@ -127,6 +128,13 @@ export const availableQuickSelections: QuickSelection[] = [
       const to = endOfDay(new Date());
 
       return [from, to];
+    },
+  },
+  {
+    name: 'Benutzerdefiniert',
+    code: 'CUSTOM',
+    range: () => {
+      return [];
     },
   },
 ];

@@ -1,8 +1,9 @@
 <div class="flex flex-row flex-wrap align-items-center justify-content-start">
-  <p-calendar [(ngModel)]="dateRangeRaw" [hidden]="hideInput()" (onSelect)="onDateRangeSelected($event)"
+  <p-dropdown [options]="quickSelections" class="date-range-picker-quick-selection mr-2"
+    [(ngModel)]="selectedQuickSelection" [checkmark]="false" optionLabel="name" placeholder="Schnellauswahl"
+    (onChange)="onQuickSelectionChanged($event)" />
+
+  <p-calendar [(ngModel)]="dateRangeRaw" [hidden]="hideInput" (onSelect)="onDateRangeSelected($event)"
     class="date-range-picker" selectionMode="range" [maxDateCount]="(365 * 2) + 1" [firstDayOfWeek]="1"
     dateFormat="dd.mm.yy" [minDate]="minDate" [maxDate]="maxDate" [showClear]="true" />
-  <p-dropdown [options]="quickSelections" class="date-range-picker-quick-selection"
-    [class.small-font-size]="!hideInput()" [(ngModel)]="selectedQuickSelection" [checkmark]="false" optionLabel="name"
-    placeholder="Schnellauswahl" (onChange)="onQuickSelectionChanged($event)" />
 </div>

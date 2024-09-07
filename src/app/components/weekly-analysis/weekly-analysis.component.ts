@@ -85,6 +85,7 @@ export class WeeklyAnalysisComponent implements OnInit, OnDestroy {
     'LY',
     'PY',
     'L2Y',
+    'CUSTOM',
   ];
 
   weekDays = [

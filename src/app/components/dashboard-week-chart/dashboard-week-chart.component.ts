@@ -89,6 +89,7 @@ export class DashboardWeekChartComponent implements OnInit, OnDestroy {
 
     this.windowResize$ = fromEvent(window, 'resize');
   }
+
   clearChart() {
     this.weeklyChart.data.labels = [];
     this.weeklyChart.data.datasets[0].data = [];
@@ -196,6 +197,7 @@ export class DashboardWeekChartComponent implements OnInit, OnDestroy {
             },
           },
           y: {
+            grace: '20%',
             ticks: {},
             border: {},
           },

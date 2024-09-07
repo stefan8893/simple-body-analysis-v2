@@ -58,6 +58,7 @@ export class DashboardComponent {
     'CY',
     'LY',
     'L2Y',
+    'CUSTOM',
   ];
 
   weightKnobSettings = weightKnobSettings;

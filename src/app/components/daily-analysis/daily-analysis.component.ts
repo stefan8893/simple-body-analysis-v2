@@ -81,6 +81,7 @@ export class DailyAnalysisComponent implements OnInit, OnDestroy {
     'L3M',
     'L6M',
     'CY',
+    'CUSTOM',
   ];
 
   private clearChart() {

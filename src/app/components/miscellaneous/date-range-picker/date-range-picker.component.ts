@@ -33,7 +33,7 @@ export class DateRangePickerComponent implements OnInit {
   offerQuickSelections = input<QuickSelectionCode[] | undefined>(undefined);
   minDate = parseISO('2000-01-01T00:00:00Z');
   maxDate = addDays(new Date(), 2);
-  hideInput = input(false);
+  hideInput = true;
 
   quickSelections: QuickSelection[] = [];
 
@@ -45,7 +45,6 @@ export class DateRangePickerComponent implements OnInit {
 
       if (rawRange.length === 0) {
         this.preparedDateRangeChanged.emit([]);
-        this.selectedQuickSelection = undefined;
         return;
       }
 
@@ -99,12 +98,13 @@ export class DateRangePickerComponent implements OnInit {
     }
   }
 
-  onDateRangeSelected(_event: any) {
-    this.selectedQuickSelection = undefined;
-  }
+  onDateRangeSelected(_event: any) {}
 
   onQuickSelectionChanged({ value }: { value: QuickSelection | undefined }) {
     if (!value) return;
+
+    if (value.code === 'CUSTOM') this.hideInput = false;
+    else this.hideInput = true;
 
     this.dateRangeRaw.update(() => value.range());
   }

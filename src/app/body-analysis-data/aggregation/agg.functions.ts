@@ -44,19 +44,19 @@ function calculateAverageWeeklyLossGain(
   const lastEntry = bodyAnalysisData.at(-1);
   const isLastEntryMonday = isMonday(lastEntry!.analysedAt);
 
-  const proportionOfFirstNotFullWeek = isFirstEntryMonday
-    ? 0
-    : differenceInCalendarDays(
-        firstEntry!.analysedAt,
-        onlyMondays.at(0)?.analysedAt ?? lastEntry!.analysedAt
-      ) / 7;
+  const proportionOfFirstPartialWeek = getProportionOfFirstPartialWeek(
+    isFirstEntryMonday,
+    firstEntry,
+    onlyMondays,
+    lastEntry
+  );
 
-  const proportionOfLastNotFullWeek = isLastEntryMonday
-    ? 0
-    : differenceInCalendarDays(
-        onlyMondays.at(-1)?.analysedAt ?? firstEntry!.analysedAt,
-        lastEntry!.analysedAt
-      ) / 7;
+  const proportionOfLastNotFullWeek = getProportionOfLastPartialWeek(
+    isLastEntryMonday,
+    onlyMondays,
+    firstEntry,
+    lastEntry
+  );
 
   const startOfWeeks: BodyAnalysis[] = [
     ...(isFirstEntryMonday ? [] : [firstEntry!]),
@@ -70,12 +70,57 @@ function calculateAverageWeeklyLossGain(
 
   const sumOfDifferences = diff.reduce((acc, next) => acc + next, 0);
 
-  const weeks =
-    (diff.length === 1 ? 0 : diff.length) +
-    proportionOfFirstNotFullWeek +
-    proportionOfLastNotFullWeek;
+  const weeks = getWeeks(
+    diff.length,
+    proportionOfFirstPartialWeek,
+    proportionOfLastNotFullWeek
+  );
 
   return Math.abs(sumOfDifferences / weeks);
+}
+
+function getProportionOfLastPartialWeek(
+  isLastEntryMonday: boolean,
+  onlyMondays: BodyAnalysis[],
+  firstEntry: BodyAnalysis | undefined,
+  lastEntry: BodyAnalysis | undefined
+) {
+  return isLastEntryMonday
+    ? 0
+    : differenceInCalendarDays(
+        onlyMondays.at(-1)?.analysedAt ?? firstEntry!.analysedAt,
+        lastEntry!.analysedAt
+      ) / 7;
+}
+
+function getProportionOfFirstPartialWeek(
+  isFirstEntryMonday: boolean,
+  firstEntry: BodyAnalysis | undefined,
+  onlyMondays: BodyAnalysis[],
+  lastEntry: BodyAnalysis | undefined
+) {
+  return isFirstEntryMonday
+    ? 0
+    : differenceInCalendarDays(
+        firstEntry!.analysedAt,
+        onlyMondays.at(0)?.analysedAt ?? lastEntry!.analysedAt
+      ) / 7;
+}
+
+function getWeeks(
+  fullWeeksCount: number,
+  proportionOfFirstPartialWeek: number,
+  proportionOfLastPartialWeek: number
+) {
+  const partialWeeksProportion = Math.abs(
+    proportionOfFirstPartialWeek + proportionOfLastPartialWeek
+  );
+
+  if (fullWeeksCount > 1) return fullWeeksCount - 1 + partialWeeksProportion;
+
+  if (partialWeeksProportion > 0) return partialWeeksProportion;
+
+  return 1;
 }
 
 export function calculateWeekDifferences(
