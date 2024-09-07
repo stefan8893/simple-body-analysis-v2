@@ -43,8 +43,7 @@
       }
       @else if(lossGainInSelectedDateRange() !== null){
       <div class="flex flex-row flex-nowrap align-items-center justify-content-center h-2rem">
-        <span class="text-color-secondary pr-1 text-base pi"
-          [class]="lossGainInSelectedDateRangeDirectionIcon()"></span>
+        <span class="text-color-secondary pr-1 text-sm pi" [class]="lossGainInSelectedDateRangeDirectionIcon()"></span>
         <span class="font-medium text-lg">
           {{ lossGainInSelectedDateRangeAbs() | number}} <span class="text-color-secondary text-sm">{{
             knobSettings().unit
