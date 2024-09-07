@@ -20,6 +20,7 @@ import { DashboardWidgetComponent } from '../dashboard-widget/dashboard-widget.c
 import { ContentHeaderComponent } from '../miscellaneous/content-header/content-header.component';
 import { QuickSelectionCode } from '../miscellaneous/date-range-picker/available-quick-selections';
 import { DateRangePickerComponent } from '../miscellaneous/date-range-picker/date-range-picker.component';
+import { LoadingSpinnerComponent } from '../miscellaneous/loading-spinner/loading-spinner.component';
 import {
   currentBodyFatKnobSettings as bodyFatKnobSettings,
   currentBodyWaterKnobSettings as bodyWaterKnobSettings,
@@ -36,6 +37,7 @@ import {
     DateRangePickerComponent,
     DashboardWidgetComponent,
     DashboardWeekChartComponent,
+    LoadingSpinnerComponent,
     FormsModule,
   ],
   templateUrl: './dashboard.component.html',

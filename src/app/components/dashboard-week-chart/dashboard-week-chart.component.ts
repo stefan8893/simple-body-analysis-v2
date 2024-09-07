@@ -151,9 +151,13 @@ export class DashboardWeekChartComponent implements OnInit, OnDestroy {
                 const unixTimeStampInMilliseconds = ctx[0].parsed.x;
                 const firstDayOfWeek = new Date(unixTimeStampInMilliseconds);
 
-                return `KW ${weekNumber}\nStart ${format(firstDayOfWeek, 'P', {
-                  locale: de,
-                })}`;
+                return `Ab KW ${weekNumber}\nStart ${format(
+                  firstDayOfWeek,
+                  'P',
+                  {
+                    locale: de,
+                  }
+                )}`;
               },
               label: (ctx: any) => {
                 const unit = getUnitOfMeasureOrDefault(ctx.dataset.label);

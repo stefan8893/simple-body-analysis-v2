@@ -35,6 +35,8 @@
       class="dashboard-card col-12 sm:col-6 lg:col-3" />
   </div>
 
-  <app-dashboard-week-chart [bodyAnalysisTableData]="bodyAnalysisTableData()" />
+  <app-loading-spinner [show]="bodyAnalysisTableData().state === 'loading'" [debounceTimeInMilliseconds]="400" />
+  <app-dashboard-week-chart [bodyAnalysisTableData]="bodyAnalysisTableData()"
+    [hidden]="bodyAnalysisTableData().state !== 'loaded'" />
 
 </div>
