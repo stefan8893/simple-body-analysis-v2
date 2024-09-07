@@ -1,4 +1,9 @@
-import { differenceInCalendarDays, getISOWeek } from 'date-fns';
+import {
+  differenceInCalendarDays,
+  getISOWeek,
+  isMonday,
+  startOfDay,
+} from 'date-fns';
 import { BodyAnalysis, BodyAnalysisProperty } from '../body-analysis.types';
 import { BodyAnalysisWeekly, WidgetValues } from './data.types';
 
@@ -72,12 +77,7 @@ export function calculateWeekDifferences(
       specialGrouping.get(week)?.push(day);
     }
 
-    if (
-      specialGrouping.has(week - 1) &&
-      specialGrouping
-        .get(week - 1)
-        ?.every((x) => getISOWeek(x.analysedAt) !== week)
-    ) {
+    if (isMonday(day.analysedAt) && specialGrouping.has(week - 1)) {
       specialGrouping.get(week - 1)?.push(day);
     }
   }
@@ -86,7 +86,7 @@ export function calculateWeekDifferences(
     const [, data] = keyValuePair;
 
     return {
-      firstDayOfWeek: data[0].analysedAt,
+      firstDayOfWeek: startOfDay(data[0].analysedAt),
       weightDiff: data[data.length - 1].weight - data[0].weight,
     };
   });
