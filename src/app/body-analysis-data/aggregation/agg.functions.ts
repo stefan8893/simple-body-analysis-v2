@@ -1,4 +1,4 @@
-import { differenceInCalendarDays, isMonday, startOfDay } from 'date-fns';
+import { differenceInCalendarDays, getISOWeek } from 'date-fns';
 import { BodyAnalysis, BodyAnalysisProperty } from '../body-analysis.types';
 import { BodyAnalysisWeekly, WidgetValues } from './data.types';
 
@@ -60,16 +60,34 @@ function calculateAverageWeeklyLossGain(
 export function calculateWeekDifferences(
   data: BodyAnalysis[]
 ): BodyAnalysisWeekly[] {
-  const mondays = data.filter((x) => isMonday(x.analysedAt));
+  if (data.length < 2) return [];
 
-  if (mondays.length < 2) return [];
+  let specialGrouping = new Map<number, BodyAnalysis[]>();
+  for (const day of data) {
+    const week = getISOWeek(day.analysedAt);
 
-  const firstMondaySkipped = mondays.slice(1);
+    if (!specialGrouping.has(week)) {
+      specialGrouping.set(week, [day]);
+    } else {
+      specialGrouping.get(week)?.push(day);
+    }
 
-  const weightDiff: BodyAnalysisWeekly[] = firstMondaySkipped.map((x, i) => ({
-    firstDayOfWeek: startOfDay(mondays[i].analysedAt),
-    weightDiff: x.weight - mondays[i].weight,
-  }));
+    if (
+      specialGrouping.has(week - 1) &&
+      specialGrouping
+        .get(week - 1)
+        ?.every((x) => getISOWeek(x.analysedAt) !== week)
+    ) {
+      specialGrouping.get(week - 1)?.push(day);
+    }
+  }
 
-  return weightDiff;
+  return Array.from(specialGrouping).map((keyValuePair) => {
+    const [, data] = keyValuePair;
+
+    return {
+      firstDayOfWeek: data[0].analysedAt,
+      weightDiff: data[data.length - 1].weight - data[0].weight,
+    };
+  });
 }
