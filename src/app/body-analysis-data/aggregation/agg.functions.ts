@@ -44,14 +44,14 @@ function calculateAverageWeeklyLossGain(
   const lastEntry = bodyAnalysisData.at(-1);
   const isLastEntryMonday = isMonday(lastEntry!.analysedAt);
 
-  const notFullFirstWeek = isFirstEntryMonday
+  const proportionOfFirstNotFullWeek = isFirstEntryMonday
     ? 0
     : differenceInCalendarDays(
         firstEntry!.analysedAt,
         onlyMondays.at(0)?.analysedAt ?? lastEntry!.analysedAt
       ) / 7;
 
-  const notFullLastWeek = isLastEntryMonday
+  const proportionOfLastNotFullWeek = isLastEntryMonday
     ? 0
     : differenceInCalendarDays(
         onlyMondays.at(-1)?.analysedAt ?? firstEntry!.analysedAt,
@@ -68,16 +68,14 @@ function calculateAverageWeeklyLossGain(
     .slice(1)
     .map((x, i) => startOfWeeks[i][property] - x[property]);
 
-  const agg = diff.reduce((acc, next) => acc + next, 0);
+  const sumOfDifferences = diff.reduce((acc, next) => acc + next, 0);
 
-  return Math.abs(
-    agg /
-      Math.abs(
-        (diff.length === 1 ? 0 : diff.length) +
-          notFullFirstWeek +
-          notFullLastWeek
-      )
-  );
+  const weeks =
+    (diff.length === 1 ? 0 : diff.length) +
+    proportionOfFirstNotFullWeek +
+    proportionOfLastNotFullWeek;
+
+  return Math.abs(sumOfDifferences / weeks);
 }
 
 export function calculateWeekDifferences(
