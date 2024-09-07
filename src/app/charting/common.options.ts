@@ -1,12 +1,10 @@
 import { Context } from 'chartjs-plugin-datalabels';
 import { de } from 'date-fns/locale';
 import { layouVariables } from '../../styles/layout-variables';
+import { surfaceBorder, textColor } from '../components/body-analysis.colors';
 import { getUnitOfMeasureOrDefault, showDataPoint } from './chart-utils';
 
 const documentStyle = getComputedStyle(document.documentElement);
-
-export const textColor = documentStyle.getPropertyValue('--text-color');
-export const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
 export const commonLineChartOptions = {
   locale: 'de-AT',
@@ -38,7 +36,7 @@ export const commonLineChartOptions = {
         const unit = getUnitOfMeasureOrDefault(ctx.dataset.label);
 
         if (showDataPoint(ctx)) {
-          return `${value} ${unit}`;
+          return `${value.toLocaleString('de-AT')} ${unit}`;
         } else {
           return '';
         }

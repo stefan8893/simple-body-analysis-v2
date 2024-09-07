@@ -21,27 +21,21 @@ import {
   Tooltip,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
-import { isMonday, startOfDay } from 'date-fns';
+import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels';
+import { format, isMonday, startOfDay } from 'date-fns';
 import { de } from 'date-fns/locale';
 import { CardModule } from 'primeng/card';
 import { debounceTime, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
+import { layouVariables } from '../../../styles/layout-variables';
 import { BodyAnalysis } from '../../body-analysis-data/body-analysis.types';
-import { surfaceBorder, textColor } from '../../charting/common.options';
+import { getUnitOfMeasureOrDefault } from '../../charting/chart-utils';
 import { Resource } from '../../infrastructure/resource.state';
-import {
-  bodyFatColor,
-  bodyWaterColor,
-  muscleMassColor,
-  weightColor,
-} from '../body-analysis.colors';
+import { surfaceBorder, textColor, weightColor } from '../body-analysis.colors';
 import { SideNavState } from '../layout/layout/side-nav.state';
 
 type BodyAnalysisWeekly = {
   firstDayOfWeek: Date;
   weightDiff: number;
-  muscleMassDiff: number;
-  bodyWaterDiff: number;
-  bodyFatDiff: number;
 };
 
 function calculateWeekDifferences(data: BodyAnalysis[]): BodyAnalysisWeekly[] {
@@ -54,9 +48,6 @@ function calculateWeekDifferences(data: BodyAnalysis[]): BodyAnalysisWeekly[] {
   const weightDiff: BodyAnalysisWeekly[] = firstMondaySkipped.map((x, i) => ({
     firstDayOfWeek: startOfDay(mondays[i].analysedAt),
     weightDiff: x.weight - mondays[i].weight,
-    muscleMassDiff: x.muscleMass - mondays[i].muscleMass,
-    bodyWaterDiff: x.bodyWater - mondays[i].bodyWater,
-    bodyFatDiff: x.bodyFat - mondays[i].bodyFat,
   }));
 
   return weightDiff;
@@ -93,6 +84,7 @@ export class DashboardWeekChartComponent implements OnInit, OnDestroy {
       LinearScale,
       TimeScale,
       LineElement,
+      ChartDataLabels,
       Filler,
       Legend,
       Tooltip
@@ -105,15 +97,9 @@ export class DashboardWeekChartComponent implements OnInit, OnDestroy {
 
       const xAxis = weeklyDifferences.map((x) => x.firstDayOfWeek);
       const weightSeries = weeklyDifferences.map((x) => x.weightDiff);
-      const muscleMassSeries = weeklyDifferences.map((x) => x.muscleMassDiff);
-      const bodyWaterSeries = weeklyDifferences.map((x) => x.bodyWaterDiff);
-      const bodyFatSeries = weeklyDifferences.map((x) => x.bodyFatDiff);
 
       this.weeklyChart.data.labels = xAxis;
       this.weeklyChart.data.datasets[0].data = weightSeries;
-      this.weeklyChart.data.datasets[1].data = muscleMassSeries;
-      this.weeklyChart.data.datasets[2].data = bodyWaterSeries;
-      this.weeklyChart.data.datasets[3].data = bodyFatSeries;
       this.weeklyChart.update();
     });
 
@@ -131,24 +117,6 @@ export class DashboardWeekChartComponent implements OnInit, OnDestroy {
             data: [],
             backgroundColor: weightColor,
           },
-          {
-            label: 'Muskeln',
-            data: [],
-            hidden: true,
-            backgroundColor: muscleMassColor,
-          },
-          {
-            label: 'Wasser',
-            data: [],
-            hidden: true,
-            backgroundColor: bodyWaterColor,
-          },
-          {
-            label: 'Fett',
-            data: [],
-            hidden: true,
-            backgroundColor: bodyFatColor,
-          },
         ],
       },
       options: {
@@ -159,9 +127,50 @@ export class DashboardWeekChartComponent implements OnInit, OnDestroy {
           line: {},
           point: {},
         },
+        layout: {
+          padding: {
+            right: 10,
+            left: 10,
+          },
+        },
         plugins: {
-          datalabels: {},
-          tooltip: {},
+          datalabels: {
+            display: (ctx: Context) => {
+              return ctx.chart.width > layouVariables.mobileBreakpoint.value;
+            },
+            anchor: function (ctx: Context) {
+              if (ctx.dataIndex % 2 === 0) return 'start';
+              else return 'end';
+            },
+            offset: 2,
+            align: function (ctx: Context) {
+              if (ctx.dataIndex % 2 === 0) return 'bottom';
+              else return 'top';
+            },
+            color: textColor,
+            formatter: (value: any, ctx: Context) => {
+              const unit = getUnitOfMeasureOrDefault(ctx.dataset.label);
+
+              return `${value.toLocaleString('de-AT')}${unit}`;
+            },
+          },
+          tooltip: {
+            callbacks: {
+              title: (ctx: any) => {
+                const weekNumber = ctx[0].label;
+                const unixTimeStampInMilliseconds = ctx[0].parsed.x;
+                const firstDayOfWeek = new Date(unixTimeStampInMilliseconds);
+
+                return `KW ${weekNumber}\nStart ${format(firstDayOfWeek, 'P', {
+                  locale: de,
+                })}`;
+              },
+              label: (ctx: any) => {
+                const unit = getUnitOfMeasureOrDefault(ctx.dataset.label);
+                return `${ctx.dataset.label}: ${ctx.formattedValue} ${unit}`;
+              },
+            },
+          },
           legend: {
             labels: {
               color: textColor,
@@ -170,12 +179,16 @@ export class DashboardWeekChartComponent implements OnInit, OnDestroy {
         },
         scales: {
           x: {
+            title: {
+              display: true,
+              text: 'Kalenderwoche',
+            },
             type: 'time',
-            offset: false,
+            offset: true,
             time: {
               unit: 'week',
               displayFormats: {
-                day: 'w',
+                week: 'w',
               },
               tooltipFormat: 'w',
               isoWeekday: true,

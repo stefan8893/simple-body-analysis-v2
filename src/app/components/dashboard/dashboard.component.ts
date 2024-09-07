@@ -96,11 +96,7 @@ export class DashboardComponent {
   onPreparedDateRangeChanged(event: string[]) {
     const [from, to] = event;
 
-    if (event.length === 2) {
-      this.loadBodyAnalysisData(from, to);
-    } else {
-      console.log('clear dashborad');
-    }
+    if (event.length === 2) this.loadBodyAnalysisData(from, to);
   }
 
   async loadBodyAnalysisData(from: string, to: string) {
@@ -111,12 +107,10 @@ export class DashboardComponent {
 
       const result = await this.bodyAnalysisQueryService.query(from, to);
 
-      setTimeout(() => {
-        this.bodyAnalysisTableData.set({
-          state: 'loaded',
-          value: result,
-        });
-      }, 2000);
+      this.bodyAnalysisTableData.set({
+        state: 'loaded',
+        value: result,
+      });
     } catch (error) {
       console.error(error);
       this.bodyAnalysisTableData.set({
