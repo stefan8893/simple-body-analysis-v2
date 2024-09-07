@@ -15,7 +15,8 @@ import {
   nullWidgetValues,
 } from '../../widget-data/widget-data.functions';
 import { WidgetValues } from '../../widget-data/widget-data.types';
-import { AnalysisWidgetComponent } from '../miscellaneous/analysis-widget/analysis-widget.component';
+import { DashboardWeekChartComponent } from '../dashboard-week-chart/dashboard-week-chart.component';
+import { DashboardWidgetComponent } from '../dashboard-widget/dashboard-widget.component';
 import { ContentHeaderComponent } from '../miscellaneous/content-header/content-header.component';
 import { QuickSelectionCode } from '../miscellaneous/date-range-picker/available-quick-selections';
 import { DateRangePickerComponent } from '../miscellaneous/date-range-picker/date-range-picker.component';
@@ -33,7 +34,8 @@ import {
     CardModule,
     ContentHeaderComponent,
     DateRangePickerComponent,
-    AnalysisWidgetComponent,
+    DashboardWidgetComponent,
+    DashboardWeekChartComponent,
     FormsModule,
   ],
   templateUrl: './dashboard.component.html',
@@ -109,10 +111,12 @@ export class DashboardComponent {
 
       const result = await this.bodyAnalysisQueryService.query(from, to);
 
-      this.bodyAnalysisTableData.set({
-        state: 'loaded',
-        value: result,
-      });
+      setTimeout(() => {
+        this.bodyAnalysisTableData.set({
+          state: 'loaded',
+          value: result,
+        });
+      }, 2000);
     } catch (error) {
       console.error(error);
       this.bodyAnalysisTableData.set({

@@ -31,7 +31,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { debounceTime, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 import { BodyAnalysisQueryService } from '../../body-analysis-data/body-analysis-query.service';
 import { BodyAnalysis } from '../../body-analysis-data/body-analysis.types';
-import { commonOptions } from '../../charting/common.options';
+import { commonLineChartOptions } from '../../charting/common.options';
 import { Resource } from '../../infrastructure/resource.state';
 import {
   bodyFatColor,
@@ -167,9 +167,9 @@ export class WeeklyAnalysisComponent implements OnInit, OnDestroy {
         ],
       },
       options: {
-        ...(commonOptions as unknown as CoreChartOptions<'line'>),
+        ...(commonLineChartOptions as unknown as CoreChartOptions<'line'>),
         elements: {
-          ...(commonOptions.elements as unknown as ElementOptionsByType<'line'>),
+          ...(commonLineChartOptions.elements as unknown as ElementOptionsByType<'line'>),
           point: {
             radius: undefined,
           },

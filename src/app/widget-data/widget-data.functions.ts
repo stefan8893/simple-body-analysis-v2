@@ -6,6 +6,8 @@ import {
 import { WidgetValues } from './widget-data.types';
 
 export const nullWidgetValues = {
+  selectedDateRangeFrom: null,
+  selectedDateRangeTo: null,
   latestValue: null,
   lossGainInSelectedDateRange: null,
   averageWeeklyLossGain: null,
@@ -18,6 +20,9 @@ export function calculateWidgetValues(
   if (bodyAnalysisData.length === 0) return nullWidgetValues;
 
   return {
+    selectedDateRangeFrom: bodyAnalysisData[0].analysedAt,
+    selectedDateRangeTo:
+      bodyAnalysisData[bodyAnalysisData.length - 1].analysedAt,
     latestValue: bodyAnalysisData[bodyAnalysisData.length - 1][property],
     lossGainInSelectedDateRange:
       bodyAnalysisData[bodyAnalysisData.length - 1][property] -

@@ -5,10 +5,10 @@ import { getUnitOfMeasureOrDefault, showDataPoint } from './chart-utils';
 
 const documentStyle = getComputedStyle(document.documentElement);
 
-const textColor = documentStyle.getPropertyValue('--text-color');
-const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
+export const textColor = documentStyle.getPropertyValue('--text-color');
+export const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
-export const commonOptions = {
+export const commonLineChartOptions = {
   locale: 'de-AT',
   responsive: true,
   maintainAspectRatio: true,

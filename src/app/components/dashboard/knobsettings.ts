@@ -4,7 +4,7 @@ import {
   muscleMassColor,
   weightColor,
 } from '../body-analysis.colors';
-import { KnobSettings } from '../miscellaneous/analysis-widget/analysis-widget.component';
+import { KnobSettings } from '../dashboard-widget/dashboard-widget.component';
 
 export const currentWeightKnobSettings: KnobSettings = {
   color: weightColor,

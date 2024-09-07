@@ -6,30 +6,35 @@
   </div>
 
   <div class="grid mb-3 md:mb-5">
-    <app-analysis-widget title="Gewicht" [isLoading]="bodyAnalysisTableData().state === 'loading'"
-      [latestValue]="weightWidgetValues().latestValue"
+    <app-dashboard-widget header="Gewicht" [isLoading]="bodyAnalysisTableData().state === 'loading'"
+      [selectedDateRangeFrom]="weightWidgetValues().selectedDateRangeFrom"
+      [selectedDateRangeTo]="weightWidgetValues().selectedDateRangeTo" [latestValue]="weightWidgetValues().latestValue"
       [lossGainInSelectedDateRange]="weightWidgetValues().lossGainInSelectedDateRange"
       [averageWeeklyLossGain]="weightWidgetValues().averageWeeklyLossGain" [knobSettings]="weightKnobSettings"
       class="dashboard-card col-12 sm:col-6 lg:col-3" />
-    <app-analysis-widget title="Muskeln" [isLoading]="bodyAnalysisTableData().state === 'loading'"
+    <app-dashboard-widget header="Muskeln" [isLoading]="bodyAnalysisTableData().state === 'loading'"
+      [selectedDateRangeFrom]="muscleMassWidgetValues().selectedDateRangeFrom"
+      [selectedDateRangeTo]="muscleMassWidgetValues().selectedDateRangeTo"
       [latestValue]="muscleMassWidgetValues().latestValue"
       [lossGainInSelectedDateRange]="muscleMassWidgetValues().lossGainInSelectedDateRange"
       [averageWeeklyLossGain]="muscleMassWidgetValues().averageWeeklyLossGain" [knobSettings]="muscleMassKnobSettings"
       class="dashboard-card col-12 sm:col-6 lg:col-3" />
-    <app-analysis-widget title="Wasser" [isLoading]="bodyAnalysisTableData().state === 'loading'"
+    <app-dashboard-widget header="Wasser" [isLoading]="bodyAnalysisTableData().state === 'loading'"
+      [selectedDateRangeFrom]="bodyWaterWidgetValues().selectedDateRangeFrom"
+      [selectedDateRangeTo]="bodyWaterWidgetValues().selectedDateRangeTo"
       [latestValue]="bodyWaterWidgetValues().latestValue"
       [lossGainInSelectedDateRange]="bodyWaterWidgetValues().lossGainInSelectedDateRange"
       [averageWeeklyLossGain]="bodyWaterWidgetValues().averageWeeklyLossGain" [knobSettings]="bodyWaterKnobSettings"
       class="dashboard-card col-12 sm:col-6 lg:col-3" />
-    <app-analysis-widget title="Fett" [isLoading]="bodyAnalysisTableData().state === 'loading'"
+    <app-dashboard-widget header="Fett" [isLoading]="bodyAnalysisTableData().state === 'loading'"
+      [selectedDateRangeFrom]="bodyFatWidgetValues().selectedDateRangeFrom"
+      [selectedDateRangeTo]="bodyFatWidgetValues().selectedDateRangeTo"
       [latestValue]="bodyFatWidgetValues().latestValue"
       [lossGainInSelectedDateRange]="bodyFatWidgetValues().lossGainInSelectedDateRange"
       [averageWeeklyLossGain]="bodyFatWidgetValues().averageWeeklyLossGain" [knobSettings]="bodyFatKnobSettings"
       class="dashboard-card col-12 sm:col-6 lg:col-3" />
   </div>
 
-  <div class="">
-    <p-card class="">Bar chart goes here ...</p-card>
-  </div>
+  <app-dashboard-week-chart [bodyAnalysisTableData]="bodyAnalysisTableData()" />
 
 </div>

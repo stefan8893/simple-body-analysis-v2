@@ -7,11 +7,14 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { format } from 'date-fns';
+import { de } from 'date-fns/locale';
 import { CardModule } from 'primeng/card';
 import { KnobModule } from 'primeng/knob';
 import { SkeletonModule } from 'primeng/skeleton';
-import { Unit } from '../../../infrastructure/units';
-import { primaryColor } from '../../body-analysis.colors';
+import { TooltipModule } from 'primeng/tooltip';
+import { Unit } from '../../infrastructure/units';
+import { primaryColor } from '../body-analysis.colors';
 
 export type KnobSettings = {
   color: string;
@@ -21,16 +24,23 @@ export type KnobSettings = {
 };
 
 @Component({
-  selector: 'app-analysis-widget',
+  selector: 'app-dashboard-widget',
   standalone: true,
-  imports: [CardModule, FormsModule, KnobModule, SkeletonModule, CommonModule],
-  templateUrl: './analysis-widget.component.html',
-  styleUrl: './analysis-widget.component.scss',
+  imports: [
+    CardModule,
+    FormsModule,
+    KnobModule,
+    TooltipModule,
+    SkeletonModule,
+    CommonModule,
+  ],
+  templateUrl: './dashboard-widget.component.html',
+  styleUrl: './dashboard-widget.component.scss',
   encapsulation: ViewEncapsulation.None,
 })
-export class AnalysisWidgetComponent {
+export class DashboardWidgetComponent {
   isLoading = input(false);
-  title = input('');
+  header = input('');
   knobSettings = input<KnobSettings>({
     color: primaryColor,
     unit: '',
@@ -38,9 +48,25 @@ export class AnalysisWidgetComponent {
     max: 100,
   });
 
+  selectedDateRangeFrom = input<Date | undefined | null>(undefined);
+  selectedDateRangeTo = input<Date | undefined | null>(undefined);
   latestValue = model<number | undefined | null>(undefined);
   lossGainInSelectedDateRange = input<number | undefined | null>(undefined);
   averageWeeklyLossGain = input<number | undefined | null>(undefined);
+
+  selectedDateRangeFromFormatted = computed(() => {
+    const analysedAt = this.selectedDateRangeFrom();
+    if (!analysedAt) return '';
+
+    return `seit ${format(analysedAt, 'P', { locale: de })}`;
+  });
+
+  selectedDateRangeToFormatted = computed(() => {
+    const analysedAt = this.selectedDateRangeTo();
+    if (!analysedAt) return '';
+
+    return format(analysedAt, 'Pp', { locale: de });
+  });
 
   lossGainInSelectedDateRangeAbs = computed(() => {
     const lossGain = this.lossGainInSelectedDateRange();

@@ -1,7 +1,7 @@
 <p-card class="analysis-widget">
 
   <ng-template pTemplate="title">
-    {{ title() }}
+    {{ header() }}
   </ng-template>
 
   <ng-template pTemplate="header">
@@ -12,7 +12,7 @@
   <ng-template pTemplate="content">
 
 
-    <div class="flex flex-row flex-nowrap align-items-center justify-content-center">
+    <div class="flex flex-column flex-nowrap align-items-center justify-content-start">
 
       @if(isLoading() || latestValue() === undefined) {
       <p-skeleton shape="circle" size="90px" />
@@ -21,10 +21,22 @@
       <p-knob [(ngModel)]="latestValue" [readonly]="true" [valueColor]="knobSettings().color"
         [min]="latestValue() === null ? 0 : knobSettings().min" [max]="knobSettings().max"
         [valueTemplate]="valueTemplate()" [size]="90" />
+
+      <div><span class="text-color-secondary">{{ selectedDateRangeToFormatted() }}</span></div>
       }
     </div>
 
-    <div class="flex flex-column flex-nowrap align-items-stretch justify-content-start w-full">
+    <div class="flex flex-column flex-nowrap align-items-stretch justify-content-start w-full mt-3">
+
+
+      @if(isLoading() || averageWeeklyLossGain() === undefined || lossGainInSelectedDateRange() === undefined) {
+      <p-skeleton height="1.5rem" styleClass="mt-2" borderRadius="16px" />
+      }
+      @else if (averageWeeklyLossGain() !== null) {
+      <div class="flex flex-row flex-nowrap align-items-center justify-content-center h-2rem">
+        <div><span class="text-color-secondary text-sm">{{ selectedDateRangeFromFormatted() }}</span></div>
+      </div>
+      }
 
       @if(isLoading() || lossGainInSelectedDateRange() === undefined) {
       <p-skeleton height="1.5rem" styleClass="mt-2" borderRadius="16px" />
@@ -45,8 +57,8 @@
       <p-skeleton height="1.5rem" styleClass="mt-2" borderRadius="16px" />
       }
       @else if (averageWeeklyLossGain() !== null) {
-      <div class="flex flex-row flex-nowrap align-items-center justify-content-center h-2rem">
-        <span class="text-color-secondary pr-1 text-overflow-ellipsis">Wochen</span>
+      <div class="flex flex-row flex-wrap align-items-center justify-content-center">
+        <span class="text-color-secondary pr-1">Wochen</span>
         <span class="unicode-character text-color-secondary pr-1">&#x2300;</span>
         <span class="font-medium text-lg">
           {{averageWeeklyLossGainAbs() | number : '1.2-2'}} <span class="text-color-secondary text-sm">{{
