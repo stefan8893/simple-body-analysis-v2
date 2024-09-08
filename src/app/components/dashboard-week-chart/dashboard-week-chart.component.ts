@@ -140,7 +140,7 @@ export class DashboardWeekChartComponent implements OnInit, OnDestroy {
             formatter: (value: number, ctx: Context) => {
               const unit = getUnitOfMeasureOrDefault(ctx.dataset.label);
 
-              return `${(Math.round(value * 100) / 100).toLocaleString(
+              return `${(Math.round(value * 10) / 10).toLocaleString(
                 'de-AT'
               )}${unit}`;
             },
@@ -154,7 +154,9 @@ export class DashboardWeekChartComponent implements OnInit, OnDestroy {
               },
               label: (ctx: any) => {
                 const unit = getUnitOfMeasureOrDefault(ctx.dataset.label);
-                return `${ctx.dataset.label}: ${ctx.formattedValue} ${unit}`;
+                return `${ctx.dataset.label}: ${(
+                  Math.round(ctx.raw * 100) / 100
+                ).toLocaleString('de-AT')} ${unit}`;
               },
             },
           },

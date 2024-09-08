@@ -6,7 +6,7 @@ export type WidgetValues = {
   averageWeeklyLossGain: number | null;
 };
 
-export type BodyAnalysisWeekly = {
+export type BodyAnalysisWeeklyDiff = {
   firstDayOfWeek: Date;
   weightDiff: number;
 };

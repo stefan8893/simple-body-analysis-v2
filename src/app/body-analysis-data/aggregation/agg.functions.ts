@@ -1,15 +1,16 @@
 import {
   addWeeks,
-  compareAsc,
   differenceInCalendarDays,
   differenceInCalendarISOWeeks,
   endOfISOWeek,
+  format,
   startOfDay,
   startOfISOWeek,
 } from 'date-fns';
+import { de } from 'date-fns/locale';
 import { BodyAnalysis, BodyAnalysisProperty } from '../body-analysis.types';
 import { BodyAnalysisDataInterpolation } from './body-analysis-data-interpolation';
-import { BodyAnalysisWeekly, WidgetValues } from './data.types';
+import { BodyAnalysisWeeklyDiff, WidgetValues } from './data.types';
 
 export const nullWidgetValues = {
   selectedDateRangeFrom: null,
@@ -46,17 +47,29 @@ function calculateAverageWeeklyLossGain(
 ): number | null {
   if (bodyAnalysisData.length < 2) return null;
 
-  const first = bodyAnalysisData.at(0)!;
-  const last = bodyAnalysisData.at(-1)!;
-
-  const timespanInDays = differenceInCalendarDays(
-    first.analysedAt,
-    last.analysedAt
+  const oneEntryPerDayGrouping = Object.entries(
+    Object.groupBy(bodyAnalysisData, ({ analysedAt }) =>
+      format(analysedAt, 'P', { locale: de })
+    )
   );
 
-  const differencesBetweenDays = bodyAnalysisData
+  const oneEntryPerDay = oneEntryPerDayGrouping
+    .map(([, v]) => v?.at(-1))
+    .filter((x) => !!x);
+
+  if (oneEntryPerDay.length < 2) return null;
+
+  const first = oneEntryPerDay.at(0)!;
+  const last = oneEntryPerDay.at(-1)!;
+
+  const timespanInDays = differenceInCalendarDays(
+    last.analysedAt,
+    first.analysedAt
+  );
+
+  const differencesBetweenDays = oneEntryPerDay
     .slice(1)
-    .map((x, i) => x[property] - bodyAnalysisData[i][property]);
+    .map((x, i) => x[property] - oneEntryPerDay[i][property]);
 
   const sumOfDifferences = differencesBetweenDays.reduce(
     (acc, next) => acc + next,
@@ -68,7 +81,7 @@ function calculateAverageWeeklyLossGain(
 
 export function calculateWeekDifferences(
   data: BodyAnalysis[]
-): BodyAnalysisWeekly[] {
+): BodyAnalysisWeeklyDiff[] {
   if (data.length < 2) return [];
 
   const firstEntry = data[0];
@@ -95,9 +108,6 @@ export function calculateWeekDifferences(
     }))
     .filter(({ first, last }) => !!first?.analysedAt && !!last?.analysedAt)
     .filter(({ first, last }) => !!first?.weight && !!last?.weight)
-    .filter(
-      ({ first, last }) => compareAsc(first!.analysedAt, last!.analysedAt) <= 0
-    )
     .map(({ first, last }) => ({
       firstDayOfWeek: startOfDay(first!.analysedAt),
       weightDiff: last!.weight - first!.weight,
