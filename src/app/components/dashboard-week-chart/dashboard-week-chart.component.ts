@@ -112,9 +112,8 @@ export class DashboardWeekChartComponent implements OnInit, OnDestroy {
         locale: 'de-AT',
         responsive: true,
         maintainAspectRatio: true,
-        elements: {
-          line: {},
-          point: {},
+        animation: {
+          duration: 700,
         },
         layout: {
           padding: {

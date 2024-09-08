@@ -66,6 +66,7 @@ export class BodyAnalysisDataInterpolation {
     const k = Math.abs((y1 - y0) / (x1 - x0));
     const x = analysedAt.getTime() - x0;
     const d = Math.min(y0, y1);
+
     const y = k * x + d;
 
     return {

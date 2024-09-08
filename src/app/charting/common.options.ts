@@ -23,6 +23,9 @@ export const commonLineChartOptions = {
       pointHitRadius: 10,
     },
   },
+  animation: {
+    duration: 700,
+  },
   plugins: {
     datalabels: {
       display: (ctx: Context) => {
