@@ -132,11 +132,9 @@
             }
           </div>
           <div class="flex py-4 gap-2">
-            @if(uploadResult.type === 'success') {
-            <!-- <p-button size="small" label="Neu starten" (onClick)="prevCallback.emit()" /> -->
-            }
-            @else {
-            <p-button size="small" label="Zurück" severity="secondary" (onClick)="reset()" />
+            <p-button size="small" label="Zurück" severity="secondary" (onClick)="prevCallback.emit()" />
+
+            @if(uploadResult.type !== 'success') {
             <p-button size="small" label="Hochladen" (onClick)="uploadNewRecords()" />
             }
           </div>

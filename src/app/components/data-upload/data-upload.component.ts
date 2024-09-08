@@ -147,11 +147,4 @@ export class DataUploadComponent {
       };
     }
   }
-
-  reset() {
-    this.files.set([]);
-    this.parsedCsv = { type: 'no-source-file' };
-    this.newRecords = { state: 'loading' };
-    this.uploadResult = { type: 'not-yet-uploaded' };
-  }
 }
