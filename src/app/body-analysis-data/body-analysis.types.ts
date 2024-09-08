@@ -2,7 +2,9 @@ export type BodyAnalysisProperty =
   | 'weight'
   | 'muscleMass'
   | 'bodyWater'
-  | 'bodyFat';
+  | 'bodyFat'
+  | 'bmi'
+  | 'dailyCalorieRequirement';
 
 export type BodyAnalysis = {
   analysedAt: Date;

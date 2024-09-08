@@ -15,7 +15,7 @@ export class BodyAnalysisDataInterpolation {
     this.data = data.sort((a, b) => compareAsc(a.analysedAt, b.analysedAt));
   }
 
-  binarySearch(
+  private search(
     mode: SearchMode,
     target: Date,
     low = 0,
@@ -36,9 +36,9 @@ export class BodyAnalysisDataInterpolation {
         ? this.data[low]
         : this.data[high]
       : target < this.data[middle].analysedAt
-      ? this.binarySearch(mode, target, low, middle)
+      ? this.search(mode, target, low, middle)
       : target > this.data[middle].analysedAt
-      ? this.binarySearch(mode, target, middle, high)
+      ? this.search(mode, target, middle, high)
       : this.data[middle];
   }
 
@@ -47,8 +47,8 @@ export class BodyAnalysisDataInterpolation {
     next: BodyAnalysis | undefined;
   } {
     return {
-      previous: this.binarySearch('previous-if-no-exact-match', x),
-      next: this.binarySearch('next-if-no-exact-match', x),
+      previous: this.search('previous-if-no-exact-match', x),
+      next: this.search('next-if-no-exact-match', x),
     };
   }
 

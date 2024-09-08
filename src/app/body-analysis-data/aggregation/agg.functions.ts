@@ -34,14 +34,14 @@ export function calculateWidgetValues(
     lossGainInSelectedDateRange:
       bodyAnalysisData[bodyAnalysisData.length - 1][property] -
       bodyAnalysisData[0][property],
-    averageWeeklyLossGain: calculateAverageWeeklyLossGain(
+    averageWeeklyLossGain: calculateAverageWeekDifferences(
       bodyAnalysisData,
       property
     ),
   };
 }
 
-function calculateAverageWeeklyLossGain(
+function calculateAverageWeekDifferences(
   bodyAnalysisData: BodyAnalysis[],
   property: BodyAnalysisProperty
 ): number | null {
