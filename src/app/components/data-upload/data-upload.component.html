@@ -119,7 +119,7 @@
             @if(newRecords.state === 'loaded'){
 
             @if(uploadResult.type === 'not-yet-uploaded') {
-            <span class="text-xl font-medium">{{ newRecords.value.length }} Einträge hochladen?</span>
+            <span class="text-xl font-medium">{{ newRecords.value.length }} Messung(en) hochladen?</span>
             }
             @else if(uploadResult.type === 'error') {
             <span class="text-xl font-medium text-red-600">Fehler beim Hochladen!</span>
