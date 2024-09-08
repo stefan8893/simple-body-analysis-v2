@@ -40,6 +40,7 @@ import {
 } from './auth/user-picture-storage.service';
 import { UserProfileService } from './auth/user-profile.service';
 import { BodyAnalysisQueryService } from './body-analysis-data/body-analysis-query.service';
+import { BodyAnalysisUploadService } from './body-analysis-data/body-analysis-upload.service';
 import { useBodyAnalysisTableClient } from './body-analysis-data/use-body-analysis-table-client';
 import { appUserReducer } from './stores/app-user/app-user.reducer';
 import { sideNavReducer } from './stores/side-nav/side-nav.reducer';
@@ -88,6 +89,7 @@ export const appConfig: ApplicationConfig = {
     MsalBroadcastService,
     UserProfileService,
     BodyAnalysisQueryService,
+    BodyAnalysisUploadService,
     {
       provide: APP_INITIALIZER,
       useFactory: initializeApp,

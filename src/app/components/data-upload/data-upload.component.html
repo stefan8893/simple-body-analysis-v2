@@ -63,9 +63,10 @@
           @else if(parsedCsv.type === 'error') {
           <div>{{ parsedCsv.reason }}</div>
           }
-          @else if(parsedCsv.type === 'success') {
+          @else if(parsedCsv.type === 'success' && newRecords.state === 'loaded') {
+
           <div class="data-upload-csv-table-container">
-            <p-table [value]="parsedCsv.data" [paginator]="true" [rows]="10" responsiveLayout="scroll"
+            <p-table [value]="newRecords.value" [paginator]="true" [rows]="10" responsiveLayout="scroll"
               [tableStyle]="{'min-width': '50rem'}" [rowsPerPageOptions]="[5, 10, 15, 20, 40, 50]"
               sortField="analysedAt" [sortOrder]="-1" [showCurrentPageReport]="true"
               currentPageReportTemplate="{first} bis {last} von {totalRecords} Einträgen" styleClass="p-datatable-sm">
@@ -105,7 +106,7 @@
           <div class="flex py-4 gap-2">
             <p-button size="small" label="Zurück" severity="secondary" (onClick)="prevCallback.emit()" />
             <p-button size="small" label="Weiter"
-              [disabled]="parsedCsv.type !== 'success' || (parsedCsv.type === 'success' && parsedCsv.data.length === 0)"
+              [disabled]="!(newRecords.state === 'loaded' && newRecords.value.length > 0)"
               (onClick)="nextCallback.emit()" />
           </div>
         </ng-template>
@@ -114,14 +115,30 @@
 
       <p-stepperPanel header="Hochladen">
         <ng-template pTemplate="content" let-prevCallback="prevCallback" let-index="index">
-          <div class="flex flex-column h-12rem">
-            <div
-              class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-              Hochladen
-            </div>
+          <div class="flex flex-column align-items-center justify-content-center h-6rem">
+            @if(newRecords.state === 'loaded'){
+
+            @if(uploadResult.type === 'not-yet-uploaded') {
+            <span class="text-xl font-medium">{{ newRecords.value.length }} Einträge hochladen?</span>
+            }
+            @else if(uploadResult.type === 'error') {
+            <span class="text-xl font-medium text-red-600">Fehler beim Hochladen!</span>
+            <span class="text-md font-medium mt-2">{{ uploadResult.reason }}</span>
+            }
+            @else if(uploadResult.type === 'success') {
+            <span class="text-6xl font-medium text-green-400 pi pi-check"></span>
+            }
+
+            }
           </div>
-          <div class="flex py-4">
-            <p-button size="small" label="Zurück" (onClick)="prevCallback.emit()" />
+          <div class="flex py-4 gap-2">
+            @if(uploadResult.type === 'success') {
+            <!-- <p-button size="small" label="Neu starten" (onClick)="prevCallback.emit()" /> -->
+            }
+            @else {
+            <p-button size="small" label="Zurück" severity="secondary" (onClick)="reset()" />
+            <p-button size="small" label="Hochladen" (onClick)="uploadNewRecords()" />
+            }
           </div>
         </ng-template>
       </p-stepperPanel>

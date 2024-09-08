@@ -36,6 +36,7 @@ export class BodyAnalysisDataInterpolation {
     }
 
     const middle = Math.floor((high + low) / 2);
+
     if (target < this.data[middle].analysedAt) {
       return this.search(mode, target, low, middle);
     }

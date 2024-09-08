@@ -98,9 +98,9 @@ export function calculateWeekDifferences(
   const interpolation = new BodyAnalysisDataInterpolation(data);
 
   const result = Array.from({ length: weeksInBetween }, (x, i) => i)
-    .map((x, i) => ({
-      startOfWeek: startOfISOWeek(addWeeks(firstWeek, i)),
-      endOfWeek: endOfISOWeek(addWeeks(firstWeek, i)),
+    .map((x) => ({
+      startOfWeek: startOfISOWeek(addWeeks(firstWeek, x)),
+      endOfWeek: endOfISOWeek(addWeeks(firstWeek, x)),
     }))
     .map(({ startOfWeek, endOfWeek }) => ({
       first: interpolation.at(startOfWeek),

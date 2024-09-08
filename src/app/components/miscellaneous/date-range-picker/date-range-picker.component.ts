@@ -8,10 +8,11 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { addDays, endOfDay, format, parseISO, startOfDay } from 'date-fns';
+import { addDays, endOfDay, parseISO, startOfDay } from 'date-fns';
 import { toZonedTime } from 'date-fns-tz';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
+import { formatToSearchString } from '../../../body-analysis-data/query-utils';
 import {
   availableQuickSelections,
   QuickSelection,
@@ -57,8 +58,8 @@ export class DateRangePickerComponent implements OnInit {
       const fromLocalTime = startOfDay(toZonedTime(from, timeZone));
       const toLocalTime = endOfDay(toZonedTime(to, timeZone));
 
-      const fromSearchString = this.formatToSearchString(fromLocalTime);
-      const toSearchString = this.formatToSearchString(toLocalTime);
+      const fromSearchString = formatToSearchString(fromLocalTime);
+      const toSearchString = formatToSearchString(toLocalTime);
 
       console.debug('Prepared DateRange changed event get emitted:', {
         from: fromSearchString,
@@ -67,10 +68,6 @@ export class DateRangePickerComponent implements OnInit {
 
       this.preparedDateRangeChanged.emit([fromSearchString, toSearchString]);
     });
-  }
-
-  private formatToSearchString(date: Date) {
-    return format(date, `yyyy-MM-dd'T'HH:mm`);
   }
 
   applyInitialQuickSelection(code: string) {
