@@ -22,24 +22,29 @@ export class BodyAnalysisDataInterpolation {
     high = this.data.length - 1
   ): BodyAnalysis {
     if (target < this.data[low].analysedAt) {
-      return this.data[0];
+      return this.data[low];
     }
 
     if (target > this.data[high].analysedAt) {
       return this.data[high];
     }
 
-    const middle = Math.floor((high + low) / 2);
-
-    return high - low < 2
-      ? mode === 'previous-if-no-exact-match'
+    if (high - low < 2) {
+      return mode === 'previous-if-no-exact-match'
         ? this.data[low]
-        : this.data[high]
-      : target < this.data[middle].analysedAt
-      ? this.search(mode, target, low, middle)
-      : target > this.data[middle].analysedAt
-      ? this.search(mode, target, middle, high)
-      : this.data[middle];
+        : this.data[high];
+    }
+
+    const middle = Math.floor((high + low) / 2);
+    if (target < this.data[middle].analysedAt) {
+      return this.search(mode, target, low, middle);
+    }
+
+    if (target > this.data[middle].analysedAt) {
+      return this.search(mode, target, middle, high);
+    }
+
+    return this.data[middle];
   }
 
   private findSurroundingEntries(x: Date): {
