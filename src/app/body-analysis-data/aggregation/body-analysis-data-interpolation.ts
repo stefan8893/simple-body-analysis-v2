@@ -1,10 +1,12 @@
-import { compareAsc, differenceInMilliseconds } from 'date-fns';
+import { compareAsc } from 'date-fns';
 import { BodyAnalysis } from '../body-analysis.types';
 
 export type InterpolatedWeight = {
   analysedAt: Date;
   weight: number;
 };
+
+type SearchMode = 'previous-if-no-exact-match' | 'next-if-no-exact-match';
 
 export class BodyAnalysisDataInterpolation {
   private data: BodyAnalysis[];
@@ -13,36 +15,40 @@ export class BodyAnalysisDataInterpolation {
     this.data = data.sort((a, b) => compareAsc(a.analysedAt, b.analysedAt));
   }
 
+  binarySearch(
+    mode: SearchMode,
+    target: Date,
+    low = 0,
+    high = this.data.length - 1
+  ): BodyAnalysis {
+    if (target < this.data[low].analysedAt) {
+      return this.data[0];
+    }
+
+    if (target > this.data[high].analysedAt) {
+      return this.data[high];
+    }
+
+    const middle = Math.floor((high + low) / 2);
+
+    return high - low < 2
+      ? mode === 'previous-if-no-exact-match'
+        ? this.data[low]
+        : this.data[high]
+      : target < this.data[middle].analysedAt
+      ? this.binarySearch(mode, target, low, middle)
+      : target > this.data[middle].analysedAt
+      ? this.binarySearch(mode, target, middle, high)
+      : this.data[middle];
+  }
+
   private findSurroundingEntries(x: Date): {
     previous: BodyAnalysis | undefined;
     next: BodyAnalysis | undefined;
   } {
-    const maxDateValue = Math.abs(new Date(0, 0, 0).valueOf());
-
-    let bestPreviousIndex = -1;
-    let bestNextIndex = -1;
-
-    let bestPrevDiff = maxDateValue;
-    let bestNextDiff = -maxDateValue;
-
-    for (const [i, candidate] of this.data.entries()) {
-      const diff = differenceInMilliseconds(x, candidate.analysedAt);
-
-      if (diff < 0 && diff > bestNextDiff) {
-        bestNextIndex = i;
-        bestNextDiff = diff;
-      }
-
-      if (diff > 0 && diff < bestPrevDiff) {
-        bestPreviousIndex = i;
-        bestPrevDiff = diff;
-      }
-    }
-
     return {
-      previous:
-        bestPreviousIndex === -1 ? undefined : this.data.at(bestPreviousIndex),
-      next: bestNextIndex === -1 ? undefined : this.data.at(bestNextIndex),
+      previous: this.binarySearch('previous-if-no-exact-match', x),
+      next: this.binarySearch('next-if-no-exact-match', x),
     };
   }
 
