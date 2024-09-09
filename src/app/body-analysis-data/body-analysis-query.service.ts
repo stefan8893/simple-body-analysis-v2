@@ -64,10 +64,6 @@ export class BodyAnalysisQueryService {
     const fromAsDate = parseISO(from);
     const toAsDate = parseISO(to);
 
-    // return sampleData.filter(
-    //   (x) => x.analysedAt >= fromAsDate && x.analysedAt <= toAsDate
-    // );
-
     if (this.isInCacheRange(fromAsDate, toAsDate))
       return this.queryCache(fromAsDate, toAsDate);
 
