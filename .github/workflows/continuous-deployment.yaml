@@ -76,9 +76,6 @@ jobs:
           name: simple-body-analysis
           path: ./
 
-      - name: Display structure of downloaded files
-        run: ls -R ./
-
       - name: Login to Azure
         uses: azure/login@v2
         with:
