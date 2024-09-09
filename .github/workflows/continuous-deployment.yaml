@@ -55,14 +55,11 @@ jobs:
           npm version ${{ env.Version }} --allow-same-version --no-git-tag-version
           npm run build
 
-      - name: Zip artifact
-        run: zip -r artifact.zip ./dist/simple-body-analysis/browser/*
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: simple-body-analysis
-          path: ./artifact.zip
+          path: ./dist
 
   deploy:
     runs-on: ubuntu-latest
@@ -77,9 +74,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: simple-body-analysis
-
-      - name: Unzip artifact
-        run: unzip artifact.zip
 
       - name: Login to Azure
         uses: azure/login@v2
