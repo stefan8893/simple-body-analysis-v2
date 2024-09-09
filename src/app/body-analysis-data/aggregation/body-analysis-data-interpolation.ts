@@ -63,17 +63,22 @@ export class BodyAnalysisDataInterpolation {
 
     if (!previous || !next) return null;
 
+    if (compareAsc(previous.analysedAt, analysedAt) === 0) return previous;
+
+    if (compareAsc(next.analysedAt, analysedAt) === 0) return next;
+
     const x0 = previous.analysedAt.getTime();
     const y0 = previous.weight;
     const x1 = next.analysedAt.getTime();
     const y1 = next.weight;
 
-    // y = k * x + d
-    const k = Math.abs((y1 - y0) / (x1 - x0));
+    // https://en.wikipedia.org/wiki/Linear_function_(calculus)
+    const slope = Math.abs((y1 - y0) / (x1 - x0));
+    const a = isNaN(slope) ? 0 : slope;
     const x = analysedAt.getTime() - x0;
-    const d = Math.min(y0, y1);
+    const b = Math.min(y0, y1);
 
-    const y = k * x + d;
+    const y = a * x + b;
 
     return {
       analysedAt: analysedAt,
