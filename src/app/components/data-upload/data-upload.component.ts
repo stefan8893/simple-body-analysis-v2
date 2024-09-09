@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, effect, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { PrimeNGConfig } from 'primeng/api';
 import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
@@ -64,6 +65,7 @@ export class DataUploadComponent {
 
   constructor(
     private uploadService: BodyAnalysisUploadService,
+    private router: Router,
     private config: PrimeNGConfig
   ) {
     effect(async () => {
@@ -146,5 +148,9 @@ export class DataUploadComponent {
         reason: `${error}`,
       };
     }
+  }
+
+  goHome() {
+    this.router.navigate(['app']);
   }
 }
