@@ -74,6 +74,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: simple-body-analysis
+          path: ./
+
+      - name: Display structure of downloaded files
+        run: ls -R ./
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -88,9 +92,9 @@ jobs:
           azcliversion: latest
           inlineScript: |
             az storage blob delete-batch --account-name "$CLIENT_APP_STORAGE_ACCOUNT" --source '$web' --pattern '*'
-            az storage blob upload-batch --account-name "$CLIENT_APP_STORAGE_ACCOUNT" --destination '$web' --source ./dist/simple-body-analysis/browser --overwrite
+            az storage blob upload-batch --account-name "$CLIENT_APP_STORAGE_ACCOUNT" --destination '$web' --source ./simple-body-analysis/browser --overwrite
 
             # set cache-control header for index.html only by re-uploading it with the --content-cache option
-            az storage blob upload --account-name "$CLIENT_APP_STORAGE_ACCOUNT" --container-name '$web' --file ./dist/simple-body-analysis/browser/index.html --name index.html --content-cache 'no-cache, no-store, must-revalidate, max-age=0' --overwrite
+            az storage blob upload --account-name "$CLIENT_APP_STORAGE_ACCOUNT" --container-name '$web' --file ./simple-body-analysis/browser/index.html --name index.html --content-cache 'no-cache, no-store, must-revalidate, max-age=0' --overwrite
         env:
           CLIENT_APP_STORAGE_ACCOUNT: ${{ vars.CLIENT_APP_STORAGE_ACCOUNT }}
