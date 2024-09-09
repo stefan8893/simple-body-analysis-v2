@@ -95,5 +95,9 @@ jobs:
           inlineScript: |
             az storage blob delete-batch --account-name "$CLIENT_APP_STORAGE_ACCOUNT" --source '$web' --pattern '*'
             az storage blob upload-batch --account-name "$CLIENT_APP_STORAGE_ACCOUNT" --destination '$web' --source ./dist/simple-body-analysis/browser --overwrite
+
+            # set cache-control header for index.html only by re-uploading it with the --content-cache option
+            $cacheControl = 'no-cache, no-store, must-revalidate, max-age=0'
+            az storage blob upload --account-name "$CLIENT_APP_STORAGE_ACCOUNT" --container-name '$web' --file ./dist/simple-body-analysis/browser/index.html --name index.html --content-cache $cacheControl --overwrite
         env:
           CLIENT_APP_STORAGE_ACCOUNT: ${{ vars.CLIENT_APP_STORAGE_ACCOUNT }}
