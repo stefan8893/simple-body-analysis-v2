@@ -15,6 +15,7 @@ export class BodyAnalysisDataInterpolation {
     this.data = data.sort((a, b) => compareAsc(a.analysedAt, b.analysedAt));
   }
 
+  // based on https://en.wikipedia.org/wiki/Binary_search
   private search(
     mode: SearchMode,
     target: Date,
@@ -63,9 +64,13 @@ export class BodyAnalysisDataInterpolation {
 
     if (!previous || !next) return null;
 
-    if (compareAsc(previous.analysedAt, analysedAt) === 0) return previous;
+    if (compareAsc(previous.analysedAt, analysedAt) === 0) {
+      return previous;
+    }
 
-    if (compareAsc(next.analysedAt, analysedAt) === 0) return next;
+    if (compareAsc(next.analysedAt, analysedAt) === 0) {
+      return next;
+    }
 
     const x0 = previous.analysedAt.getTime();
     const y0 = previous.weight;
