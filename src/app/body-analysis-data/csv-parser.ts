@@ -21,7 +21,7 @@ export type ParsingResult =
   | ErrorParsingResult
   | SuccessParsingResult;
 
-const bodyAnalysisPropertyByCsvHeader = new Map<BodyAnalysisProperty, string>([
+const csvHeaderbodyByAnalysisProperty = new Map<BodyAnalysisProperty, string>([
   ['weight', 'Gewicht'],
   ['bmi', 'BMI'],
   ['bodyFat', 'Körperfettanteil'],
@@ -64,7 +64,7 @@ function parseRow(header: string[], row: string): BodyAnalysis | null {
   if (cells.length !== header.length) return null;
 
   const indexOfProperty = (property: BodyAnalysisProperty) => {
-    return header.indexOf(bodyAnalysisPropertyByCsvHeader.get(property) ?? '');
+    return header.indexOf(csvHeaderbodyByAnalysisProperty.get(property) ?? '');
   };
 
   const analysedAtString = `${cells[header.indexOf('Datum')]} ${
@@ -95,7 +95,7 @@ function parseRow(header: string[], row: string): BodyAnalysis | null {
 function isDataHeader(cells: string[]): boolean {
   const containsHeaderFor = (bodyAnalysisProperty: BodyAnalysisProperty) =>
     cells.some(
-      (x) => x === bodyAnalysisPropertyByCsvHeader.get(bodyAnalysisProperty)
+      (x) => x === csvHeaderbodyByAnalysisProperty.get(bodyAnalysisProperty)
     );
 
   return (

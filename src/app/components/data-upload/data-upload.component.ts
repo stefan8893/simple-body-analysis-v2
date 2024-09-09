@@ -121,7 +121,7 @@ export class DataUploadComponent {
       this.parsedCsv.data
     );
 
-    console.log(newRecords);
+    console.debug('New records', newRecords);
 
     this.newRecords = {
       state: 'loaded',

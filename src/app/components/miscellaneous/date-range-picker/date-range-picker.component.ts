@@ -61,7 +61,7 @@ export class DateRangePickerComponent implements OnInit {
       const fromSearchString = formatToSearchString(fromLocalTime);
       const toSearchString = formatToSearchString(toLocalTime);
 
-      console.debug('Prepared DateRange changed event get emitted:', {
+      console.debug('Prepared DateRange changed event gets emitted:', {
         from: fromSearchString,
         to: toSearchString,
       });
