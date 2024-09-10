@@ -15,6 +15,12 @@
     margin-left: auto;
     margin-right: auto;
   }
+
+  .dashboard-date-range-picker {
+    width: 80% !important;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 @media screen and (max-width: calc(#{$md})) {

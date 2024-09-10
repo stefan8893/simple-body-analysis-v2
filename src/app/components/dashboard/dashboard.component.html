@@ -1,8 +1,9 @@
 <div class="dashboard">
 
-  <div class="mb-3 md:mb-5  flex flex-row flex-wrap align-items-center justify-content-start">
+  <div
+    class="dashboard-date-range-picker flex flex-row flex-wrap align-items-center justify-content-start mb-3 md:mb-5 p-2 sm:p-0 w-full">
     <app-date-range-picker [offerQuickSelections]="offerQuickSelections" initialRange="L6M"
-      (preparedDateRangeChanged)="onPreparedDateRangeChanged($event)" class="mr-3" />
+      (preparedDateRangeChanged)="onPreparedDateRangeChanged($event)" class="w-full" />
   </div>
 
   <div class="dashboard-widgets grid mb-3 md:mb-5">
