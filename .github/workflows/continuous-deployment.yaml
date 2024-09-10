@@ -92,6 +92,6 @@ jobs:
             az storage blob upload-batch --account-name "$CLIENT_APP_STORAGE_ACCOUNT" --destination '$web' --source ./simple-body-analysis/browser --overwrite
 
             # set cache-control header for index.html only by re-uploading it with the --content-cache option
-            az storage blob upload --account-name "$CLIENT_APP_STORAGE_ACCOUNT" --container-name '$web' --file ./simple-body-analysis/browser/index.html --name index.html --content-cache 'no-cache, no-store, must-revalidate, max-age=0' --overwrite
+            az storage blob upload --account-name "$CLIENT_APP_STORAGE_ACCOUNT" --container-name '$web' --file ./simple-body-analysis/browser/index.html --name index.html --content-cache 'no-cache' --overwrite
         env:
           CLIENT_APP_STORAGE_ACCOUNT: ${{ vars.CLIENT_APP_STORAGE_ACCOUNT }}
