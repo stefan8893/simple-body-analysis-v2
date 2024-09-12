@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
 
-export function formatToSearchString(date: Date) {
+export function formatToRowKey(date: Date) {
   return format(date, `yyyy-MM-dd'T'HH:mm:ss`);
 }

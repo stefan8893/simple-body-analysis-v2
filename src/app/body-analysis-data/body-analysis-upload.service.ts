@@ -3,7 +3,7 @@ import { TableClient, TableEntity } from '@azure/data-tables';
 import { compareAsc, format } from 'date-fns';
 import { BodyAnalysisQueryService } from './body-analysis-query.service';
 import { BodyAnalysis } from './body-analysis.types';
-import { formatToSearchString } from './query-utils';
+import { formatToRowKey } from './query-utils';
 
 @Injectable({ providedIn: 'root' })
 export class BodyAnalysisUploadService {
@@ -19,8 +19,8 @@ export class BodyAnalysisUploadService {
     const last = data[data.length - 1];
 
     const existing = await this.queryService.query(
-      formatToSearchString(first.analysedAt),
-      formatToSearchString(last.analysedAt)
+      formatToRowKey(first.analysedAt),
+      formatToRowKey(last.analysedAt)
     );
 
     return data.filter(

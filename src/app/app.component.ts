@@ -33,6 +33,10 @@ export class AppComponent implements OnInit, OnDestroy {
     private userPictureStorage: UserPictureStorage
   ) {
     this.primengConfig.ripple = true;
+    this.primengConfig.setTranslation({
+      accept: 'Ok',
+      reject: 'Abbrechen',
+    });
   }
 
   async ngOnInit(): Promise<void> {

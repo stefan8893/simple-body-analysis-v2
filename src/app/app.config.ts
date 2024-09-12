@@ -28,6 +28,7 @@ import {
 import { provideEffects } from '@ngrx/effects';
 import { provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { ConfirmationService } from 'primeng/api';
 import { routes } from './app.routes';
 import {
   msalGuardConfigFactory,
@@ -51,6 +52,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideAnimations(),
+    ConfirmationService,
     provideStore({
       appUser: appUserReducer,
       userPicture: userPictureReducer,

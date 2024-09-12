@@ -1,8 +1,11 @@
+<p-toast position="top-center" />
+<p-confirmDialog #cd rejectButtonStyleClass="p-button-outlined p-button-sm">
+</p-confirmDialog>
+
 <div class="table-view-grid-table">
   <app-content-header title="Tabellenansicht" />
   <div class="mb-3 md:mb-5 flex flex-row flex-wrap align-items-center justify-content-start">
-    <app-date-range-picker [(dateRangeRaw)]="dateRangeRaw"
-      (preparedDateRangeChanged)="onPreparedDateRangeChanged($event)" />
+    <app-date-range-picker (preparedDateRangeChanged)="onPreparedDateRangeChanged($event)" />
   </div>
 
   <app-loading-spinner [show]="bodyAnalysisTableData.state === 'loading'" [debounceTimeInMilliseconds]="400" />
@@ -23,6 +26,7 @@
           <th pSortableColumn="bmi">Bmi <p-sortIcon field="bmi" /></th>
           <th pSortableColumn="dailyCalorieRequirement">Täglicher Kalorienbedarf <p-sortIcon
               field="dailyCalorieRequirement" /></th>
+          <th>Löschen</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row>
@@ -34,6 +38,7 @@
           <td>{{ row.bodyFat | number }} %</td>
           <td>{{ row.bmi | number }}</td>
           <td>{{ row.dailyCalorieRequirement | number }} kcal</td>
+          <td><span class="pi pi-trash cursor-pointer" (click)="deleteEntry($event, row.analysedAt)"></span></td>
         </tr>
       </ng-template>
       <ng-template pTemplate="emptymessage">

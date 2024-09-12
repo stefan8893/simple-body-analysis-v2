@@ -60,6 +60,10 @@ export class BodyAnalysisQueryService {
     );
   }
 
+  clearCache() {
+    this.cache = [];
+  }
+
   async query(from: string, to: string) {
     const fromAsDate = parseISO(from);
     const toAsDate = parseISO(to);

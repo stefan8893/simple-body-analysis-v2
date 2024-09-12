@@ -8,6 +8,7 @@ import { CardModule } from 'primeng/card';
 import { FileUploadModule } from 'primeng/fileupload';
 import { StepperModule } from 'primeng/stepper';
 import { TableModule } from 'primeng/table';
+import { BodyAnalysisQueryService } from '../../body-analysis-data/body-analysis-query.service';
 import { BodyAnalysisUploadService } from '../../body-analysis-data/body-analysis-upload.service';
 import { BodyAnalysis } from '../../body-analysis-data/body-analysis.types';
 import {
@@ -65,6 +66,7 @@ export class DataUploadComponent {
 
   constructor(
     private uploadService: BodyAnalysisUploadService,
+    private queryService: BodyAnalysisQueryService,
     private router: Router,
     private config: PrimeNGConfig
   ) {
@@ -138,6 +140,7 @@ export class DataUploadComponent {
 
     try {
       await this.uploadService.upload(this.newRecords.value);
+      this.queryService.clearCache();
 
       this.uploadResult = {
         type: 'success',

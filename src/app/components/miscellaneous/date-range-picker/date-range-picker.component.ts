@@ -12,7 +12,7 @@ import { addDays, endOfDay, parseISO, startOfDay } from 'date-fns';
 import { toZonedTime } from 'date-fns-tz';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
-import { formatToSearchString } from '../../../body-analysis-data/query-utils';
+import { formatToRowKey } from '../../../body-analysis-data/query-utils';
 import {
   availableQuickSelections,
   QuickSelection,
@@ -58,8 +58,8 @@ export class DateRangePickerComponent implements OnInit {
       const fromLocalTime = startOfDay(toZonedTime(from, timeZone));
       const toLocalTime = endOfDay(toZonedTime(to, timeZone));
 
-      const fromSearchString = formatToSearchString(fromLocalTime);
-      const toSearchString = formatToSearchString(toLocalTime);
+      const fromSearchString = formatToRowKey(fromLocalTime);
+      const toSearchString = formatToRowKey(toLocalTime);
 
       console.debug('Prepared DateRange changed event gets emitted:', {
         from: fromSearchString,
