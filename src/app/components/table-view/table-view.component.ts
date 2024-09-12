@@ -92,9 +92,9 @@ export class TableViewComponent {
 
     this.confirmationService.confirm({
       target: event.target as EventTarget,
-      message: `Eintrag am ${format(analysedAt, 'P', {
+      message: `Eintrag vom ${format(analysedAt, 'Pp', {
         locale: de,
-      })} um ${format(analysedAt, 'p', { locale: de })} löschen?`,
+      })} löschen?`,
       header: 'Löschen',
       icon: 'pi pi-exclamation-triangle',
       acceptIcon: 'none',
