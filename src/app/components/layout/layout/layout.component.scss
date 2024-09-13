@@ -1,4 +1,4 @@
-@import '../../../../styles/layout-variables';
+@import "../../../../styles/layout-variables";
 
 .layout {
   position: relative;
@@ -20,10 +20,10 @@
   grid-area: nav;
   z-index: 2;
   overflow-y: auto;
-  transition: 0.3s cubic-bezier(.36,-0.01,0,.77);
+  transition: 0.3s cubic-bezier(0.36, -0.01, 0, 0.77);
 }
 
-.side-nav-closed-animated{
+.side-nav-closed-animated {
   margin-left: -200px;
 }
 
@@ -32,9 +32,9 @@
   transition: 1s;
 }
 
-.side-nav-closed-instantly{
-  margin-left: -200px;
+.side-nav-closed-instantly {
   transition: 0ms;
+  margin-left: -200px;
 }
 
 .content {
@@ -61,14 +61,14 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 1;
   cursor: pointer;
   transition: 0.3s ease-in-out;
 }
 
 @media (max-width: calc(#{$mobile-breakpoint} - 1px)) {
-  .side-nav{
+  .side-nav {
     position: absolute;
   }
 }
