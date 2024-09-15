@@ -14,9 +14,9 @@ export const initialState: UserPictureState = null as UserPictureState;
 
 export const userPictureReducer = createReducer(
   initialState,
-  on(setPicture, (state, picture) => ({
+  on(setPicture, (_state, picture) => ({
     objectUrl: picture.objectUrl,
     source: picture.source,
   })),
-  on(removePicture, (state) => null)
+  on(removePicture, () => null)
 );
