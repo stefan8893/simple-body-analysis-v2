@@ -65,6 +65,11 @@ export class AppComponent implements OnInit, OnDestroy {
   async onAuthenticated(idToken: IdToken): Promise<void> {
     console.log('User is authenticated.');
 
+    this.authService.acquireTokenSilent({
+      scopes: ['email', 'openid', 'profile', 'user.read', 'offline_access'],
+      forceRefresh: true,
+    });
+
     this.setActiveAccount();
     this.appUserStore.dispatch(setUser(idToken));
   }
