@@ -1,4 +1,8 @@
-@import '../../../styles/layout-variables';
+@import "../../../styles/layout-variables";
+
+.w-34rem {
+  width: 34rem;
+}
 
 .profile-user-info > .p-card {
   width: 100%;
@@ -12,12 +16,11 @@
   border-radius: 10px;
 }
 
-.profile-user-avatar > .p-avatar{
-
+.profile-user-avatar > .p-avatar {
   width: 100px;
   height: 100px;
 
-  .pi-user.p-avatar-icon{
+  .pi-user.p-avatar-icon {
     transform: scale(2);
   }
 }
