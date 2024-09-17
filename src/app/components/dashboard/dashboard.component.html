@@ -1,38 +1,38 @@
 <div class="dashboard">
 
-  <div class="mb-3 md:mb-5  flex flex-row flex-wrap align-items-center justify-content-start">
+  <div class="mb-3 md:mb-5  flex flex-row flex-wrap items-center justify-start">
     <app-date-range-picker [offerQuickSelections]="offerQuickSelections" initialRange="L6M"
       (preparedDateRangeChanged)="onPreparedDateRangeChanged($event)" class="mr-3" />
   </div>
 
-  <div class="grid mb-3 md:mb-5">
+  <div class="mb-3 sm:mb-5 grid grid-rows-4 md:grid-rows-2 lg:grid-rows-1 grid-flow-col gap-4">
     <app-dashboard-widget header="Gewicht" [isLoading]="bodyAnalysisTableData().state === 'loading'"
       [selectedDateRangeFrom]="weightWidgetValues().selectedDateRangeFrom"
       [selectedDateRangeTo]="weightWidgetValues().selectedDateRangeTo" [latestValue]="weightWidgetValues().latestValue"
       [lossGainInSelectedDateRange]="weightWidgetValues().lossGainInSelectedDateRange"
       [averageWeeklyLossGain]="weightWidgetValues().averageWeeklyLossGain" [knobSettings]="weightKnobSettings"
-      class="dashboard-card col-12 sm:col-6 lg:col-3" />
+      class="dashboard-card" />
     <app-dashboard-widget header="Muskeln" [isLoading]="bodyAnalysisTableData().state === 'loading'"
       [selectedDateRangeFrom]="muscleMassWidgetValues().selectedDateRangeFrom"
       [selectedDateRangeTo]="muscleMassWidgetValues().selectedDateRangeTo"
       [latestValue]="muscleMassWidgetValues().latestValue"
       [lossGainInSelectedDateRange]="muscleMassWidgetValues().lossGainInSelectedDateRange"
       [averageWeeklyLossGain]="muscleMassWidgetValues().averageWeeklyLossGain" [knobSettings]="muscleMassKnobSettings"
-      class="dashboard-card col-12 sm:col-6 lg:col-3" />
+      class="dashboard-card" />
     <app-dashboard-widget header="Wasser" [isLoading]="bodyAnalysisTableData().state === 'loading'"
       [selectedDateRangeFrom]="bodyWaterWidgetValues().selectedDateRangeFrom"
       [selectedDateRangeTo]="bodyWaterWidgetValues().selectedDateRangeTo"
       [latestValue]="bodyWaterWidgetValues().latestValue"
       [lossGainInSelectedDateRange]="bodyWaterWidgetValues().lossGainInSelectedDateRange"
       [averageWeeklyLossGain]="bodyWaterWidgetValues().averageWeeklyLossGain" [knobSettings]="bodyWaterKnobSettings"
-      class="dashboard-card col-12 sm:col-6 lg:col-3" />
+      class="dashboard-card" />
     <app-dashboard-widget header="Fett" [isLoading]="bodyAnalysisTableData().state === 'loading'"
       [selectedDateRangeFrom]="bodyFatWidgetValues().selectedDateRangeFrom"
       [selectedDateRangeTo]="bodyFatWidgetValues().selectedDateRangeTo"
       [latestValue]="bodyFatWidgetValues().latestValue"
       [lossGainInSelectedDateRange]="bodyFatWidgetValues().lossGainInSelectedDateRange"
       [averageWeeklyLossGain]="bodyFatWidgetValues().averageWeeklyLossGain" [knobSettings]="bodyFatKnobSettings"
-      class="dashboard-card col-12 sm:col-6 lg:col-3" />
+      class="dashboard-card" />
   </div>
 
   <app-loading-spinner [show]="bodyAnalysisTableData().state === 'loading'" [debounceTimeInMilliseconds]="400" />

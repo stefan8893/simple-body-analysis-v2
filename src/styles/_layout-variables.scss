@@ -1,13 +1,6 @@
-@import 'primeflex/core/_variables.scss';
+$sm: 576px;
+$md: 768px;
+$lg: 992px;
+$xl: 1200px;
 
-
-/*
-https://primeflex.org/installation
-
-$sm	Breakpoint of screens such as phones.	576px
-$md	Breakpoint of screens such as tablets.	768px
-$lg	Breakpoint of screens such as notebook monitors.	992px
-$xl	Breakpoint of smaller screens such as desktop monitors.	1200px
-*/
-$mobile-breakpoint: $sm;
-
+$mobile-breakpoint: 576px;

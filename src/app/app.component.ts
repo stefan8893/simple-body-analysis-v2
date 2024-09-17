@@ -4,6 +4,7 @@ import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
 import { EventType } from '@azure/msal-browser';
 import { Store } from '@ngrx/store';
 import { PrimeNGConfig } from 'primeng/api';
+import { Aura } from 'primeng/themes/aura';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { getIdToken, IdToken, isAuthenticated } from './auth/auth.functions';
 import {
@@ -32,10 +33,20 @@ export class AppComponent implements OnInit, OnDestroy {
     @Inject(USER_PICTURE_STORAGE)
     private userPictureStorage: UserPictureStorage
   ) {
-    this.primengConfig.ripple = true;
+    this.primengConfig.ripple.set(true);
     this.primengConfig.setTranslation({
       accept: 'Ok',
       reject: 'Abbrechen',
+    });
+
+    this.primengConfig.theme.set({
+      preset: Aura,
+      options: {
+        cssLayer: {
+          name: 'primeng',
+          order: 'tailwind-base, primeng, tailwind-utilities',
+        },
+      },
     });
   }
 

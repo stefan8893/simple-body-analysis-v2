@@ -1,12 +1,12 @@
 <div class="layout h-screen">
   <app-header (menuTogglerClicked)="onMenuTogglerClicked()" (appTitleClicked)="onAppTitleClicked()"
-    class="header surface-800"></app-header>
+    class="header bg-surface-800"></app-header>
 
-  <nav class="side-nav surface-card h-full" [class]="sideNavCssClassByState.get(sideNavState.state)">
-    <app-side-nav class="surface-card h-full" (menuItemSelected)="onMenuItemSelected()"></app-side-nav>
+  <nav class="side-nav h-full" [class]="sideNavCssClassByState.get(sideNavState.state)">
+    <app-side-nav class="h-full" (menuItemSelected)="onMenuItemSelected()"></app-side-nav>
   </nav>
 
-  <section class="content surface-ground" [class.overlayed]="sideNavState.showOverlay">
+  <section class="content bg-surface-100" [class.overlayed]="sideNavState.showOverlay">
     <div class="overlay" [class.overlay-show]="sideNavState.showOverlay"
       (click)="sideNavState.showOverlay && onOverlayClicked()"></div>
     <div class="ml-2 mr-2 sm:ml-3 sm:mr-3 md:ml-5 md:mr-5 mb-8">

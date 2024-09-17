@@ -1,4 +1,4 @@
-@import 'primeflex/core/_variables.scss';
+@import "../../../styles/layout-variables";
 
 .dashboard {
   margin: 2.25rem auto 5.5rem auto;
@@ -14,7 +14,6 @@
     margin-top: 1rem;
   }
 }
-
 
 @media screen and (min-width: calc(#{$xl})) {
   .dashboard {

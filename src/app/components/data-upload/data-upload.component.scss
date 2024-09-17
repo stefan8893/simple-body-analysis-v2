@@ -1,4 +1,4 @@
-@import 'primeflex/core/_variables.scss';
+@import "../../../styles/layout-variables";
 
 .data-upload {
   margin: 0 auto;
@@ -8,7 +8,6 @@
 .data-upload-csv-table-container {
   width: 97%;
 }
-
 
 @media screen and (min-width: calc(#{$xl})) {
   .data-upload {

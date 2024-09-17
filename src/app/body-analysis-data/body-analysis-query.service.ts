@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { TableClient, TableEntityResult } from '@azure/data-tables';
 import { compareAsc, endOfDay, parseISO, startOfDay } from 'date-fns';
 import { BodyAnalysis } from './body-analysis.types';
+import { sampleData } from './sample-data';
 
 @Injectable({ providedIn: 'root' })
 export class BodyAnalysisQueryService {
@@ -71,7 +72,7 @@ export class BodyAnalysisQueryService {
     if (this.isInCacheRange(fromAsDate, toAsDate))
       return this.queryCache(fromAsDate, toAsDate);
 
-    const result = await this.queryAzureTables(from, to);
+    const result = sampleData; //await this.queryAzureTables(from, to);
     const resultSorted = result.sort((a, b) =>
       compareAsc(a.analysedAt, b.analysedAt)
     );

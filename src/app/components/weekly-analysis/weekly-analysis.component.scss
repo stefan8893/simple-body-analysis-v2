@@ -1,11 +1,11 @@
-@import 'primeflex/core/_variables.scss';
+@import "../../../styles/layout-variables";
 
 .weekly-analysis {
   margin: 0 auto;
   width: 100%;
 }
 
-.weekly-analysis-week-day-selection .p-dropdown-items-wrapper{
+.weekly-analysis-week-day-selection .p-dropdown-items-wrapper {
   max-height: 300px !important;
 }
 

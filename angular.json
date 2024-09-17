@@ -27,9 +27,7 @@
             "styles": [
               "src/styles/_layout-variables.scss",
               "src/styles.scss",
-              "src/styles/theme.scss",
-              "node_modules/primeng/resources/primeng.min.css",
-              "node_modules/primeflex/primeflex.css"
+              "src/styles/theme.scss"
             ],
             "scripts": []
           },

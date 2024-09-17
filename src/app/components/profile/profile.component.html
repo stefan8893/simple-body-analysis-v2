@@ -1,13 +1,13 @@
 <div class="ml-auto mr-auto w-34rem">
   <app-content-header title="Profil"></app-content-header>
 </div>
-<div class="flex flex-row align-items-center justify-content-center">
+<div class="flex flex-row items-center justify-center">
   @if((appUser$ | async) !== null){
-  <p-card class="profile-user-info flex flex-column align-items-center justify-content-start w-full">
+  <p-card class="profile-user-info flex flex-col items-center justify-start w-full">
 
-    <div class="flex flex-row flex-wrap sm:flex-nowrap justify-content-center w-full">
+    <div class="flex flex-row flex-wrap sm:flex-nowrap justify-center w-full">
 
-      <div class="flex flex-row flex-nowrap align-items-center justify-content-center sm:justify-content-start">
+      <div class="flex flex-row flex-nowrap items-center justify-center sm:justify-start">
         @if(userPictureObjectUrl) {
         <img class="profile-user-picture" [src]="userPictureObjectUrl" alt="User Picture" />
         } @else {
@@ -15,12 +15,12 @@
         }
       </div>
 
-      <div class="flex flex-column align-items-stretch justify-content-start sm:ml-3 mt-3 sm:mt-0 w-full">
-        <div class="flex flex-column gap-1 w-full">
+      <div class="flex flex-col align-items-stretch justify-start sm:ml-3 mt-3 sm:mt-0 w-full">
+        <div class="flex flex-col gap-1 w-full">
           <label for="firstName">Vorname</label>
           <input pInputText id="firstName" [ngModel]="(appUser$ | async)?.firstName" readonly />
         </div>
-        <div class="flex flex-column gap-1 mt-3 w-full">
+        <div class="flex flex-col gap-1 mt-3 w-full">
           <label for="lastName">Nachname</label>
           <input pInputText id="lastName" [ngModel]="(appUser$ | async)?.lastName" readonly />
         </div>
@@ -30,7 +30,7 @@
     </div>
 
 
-    <div class="flex flex-column gap-1 mt-3 w-full">
+    <div class="flex flex-col gap-1 mt-3 w-full">
       <label for="email">Email</label>
       <input pInputText id="email" [ngModel]="(appUser$ | async)?.email" readonly />
     </div>
