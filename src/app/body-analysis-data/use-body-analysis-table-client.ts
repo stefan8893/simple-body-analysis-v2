@@ -1,7 +1,6 @@
 import { TableClient } from '@azure/data-tables';
 import { AccessToken, TokenCredential } from '@azure/identity';
 import { MsalService } from '@azure/msal-angular';
-import { firstValueFrom } from 'rxjs';
 
 export function useBodyAnalysisTableClient(
   authService: MsalService
@@ -12,19 +11,15 @@ export function useBodyAnalysisTableClient(
 
   const getToken = async () => {
     try {
-      return await firstValueFrom(
-        authService.acquireTokenSilent({
-          account: authService.instance.getAllAccounts()[0],
-          scopes: [scope],
-        })
-      );
+      return await authService.instance.acquireTokenSilent({
+        account: authService.instance.getAllAccounts()[0],
+        scopes: [scope],
+      });
     } catch {
       debugger;
-      await firstValueFrom(
-        authService.acquireTokenRedirect({
-          scopes: [scope],
-        })
-      );
+      await authService.instance.acquireTokenRedirect({
+        scopes: [scope],
+      });
 
       throw 'This path will never be reached.';
     }
