@@ -49,7 +49,7 @@ export class UserProfileService {
   private acquireAccessToken() {
     return this.authService
       .acquireTokenSilent({
-        account: this.authService.instance.getAllAccounts()[0],
+        account: this.authService.instance.getActiveAccount() ?? undefined,
         scopes: UserProfileService.scopes,
       })
       .pipe(

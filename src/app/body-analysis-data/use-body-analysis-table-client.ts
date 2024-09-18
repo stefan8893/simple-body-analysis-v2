@@ -12,11 +12,10 @@ export function useBodyAnalysisTableClient(
   const getToken = async () => {
     try {
       return await authService.instance.acquireTokenSilent({
-        account: authService.instance.getAllAccounts()[0],
+        account: authService.instance.getActiveAccount() ?? undefined,
         scopes: [scope],
       });
     } catch {
-      debugger;
       await authService.instance.acquireTokenRedirect({
         scopes: [scope],
       });
