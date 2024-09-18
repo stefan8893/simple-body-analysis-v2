@@ -14,6 +14,7 @@ export function useBodyAnalysisTableClient(
     try {
       return await firstValueFrom(
         authService.acquireTokenSilent({
+          account: authService.instance.getAllAccounts()[0],
           scopes: [scope],
         })
       );
