@@ -18,6 +18,7 @@ export function useBodyAnalysisTableClient(
         })
       );
     } catch {
+      debugger;
       await firstValueFrom(
         authService.acquireTokenRedirect({
           scopes: [scope],
