@@ -2,7 +2,16 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { MsalService } from '@azure/msal-angular';
 import { select } from '@ngrx/store';
-import { catchError, concatMap, EMPTY, from, map, of, tap } from 'rxjs';
+import {
+  catchError,
+  concatMap,
+  EMPTY,
+  firstValueFrom,
+  from,
+  map,
+  of,
+  tap,
+} from 'rxjs';
 import { PictureSource } from '../stores/user-picture/user-picture.reducer';
 import {
   USER_PICTURE_STORAGE,
@@ -46,21 +55,23 @@ export class UserProfileService {
     private authService: MsalService
   ) {}
 
-  private acquireAccessToken() {
-    return this.authService
-      .acquireTokenSilent({
-        account: this.authService.instance.getActiveAccount() ?? undefined,
-        scopes: UserProfileService.scopes,
-      })
-      .pipe(
-        catchError(() => {
-          this.authService.acquireTokenRedirect({
-            scopes: UserProfileService.scopes,
-          });
-
-          throw 'This path will never be reached.';
+  private async ensureValidAccessToken(): Promise<void> {
+    await firstValueFrom(
+      this.authService
+        .acquireTokenSilent({
+          account: this.authService.instance.getActiveAccount() ?? undefined,
+          scopes: UserProfileService.scopes,
         })
-      );
+        .pipe(
+          catchError(() => {
+            this.authService.acquireTokenRedirect({
+              scopes: UserProfileService.scopes,
+            });
+
+            throw 'This path will never be reached.';
+          })
+        )
+    );
   }
 
   loadUserProfile() {
@@ -83,7 +94,11 @@ export class UserProfileService {
         );
     };
 
-    return this.acquireAccessToken().pipe(concatMap(() => loadUserProfile()));
+    // this ensures that the app holds a valid access token
+    this.ensureValidAccessToken();
+
+    // finally the msal interceptor adds the token to the request
+    return loadUserProfile();
   }
 
   loadUserPicture(userId: string) {
