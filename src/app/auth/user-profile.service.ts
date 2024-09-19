@@ -59,7 +59,7 @@ export class UserProfileService {
     await firstValueFrom(
       this.authService
         .acquireTokenSilent({
-          account: this.authService.instance.getActiveAccount() ?? undefined,
+          account: this.authService.instance.getAllAccounts()[0],
           scopes: UserProfileService.scopes,
         })
         .pipe(
