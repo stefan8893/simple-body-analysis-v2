@@ -33,8 +33,6 @@ export function useBodyAnalysisTableClient(
       console.error(`'acquireTokenSilent' failed. error: `, error);
       console.log('redirecting user to identity provider.');
 
-      debugger;
-
       await authService.instance.acquireTokenRedirect({
         scopes: [scope],
       });
