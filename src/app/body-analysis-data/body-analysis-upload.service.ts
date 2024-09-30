@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TableClient, TableEntity } from '@azure/data-tables';
-import { compareAsc, format } from 'date-fns';
+import { compareAsc } from 'date-fns';
 import { BodyAnalysisQueryService } from './body-analysis-query.service';
 import { BodyAnalysis } from './body-analysis.types';
 import { formatToRowKey } from './query-utils';
@@ -31,7 +31,7 @@ export class BodyAnalysisUploadService {
   async upload(data: BodyAnalysis[]): Promise<void> {
     const entities: TableEntity<object>[] = data.map((x) => ({
       partitionKey: 'body_data',
-      rowKey: format(x.analysedAt, `yyyy-MM-dd'T'HH:mm:ss`),
+      rowKey: formatToRowKey(x.analysedAt),
       Weight: x.weight,
       MuscleMass: x.muscleMass,
       BodyWater: x.bodyWater,
