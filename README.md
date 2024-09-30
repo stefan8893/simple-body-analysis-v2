@@ -1,27 +1,30 @@
 # SimpleBodyAnalysis
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.8.
+## What it is
 
-## Development server
+A simple app to track and analyze body data, such as:
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- Weight
+- Body Fat
+- Body Water
+- Muscle Mass
+- BMI
+- Daily Calorie Requirement
 
-## Code scaffolding
+Some while ago, I was obese and needed to lose weight.  
+So I started a strict diet and lifting weights.  
+In order to see the progress, not only in the mirror, I created this app.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Infrastructure
 
-## Build
+This app runs entirely in azure and uses the following resources:
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- EntraID (OAuth2.1 + OpenID Connect)
+- Blob Storage (static web site hosting)
+- Azure Tables (storage for the body data)
 
-## Running unit tests
+There is no backend, the app gets served from the blob storage that can be configured to host static web sites.  
+After authenticating against EntraID, tokens get issued that can be used to query Azure tables that contains the actual body data.  
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+The data itself comes from a SÖHNLE Connect scale.  
+A csv export of the scale's data gets uploaded to the app(client-side) and parsed there before finally stored in Azure tables.
