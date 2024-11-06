@@ -26,5 +26,5 @@ This app runs entirely in azure and uses the following resources:
 There is no backend, the app gets served from the blob storage that can be configured to host static web sites.  
 After authenticating against EntraID, tokens get issued that can be used to query Azure tables that contains the actual body data.  
 
-The data itself comes from a SÖHNLE Connect scale.  
+The data itself comes from a SÖHNLE Shape Sense scale.  
 A csv export of the scale's data gets uploaded to the app(client-side) and parsed there before finally stored in Azure tables.
