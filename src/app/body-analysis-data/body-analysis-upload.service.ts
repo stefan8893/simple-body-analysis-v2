@@ -15,8 +15,8 @@ export class BodyAnalysisUploadService {
   async filterNewEntries(data: BodyAnalysis[]): Promise<BodyAnalysis[]> {
     if (data.length === 0) return [];
 
-    const first = data[0];
-    const last = data[data.length - 1];
+    const last = data[0];
+    const first = data[data.length - 1];
 
     const existing = await this.queryService.query(
       formatToRowKey(first.analysedAt),

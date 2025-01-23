@@ -24,13 +24,13 @@ export type ParsingResult =
 const csvHeaderByBodyAnalysisProperty = new Map<BodyAnalysisProperty, string>([
   ['weight', 'Gewicht'],
   ['bmi', 'BMI'],
-  ['bodyFat', 'Körperfettanteil'],
+  ['bodyFat', 'Fett'],
   ['bodyWater', 'Wasser'],
-  ['muscleMass', 'Muskelmasse'],
-  ['dailyCalorieRequirement', 'Energie Tagesbedarf'],
+  ['muscleMass', 'Muskel'],
+  ['dailyCalorieRequirement', 'Kalorienverbrauch'],
 ]);
 
-const delimiter = ';';
+const delimiter = ',';
 
 export async function parseBodyAnalysisCsv(file: File): Promise<ParsingResult> {
   const fileContent = await toString(file);
@@ -68,7 +68,7 @@ function parseRow(header: string[], row: string): BodyAnalysis | null {
   };
 
   const analysedAtString = `${cells[header.indexOf('Datum')]} ${
-    cells[header.indexOf('Uhrzeit')]
+    cells[header.indexOf('Zeit')]
   }`;
   const analysedAt = parse(analysedAtString, 'Pp', new Date(), { locale: de });
 
@@ -100,7 +100,7 @@ function isDataHeader(cells: string[]): boolean {
 
   return (
     cells.some((x) => x === 'Datum') &&
-    cells.some((x) => x === 'Uhrzeit') &&
+    cells.some((x) => x === 'Zeit') &&
     containsHeaderFor('weight') &&
     containsHeaderFor('muscleMass') &&
     containsHeaderFor('bodyWater') &&
