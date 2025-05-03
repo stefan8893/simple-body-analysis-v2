@@ -1,5 +1,6 @@
-import { compareAsc } from 'date-fns';
+import { addHours, compareAsc, format, subHours } from 'date-fns';
 import { BodyAnalysis } from '../body-analysis.types';
+import { de } from 'date-fns/locale';
 
 export type InterpolatedWeight = {
   analysedAt: Date;
@@ -81,9 +82,11 @@ export class BodyAnalysisDataInterpolation {
     const slope = Math.abs((y1 - y0) / (x1 - x0));
     const a = isNaN(slope) ? 0 : slope;
     const x = analysedAt.getTime() - x0;
-    const b = Math.min(y0, y1);
+    const b = y1 > y0 ? y0 : -y0;
 
-    const y = a * x + b;
+    const y = Math.abs(a * x + b);
+
+    console.debug(`Interpolated weight at ${format(analysedAt, 'Pp', {locale: de})}: ${y} kg`);
 
     return {
       analysedAt: analysedAt,
