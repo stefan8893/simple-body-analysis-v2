@@ -1,6 +1,6 @@
 import { compareAsc, format } from 'date-fns';
-import { BodyAnalysis } from '../body-analysis.types';
 import { de } from 'date-fns/locale';
+import { BodyAnalysis } from '../body-analysis.types';
 
 export type InterpolatedWeight = {
   analysedAt: Date;
@@ -86,7 +86,11 @@ export class BodyAnalysisDataInterpolation {
 
     const y = Math.abs(a * x + b);
 
-    console.debug(`Interpolated weight at ${format(analysedAt, 'Pp', {locale: de})}: ${y} kg`);
+    console.debug(
+      `Interpolated weight at ${format(analysedAt, 'Ppp', {
+        locale: de,
+      })}: ${y} kg`
+    );
 
     return {
       analysedAt: analysedAt,
