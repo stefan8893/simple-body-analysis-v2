@@ -96,12 +96,9 @@ export function calculateWeekDifferences(
   if (weeksInBetween <= 0) return [];
 
   const interpolation = new BodyAnalysisDataInterpolation(data);
-
   const weeksInBetweenIncludingCurrentWeek = weeksInBetween + 1;
-  const result = Array.from(
-    { length: weeksInBetweenIncludingCurrentWeek },
-    (x, i) => i
-  )
+
+  return Array.from({ length: weeksInBetweenIncludingCurrentWeek }, (x, i) => i)
     .map((x) => ({
       startOfWeek: startOfISOWeek(addWeeks(firstWeek, x)),
       endOfWeek: endOfISOWeek(addWeeks(firstWeek, x)),
@@ -116,6 +113,4 @@ export function calculateWeekDifferences(
       firstDayOfWeek: startOfDay(first!.analysedAt),
       weightDiff: last!.weight - first!.weight,
     }));
-
-  return result;
 }
