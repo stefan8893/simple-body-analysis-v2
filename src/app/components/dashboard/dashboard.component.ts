@@ -34,7 +34,6 @@ import {
   standalone: true,
   imports: [
     CardModule,
-    ContentHeaderComponent,
     DateRangePickerComponent,
     DashboardWidgetComponent,
     DashboardWeekChartComponent,
@@ -82,8 +81,11 @@ export class DashboardComponent {
     if (resource.state !== 'loaded')
       return nullWidgetValues;
 
-    const averageWeeklyWeightLossGain = this.weeklyDifferences().reduce((acc, x) => acc + x.weightDiff, 0) / this.weeklyDifferences().length;
+    const sum = this.weeklyDifferences().reduce((acc, x) => acc + x.weightDiff, 0);
+    const averageWeeklyWeightLossGain = sum / this.weeklyDifferences().length;
     const widgetValues = calculateWidgetValues(resource.value, 'weight');
+
+    widgetValues.lossGainInSelectedDateRange = sum;
     widgetValues.averageWeeklyLossGain = averageWeeklyWeightLossGain;
 
     return widgetValues
