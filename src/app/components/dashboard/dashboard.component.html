@@ -36,7 +36,7 @@
   </div>
 
   <app-loading-spinner [show]="bodyAnalysisTableData().state === 'loading'" [debounceTimeInMilliseconds]="400" />
-  <app-dashboard-week-chart [bodyAnalysisTableData]="bodyAnalysisTableData()"
+  <app-dashboard-week-chart [weeklyDifferences]="weeklyDifferences()"
     [hidden]="bodyAnalysisTableData().state !== 'loaded'" />
 
 </div>

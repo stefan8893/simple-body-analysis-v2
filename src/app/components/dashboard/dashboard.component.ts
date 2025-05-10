@@ -8,6 +8,7 @@ import {
 import { FormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
 import {
+  calculateWeekDifferences,
   calculateWidgetValues,
   nullWidgetValues,
 } from '../../body-analysis-data/aggregation/agg.functions';
@@ -51,6 +52,14 @@ export class DashboardComponent {
     state: 'loading',
   });
 
+  weeklyDifferences = computed(() => {
+    const bodyAnalysisTableData = this.bodyAnalysisTableData();
+
+    if (bodyAnalysisTableData.state !== 'loaded') return [];
+
+    return calculateWeekDifferences(bodyAnalysisTableData.value);
+  });
+
   offerQuickSelections: QuickSelectionCode[] = [
     'L14D',
     'L30D',
@@ -70,30 +79,38 @@ export class DashboardComponent {
 
   weightWidgetValues: Signal<WidgetValues> = computed(() => {
     const resource = this.bodyAnalysisTableData();
-    if (resource.state === 'loaded')
-      return calculateWidgetValues(resource.value, 'weight');
-    else return nullWidgetValues;
+    if (resource.state !== 'loaded')
+      return nullWidgetValues;
+
+    const averageWeeklyWeightLossGain = this.weeklyDifferences().reduce((acc, x) => acc + x.weightDiff, 0) / this.weeklyDifferences().length;
+    const widgetValues = calculateWidgetValues(resource.value, 'weight');
+    widgetValues.averageWeeklyLossGain = averageWeeklyWeightLossGain;
+
+    return widgetValues
   });
 
   muscleMassWidgetValues: Signal<WidgetValues> = computed(() => {
     const resource = this.bodyAnalysisTableData();
-    if (resource.state === 'loaded')
-      return calculateWidgetValues(resource.value, 'muscleMass');
-    else return nullWidgetValues;
+    if (resource.state !== 'loaded')
+      return nullWidgetValues;
+    
+    return calculateWidgetValues(resource.value, 'muscleMass');
   });
 
   bodyWaterWidgetValues: Signal<WidgetValues> = computed(() => {
     const resource = this.bodyAnalysisTableData();
-    if (resource.state === 'loaded')
-      return calculateWidgetValues(resource.value, 'bodyWater');
-    else return nullWidgetValues;
+    if (resource.state !== 'loaded')
+      return nullWidgetValues;
+
+    return calculateWidgetValues(resource.value, 'bodyWater');
   });
 
   bodyFatWidgetValues: Signal<WidgetValues> = computed(() => {
     const resource = this.bodyAnalysisTableData();
-    if (resource.state === 'loaded')
-      return calculateWidgetValues(resource.value, 'bodyFat');
-    else return nullWidgetValues;
+    if (resource.state !== 'loaded')
+      return nullWidgetValues;
+
+    return calculateWidgetValues(resource.value, 'bodyFat');
   });
 
   onPreparedDateRangeChanged(event: string[]) {

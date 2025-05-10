@@ -32,6 +32,7 @@ import { getUnitOfMeasureOrDefault } from '../../charting/chart-utils';
 import { Resource } from '../../infrastructure/resource.state';
 import { surfaceBorder, textColor, weightColor } from '../body-analysis.colors';
 import { SideNavState } from '../layout/layout/side-nav.state';
+import { BodyAnalysisWeeklyDiff } from '../../body-analysis-data/aggregation/data.types';
 
 @Component({
   selector: 'app-dashboard-week-chart',
@@ -43,15 +44,15 @@ import { SideNavState } from '../layout/layout/side-nav.state';
 export class DashboardWeekChartComponent implements OnInit, OnDestroy {
   private windowResize$: Observable<Event>;
   private poisonPill$ = new Subject<void>();
-  bodyAnalysisTableData = input<Resource<BodyAnalysis[]>>({ state: 'loading' });
+  weeklyDifferences = input<BodyAnalysisWeeklyDiff[]>([]);
 
-  weeklyDifferences = computed(() => {
-    const bodyAnalysisTableData = this.bodyAnalysisTableData();
+  // weeklyDifferences = computed(() => {
+  //   const bodyAnalysisTableData = this.bodyAnalysisTableData();
 
-    if (bodyAnalysisTableData.state !== 'loaded') return [];
+  //   if (bodyAnalysisTableData.state !== 'loaded') return [];
 
-    return calculateWeekDifferences(bodyAnalysisTableData.value);
-  });
+  //   return calculateWeekDifferences(bodyAnalysisTableData.value);
+  // });
 
   weeklyDashboardChart: any;
 
