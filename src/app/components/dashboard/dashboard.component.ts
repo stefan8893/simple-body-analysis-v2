@@ -78,14 +78,7 @@ export class DashboardComponent {
     const resource = this.bodyAnalysisTableData();
     if (resource.state !== 'loaded') return nullWidgetValues;
 
-    // const sum = this.weeklyDifferences().reduce((acc, x) => acc + x.weightDiff, 0);
-    // const averageWeeklyWeightLossGain = sum / this.weeklyDifferences().length;
-    const widgetValues = calculateWidgetValues(resource.value, 'weight');
-
-    // widgetValues.lossGainInSelectedDateRange = sum;
-    // widgetValues.averageWeeklyLossGain = averageWeeklyWeightLossGain;
-
-    return widgetValues;
+    return calculateWidgetValues(resource.value, 'weight');
   });
 
   muscleMassWidgetValues: Signal<WidgetValues> = computed(() => {
