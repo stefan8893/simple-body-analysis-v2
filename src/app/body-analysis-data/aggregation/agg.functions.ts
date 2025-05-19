@@ -3,11 +3,9 @@ import {
   differenceInCalendarDays,
   differenceInCalendarISOWeeks,
   endOfISOWeek,
-  format,
   startOfDay,
   startOfISOWeek,
 } from 'date-fns';
-import { de } from 'date-fns/locale';
 import { BodyAnalysis, BodyAnalysisProperty } from '../body-analysis.types';
 import { BodyAnalysisDataInterpolation } from './body-analysis-data-interpolation';
 import { BodyAnalysisWeeklyDiff, WidgetValues } from './data.types';
@@ -20,11 +18,19 @@ export const nullWidgetValues = {
   averageWeeklyLossGain: null,
 };
 
+const daysToCalculateAverage = 3;
+
 export function calculateWidgetValues(
   bodyAnalysisData: BodyAnalysis[],
   property: BodyAnalysisProperty
 ): WidgetValues {
-  if (bodyAnalysisData.length === 0) return nullWidgetValues;
+  if (bodyAnalysisData.length < daysToCalculateAverage) return nullWidgetValues;
+
+  const averageOfFirstNDays = +(
+    bodyAnalysisData
+      .slice(0, daysToCalculateAverage)
+      .reduce((acc, next) => acc + next[property], 0) / daysToCalculateAverage
+  ).toFixed(2);
 
   return {
     selectedDateRangeFrom: bodyAnalysisData[0].analysedAt,
@@ -33,8 +39,9 @@ export function calculateWidgetValues(
     latestValue: bodyAnalysisData[bodyAnalysisData.length - 1][property],
     lossGainInSelectedDateRange:
       bodyAnalysisData[bodyAnalysisData.length - 1][property] -
-      bodyAnalysisData[0][property],
+      averageOfFirstNDays,
     averageWeeklyLossGain: calculateAverageWeekDifferences(
+      averageOfFirstNDays,
       bodyAnalysisData,
       property
     ),
@@ -42,41 +49,21 @@ export function calculateWidgetValues(
 }
 
 function calculateAverageWeekDifferences(
+  averageOfFirstThreeDays: number,
   bodyAnalysisData: BodyAnalysis[],
   property: BodyAnalysisProperty
 ): number | null {
-  if (bodyAnalysisData.length < 2) return null;
-
-  const oneEntryPerDayGrouping = Object.entries(
-    Object.groupBy(bodyAnalysisData, ({ analysedAt }) =>
-      format(analysedAt, 'P', { locale: de })
-    )
-  );
-
-  const oneEntryPerDay = oneEntryPerDayGrouping
-    .map(([, v]) => v?.at(-1))
-    .filter((x) => !!x);
-
-  if (oneEntryPerDay.length < 2) return null;
-
-  const first = oneEntryPerDay.at(0)!;
-  const last = oneEntryPerDay.at(-1)!;
+  const first = bodyAnalysisData[0];
+  const last = bodyAnalysisData[bodyAnalysisData.length - 1];
 
   const timespanInDays = differenceInCalendarDays(
     last.analysedAt,
     first.analysedAt
   );
 
-  const differencesBetweenDays = oneEntryPerDay
-    .slice(1)
-    .map((x, i) => x[property] - oneEntryPerDay[i][property]);
+  const difference = last[property] - averageOfFirstThreeDays;
 
-  const sumOfDifferences = differencesBetweenDays.reduce(
-    (acc, next) => acc + next,
-    0
-  );
-
-  return Math.abs(sumOfDifferences / (timespanInDays / 7.0));
+  return Math.abs(difference / (timespanInDays / 7.0));
 }
 
 export function calculateWeekDifferences(
