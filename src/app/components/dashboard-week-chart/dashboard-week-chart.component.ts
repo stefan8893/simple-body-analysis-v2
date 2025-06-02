@@ -26,13 +26,11 @@ import { de } from 'date-fns/locale';
 import { CardModule } from 'primeng/card';
 import { debounceTime, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 import { layouVariables } from '../../../styles/layout-variables';
-import { calculateWeekDifferences } from '../../body-analysis-data/aggregation/agg.functions';
-import { BodyAnalysis } from '../../body-analysis-data/body-analysis.types';
 import { getUnitOfMeasureOrDefault } from '../../charting/chart-utils';
-import { Resource } from '../../infrastructure/resource.state';
 import { surfaceBorder, textColor, weightColor } from '../body-analysis.colors';
 import { SideNavState } from '../layout/layout/side-nav.state';
 import { BodyAnalysisWeeklyDiff } from '../../body-analysis-data/aggregation/data.types';
+import { endOfISOWeek, format, getISOWeek, parse } from 'date-fns';
 
 @Component({
   selector: 'app-dashboard-week-chart',
@@ -45,15 +43,6 @@ export class DashboardWeekChartComponent implements OnInit, OnDestroy {
   private windowResize$: Observable<Event>;
   private poisonPill$ = new Subject<void>();
   weeklyDifferences = input<BodyAnalysisWeeklyDiff[]>([]);
-
-  // weeklyDifferences = computed(() => {
-  //   const bodyAnalysisTableData = this.bodyAnalysisTableData();
-
-  //   if (bodyAnalysisTableData.state !== 'loaded') return [];
-
-  //   return calculateWeekDifferences(bodyAnalysisTableData.value);
-  // });
-
   weeklyDashboardChart: any;
 
   constructor(private sideNavStore: Store<{ sideNav: SideNavState }>) {
@@ -148,9 +137,12 @@ export class DashboardWeekChartComponent implements OnInit, OnDestroy {
           tooltip: {
             callbacks: {
               title: (ctx: any) => {
-                const weekNumber = ctx[0].label;
+                const firstDayOfWeek = parse(ctx[0].label, 'P', new Date(), { locale: de});
+                const calendarWeek = getISOWeek(firstDayOfWeek);
+                const lastDayOfWeek = endOfISOWeek(firstDayOfWeek);
 
-                return `KW ${weekNumber}`;
+                const weekRange = `${format(firstDayOfWeek, 'P', {locale: de})} - ${format(lastDayOfWeek, 'P', {locale: de})}`;
+                return `KW ${calendarWeek}\n${weekRange}`;
               },
               label: (ctx: any) => {
                 const unit = getUnitOfMeasureOrDefault(ctx.dataset.label);
@@ -179,7 +171,7 @@ export class DashboardWeekChartComponent implements OnInit, OnDestroy {
               displayFormats: {
                 week: 'w',
               },
-              tooltipFormat: 'w',
+              tooltipFormat: 'P',
               isoWeekday: true,
             },
             ticks: {
